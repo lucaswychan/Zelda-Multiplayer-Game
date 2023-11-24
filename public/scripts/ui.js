@@ -96,12 +96,12 @@ const UserPanel = (function () {
 
     // This function shows the form with the user
     const show = function (user) {
-        $("#user-panel").show();
+        $("#game-container").show();
     };
 
     // This function hides the form
     const hide = function () {
-        $("#user-panel").hide();
+        $("#game-container").hide();
     };
 
     // This function updates the user panel
