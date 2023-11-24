@@ -1,0 +1,38 @@
+[
+    {
+     "user": {
+      "username": "tony",
+      "avatar": "Owl",
+      "name": "Tony Lee"
+     },
+     "datetime": "2022-01-01T01:00:00.000Z",
+     "content": "Hi, welcome to the chatroom!"
+    },
+    {
+     "user": {
+      "username": "try",
+      "avatar": "Bat",
+      "name": "Try WebSocket"
+     },
+     "datetime": "2023-11-05T11:59:24.521Z",
+     "content": "How are you"
+    },
+    {
+     "user": {
+      "username": "try",
+      "avatar": "Bat",
+      "name": "Try WebSocket"
+     },
+     "datetime": "2023-11-05T12:00:08.371Z",
+     "content": "What lessons are you currently in"
+    },
+    {
+     "user": {
+      "username": "LucasChan",
+      "avatar": "Koala",
+      "name": "LC"
+     },
+     "datetime": "2023-11-05T12:00:50.139Z",
+     "content": "I am studying COMP3111H"
+    }
+   ]
