@@ -13,5 +13,10 @@
   "avatar": "Hamster",
   "name": "nat",
   "password": "$2b$10$0OQmI/s0eQQ5wAzrpbke4uCAD7MylSBocfXQseKsP0QmoO.ecLKsS"
+ },
+ "LucasChan": {
+  "avatar": "Koala",
+  "name": "LC",
+  "password": "$2b$10$QctADjB/d6PDICsJLYvepOROI1IY3gq/jXiaRPJkr4XyzWyJ2HgSC"
  }
 }
