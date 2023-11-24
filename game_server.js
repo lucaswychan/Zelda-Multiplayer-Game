@@ -41,8 +41,10 @@ app.post("/register", (req, res) => {
     //
     // E. Checking for the user data correctness
     //
-    if (username == '') res.json({ status: "error", error: "The username cannot be empty." });
-    if (password == '') res.json({ status: "error", error: "The password cannot be empty." });
+    if (username === '') res.json({ status: "error", error: "The username cannot be empty." });
+    if (avatar === '') res.json({ status: "error", error: "The avatar cannot be empty." });
+    if (name === '') res.json({ status: "error", error: "The name cannot be empty." });
+    if (password === '') res.json({ status: "error", error: "The password cannot be empty." });
 
     if (!containWordCharsOnly(username)) res.json({ status: "error", error: "The username can contain only underscores, letters or number" });
 
@@ -76,6 +78,7 @@ app.post("/signin", (req, res) => {
     // D. Reading the users.json file
     //
     const users = JSON.parse(fs.readFileSync("data/users.json"));
+    console.log("users in server : ", users);
 
     //
     // E. Checking for username/password
@@ -170,15 +173,6 @@ io.on("connection", (socket) => {
             io.emit("add message", JSON.stringify(chat_details));
         });
 
-        socket.on("typing", () => {
-            io.emit("add typing", socket.request.session.user.name);
-        });
-
-        socket.on("remove typing", () => {
-            io.emit("remove typing message");
-        });
-
-
         // disconnection
         socket.on("disconnect", () => {
             delete onlineUsers[socket.request.session.user.username];
@@ -189,6 +183,6 @@ io.on("connection", (socket) => {
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
-    console.log("The chat server has started...");
+    console.log("The game has started...");
 });
 
