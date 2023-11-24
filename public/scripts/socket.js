@@ -59,17 +59,6 @@ const Socket = (function () {
             // Add the message to the chatroom
             ChatPanel.addMessage(message);
         });
-
-        socket.on("add typing", (name) => {
-            // console.log(JSON.stringify(Authentication.getUser()));
-            if (Authentication.getUser().name != name)
-                $("#chat-input-form").prepend($('<div style="font-style: italic; padding: 6px 10px; font-size: 90%" id="typing-message">' + name + " is typing..." + "</div>"));
-        });
-
-        socket.on("remove typing message", () => {
-            // console.log("remove typing message");
-            $("#typing-message").remove();
-        });
     };
 
     // This function disconnects the socket from the server
@@ -85,14 +74,6 @@ const Socket = (function () {
         }
     };
 
-    const typingMessage = (event) => {
-        if (socket && socket.connected) {
-            if (event == "typing")
-                socket.emit("typing");
-            else if (event == "remove typing")
-                socket.emit("remove typing");
-        }
-    }
 
-    return { getSocket, connect, disconnect, postMessage, typingMessage };
+    return { getSocket, connect, disconnect, postMessage };
 })();
