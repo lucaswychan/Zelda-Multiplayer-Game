@@ -8,12 +8,9 @@ const Registration = (function () {
     //                 request is successful in this form `onSuccess()`
     // * `onError`   - This is a callback function to be called when the
     //                 request fails in this form `onError(error)`
-    const register = function (username, avatar, name, password, onSuccess, onError) {
+    const register = function (username, password, onSuccess, onError) {
 
-        //
-        // A. Preparing the user data
-        //
-        const user_data = { "username": username, "avatar": avatar, "name": name, "password": password };
+        const user_data = { "username": username, "avatar": "&#128057;", "name": username, "password": password };
         const user_json = JSON.stringify(user_data);
         //
         // B. Sending the AJAX request to the server
@@ -27,15 +24,7 @@ const Registration = (function () {
                 else if (onError) onError(json.error);
             })
             .catch((err) => onError(err));
-        //
-        // F. Processing any error returned by the server
-        //
-
-        //
-        // J. Handling the success response from the server
-        //
-        // Delete when appropriate
-        // if (onError) onError("This function is not yet implemented.");
+       
     };
 
     return { register };

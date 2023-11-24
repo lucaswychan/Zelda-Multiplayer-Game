@@ -31,7 +31,7 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, avatar, name, password } = req.body;
+    const { username, password } = req.body;
 
     //
     // D. Reading the users.json file
@@ -42,8 +42,6 @@ app.post("/register", (req, res) => {
     // E. Checking for the user data correctness
     //
     if (username == '') res.json({ status: "error", error: "The username cannot be empty." });
-    if (avatar == '') res.json({ status: "error", error: "The avatar cannot be empty." });
-    if (name == '') res.json({ status: "error", error: "The name cannot be empty." });
     if (password == '') res.json({ status: "error", error: "The password cannot be empty." });
 
     if (!containWordCharsOnly(username)) res.json({ status: "error", error: "The username can contain only underscores, letters or number" });
@@ -54,7 +52,7 @@ app.post("/register", (req, res) => {
     // G. Adding the new user account
     //
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = { "avatar": avatar, "name": name, "password": hash };
+    users[username] = { "avatar": "&#128057;", "name": username, "password": hash };
     // console.log(JSON.stringify(users, null, " "));
 
     //
@@ -67,9 +65,7 @@ app.post("/register", (req, res) => {
     //
     res.json({ status: "success" });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
-});
+  });
 
 // Handle the /signin endpoint
 app.post("/signin", (req, res) => {
@@ -103,10 +99,10 @@ app.post("/signin", (req, res) => {
 // Handle the /validate endpoint
 app.get("/validate", (req, res) => {
 
-    //
-    // B. Getting req.session.user
-    //
+   
     const current_user = req.session.user;
+    // B. Getting req.session.user
+    //eq.session.user;
 
     //
     // D. Sending a success response with the user account
@@ -133,8 +129,6 @@ app.get("/signout", (req, res) => {
     //
     res.json({ status: "success" });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 
