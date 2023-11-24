@@ -1,4 +1,9 @@
 {
+ "12": {
+  "avatar": "&#128057;",
+  "name": "12",
+  "password": "$2b$10$Bf8HlZCw8WLUjsCqKUx5n.3R3gfxdJDBHGX3rUtJ/STa//HpVdl9y"
+ },
  "tony": {
   "avatar": "Owl",
   "name": "Tony Lee",
@@ -18,5 +23,20 @@
   "avatar": "Koala",
   "name": "LC",
   "password": "$2b$10$QctADjB/d6PDICsJLYvepOROI1IY3gq/jXiaRPJkr4XyzWyJ2HgSC"
+=======
+ "nata": {
+  "avatar": "&#128057;",
+  "name": "nata",
+  "password": "$2b$10$PN.suH8M9uUX3i4XdCsFquW5yo28fiLXACzJuTqp6dFmktVquM2C."
+ },
+ "sd": {
+  "avatar": "&#128057;",
+  "name": "sd",
+  "password": "$2b$10$BEL.I7KTWMUlxh7SREfn3Oh/WO/jNiBESfEEyzl1B/otFdnwcVYgG"
+ },
+ "vd": {
+  "avatar": "&#128057;",
+  "name": "vd",
+  "password": "$2b$10$Oq0edb2JWFE5WdTdCeai8O5.r6glRMs.QsBCj0niRpXUE6Wv4fuY6"
  }
 }

@@ -35,16 +35,7 @@ const Authentication = (function() {
             })
             .catch((err) => onError(err));
 
-        //
-        // F. Processing any error returned by the server
-        //
 
-        //
-        // H. Handling the success response from the server
-        //
-
-        // Delete when appropriate
-        // if (onError) onError("This function is not yet implemented.");
     };
 
     // This function sends a validate request to the server
@@ -54,9 +45,6 @@ const Authentication = (function() {
     //                 request fails in this form `onError(error)`
     const validate = function(onSuccess, onError) {
 
-        //
-        // A. Sending the AJAX request to the server
-        //
         fetch("/validate").then((res) => res.json()).then((json) => {
             if (json.status == "success") {
                 onSuccess();
@@ -65,16 +53,6 @@ const Authentication = (function() {
         })
         .catch((err) => onError(err));
 
-        //
-        // C. Processing any error returned by the server
-        //
-
-        //
-        // E. Handling the success response from the server
-        //
-
-        // Delete when appropriate
-        // if (onError) onError("This function is not yet implemented.");
     };
 
     // This function sends a sign-out request to the server
