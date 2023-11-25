@@ -28,7 +28,7 @@
 
  <!-- Game Page -->
     <div id="game-container">
-        <!-- <canvas width="854px" height="480px"></canvas> -->
+        <!-- <canvas id="game-canvas" width="854px" height="480px"></canvas> -->
 
         <!-- <svg xmlns="http://www.w3.org/2000/svg" id="counter"> -->
             <!-- <text x="10" y="35"> -->
@@ -60,24 +60,22 @@
             <div class="content shadow home-page-row ">               
                 <form id="signin-form" class="home-page-col">
                     <div class="caption">Sign In</div>
+                    <p></p>
                     <input id="signin-username" placeholder="Enter your username"></input>
                     <input id="signin-password" type="password" placeholder="Enter your password"></input>
-                    <button type="submit">Sign In</button>
+                    <button class="home-page-button" type="submit">Sign In</button>
                     <div id="signin-message" class="warning center"></div>
                 </form>
                     
                 <form id="register-form" class="home-page-col">
-                    <div class="caption">Register Account</div>     
+                    <div class="caption">Register Account</div>  
+                    <p></p>   
                     <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
                     <input id="register-password" type="password" placeholder="Enter your password"></input>
                     <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
-                    <button type="submit">Register</button>
+                    <button class="home-page-button" type="submit">Register</button>
                     <div id="register-message" class="warning center"></div>
                 </form>
-            </div>
-
-            <div class="home-page-row">
-            <button>Game Instruction</button>
             </div>
         </div>
 
