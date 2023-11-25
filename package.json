@@ -1,0 +1,33 @@
+{
+  "name": "zelda-multiplayer-game",
+  "version": "1.0.0",
+  "description": "A multi-player game",
+  "main": "index.js",
+  "scripts": {
+    "start": "node game_server.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LConann/Zelda-Multiplayer-Game.git"
+  },
+  "keywords": [
+    "COMP4021",
+    "Project:",
+    "Zelda-multiplayer-game"
+  ],
+  "author": "Lucas Chan, Samuel Chau, Natalie Leung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LConann/Zelda-Multiplayer-Game/issues"
+  },
+  "homepage": "https://github.com/LConann/Zelda-Multiplayer-Game#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "~4.16.1",
+    "express-session": "^1.17.3",
+    "http-errors": "~1.6.3",
+    "nodemon": "^3.0.1",
+    "socket.io": "^4.7.2"
+  }
+}
