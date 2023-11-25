@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zelda MultiPlayer Gaem</title>
+    <title>Zelda Multi-Player Game</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/return-of-ganon" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link rel="icon" href="#" />
 </head>
 
 <body>
@@ -26,135 +27,164 @@
 <!--        </div>-->
 <!--    </div>-->
 
- <!-- Game Page -->
-    <div id="game-container">
-        <!-- <canvas id="game-canvas" width="854px" height="480px"></canvas> -->
-
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="counter"> -->
-            <!-- <text x="10" y="35"> -->
-                <!-- TIME:<tspan id="time-remaining">20</tspan> -->
-            <!-- </text> -->
-        <!-- </svg> -->
-
-<!--        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">-->
-<!--            <defs>-->
-<!--                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">-->
-<!--                    <stop offset="0.2" stop-color="red" />-->
-<!--                    <stop offset="0.4" stop-color="yellow" />-->
-<!--                    <stop offset="0.6" stop-color="green" />-->
-<!--                    <stop offset="0.8" stop-color="purple" />-->
-<!--                </linearGradient>-->
-<!--            </defs>-->
-<!--            <p id="game-title" x="50%" y="45%">GEM RUSH!</p>-->
-<!--            <p x="50%" y="60%">Click here to start the game</p>-->
-<!--        </svg>-->
-    </div>
-
-    <!-- Home Page: Signin and Register -->
-    <div id="home-page">
-        <div class="overlay">
-            <div class="home-page-row">
-                <div id="game-title">Zelda MultiPlayer Game</div>
-            </div>
-
-            <div class="content shadow home-page-row ">               
-                <form id="signin-form" class="home-page-col">
-                    <div class="caption">Sign In</div>
-                    <p></p>
-                    <input id="signin-username" placeholder="Enter your username"></input>
-                    <input id="signin-password" type="password" placeholder="Enter your password"></input>
-                    <button class="home-page-button" type="submit">Sign In</button>
-                    <div id="signin-message" class="warning center"></div>
-                </form>
-                    
-                <form id="register-form" class="home-page-col">
-                    <div class="caption">Register Account</div>  
-                    <p></p>   
-                    <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                    <input id="register-password" type="password" placeholder="Enter your password"></input>
-                    <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
-                    <button class="home-page-button" type="submit">Register</button>
-                    <div id="register-message" class="warning center"></div>
-                </form>
-            </div>
+<!-- Home Page: Signin and Register -->
+<div id="home-page">
+    <div class="overlay">
+        <div class="home-page-row">
+            <div id="game-title">Zelda Multi-Player Game</div>
         </div>
 
-    </div>
+        <div class="content shadow home-page-row ">
+            <form id="signin-form" class="home-page-col">
+                <div class="caption">Sign In</div>
+                <p></p>
+                <input id="signin-username" placeholder="Enter your username"></input>
+                <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                <button class="home-page-button" type="submit">Sign In</button>
+                <div id="signin-message" class="warning center"></div>
+            </form>
 
-
-    <!-- Pair Up Page -->
-    <div class="pair-up-container" id="pair-up-page">
-        <div class="" id="instruction-page">
-            <h1 class="instruction-title">Instructions</h1>
-            <div class="instructions-container">
-                    <p>Game Duration: 2 minutess</p>
-                    <p>The Higher Score Player can win the game</p>
-
-                    <h3>Initial Player Arreibutes:</h3>
-                    <p>Attack Point: 100</p>
-                    <p>Score: 0</p>
-                    <p>Speed of movement:200</p>
-                    <p></p>
-
-                    <h3 >Game flow:</h3>
-                    <h4>Pair Up</h4>
-                    <p>1. Pressing either "Player 1" button or "Player 2" button</p>
-                    <p>2. Wait for other Player to join the game</p>
-
-                    <h4>Game Characters</h4>
-                    <p>Monster have 400-1000 Health Point, the last player kill the monster can earn points</p>
-                    <p>Kill Monsters: + 30 scores in player scores</p>
-                    <p>Collect Swords:  + 200 in player attack point</p>
-                    <p>Collect Gem: 10 scores</p>
-                    <p></p>
-                   
-                    <h3>Player movements:</h3>
-                    <h4>Player1</h4>
-                    <p>Move: W:"Up", A:"Left", S:"Down", D: "Right" </p>
-                    <p>Attack: Q</p>
-                    <h4>Player2: </h4>
-                    <p>Move: Arrow key ↑:"Up", ←:"Left", ↓:"Down", →:"Right"</p>
-                    <p>Attack: Shift</p>
-                    <p></p>
-
-                    <h3>Cheat modes:</h3>
-                    <p>Click on Keyboard Space Key</p>
-                    <p>1. The attack range is increased </p>
-                    <p>2. All the monsters can be killed by one attack regardless of the levels of difficulty </p>
-                    <p>3. The speed is increased</p>
-                    <p></p>
-
-                    <h3>After finishing the game, there are two buttons to select</h3>
-                    <p>Click on "Restart" Button: back to the pair up page</p>
-                    <p>Click on "Back Home" Button: back to the home page</p>
-                    <p></p>
-            </div>       
-        </div>
-        <p></p>
-
-        <div class="two-players">
-            <button class="pair-up-button" id="player1">Player 1</button>
-            <button class="pair-up-button" id="player2">Player 2</button>
+            <form id="register-form" class="home-page-col">
+                <div class="caption">Register Account</div>
+                <p></p>
+                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+                <input id="register-password" type="password" placeholder="Enter your password"></input>
+                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+                <button class="home-page-button" type="submit">Register</button>
+                <div id="register-message" class="warning center"></div>
+            </form>
         </div>
     </div>
 
+</div>
 
-    <script src="/socket.io/socket.io.min.js"></script>
-    <script src="scripts/socket.js"></script>
-    <script src="scripts/avatar.js"></script>
-    <script src="scripts/ui.js"></script>
-    <script src="scripts/registration.js"></script>
-    <script src="scripts/authentication.js"></script>
 
-    <script src="game_scripts/bounding_box.js"></script>
-    <script src="game_scripts/sprite.js"></script>
-    <script src="game_scripts/player.js"></script>
-    <script src="game_scripts/gem.js"></script>
-    <script src="game_scripts/fire.js"></script>
-    <script src="game_scripts/game.js"></script>
+<!-- Pair Up Page -->
+<div class="pair-up-container" id="pair-up-page">
+    <div class="" id="instruction-page">
+        <h1 class="instruction-title">Instructions</h1>
+        <div class="instructions-container shadow">
+            <p>Game Duration: 2 minutes</p>
+            <p>The Higher Score Player can win the game</p>
 
-    <script>
-    $(document).ready(function() {
+            <br>
+
+            <h3>Initial Player Attributes:</h3>
+            <p>Attack Point: 100</p>
+            <p>Score: 0</p>
+            <p>Speed of movement:200</p>
+            <p></p>
+
+            <br>
+
+            <h3>Game Flow:</h3>
+            <h4>Pair Up</h4>
+            <p>1. Pressing either "Player 1" button or "Player 2" button</p>
+            <p>2. Wait for other Player to join the game</p>
+
+            <h4>Game Characters</h4>
+            <p>Monster have 400-1000 Health Point, the last player kill the monster can earn points</p>
+            <p>Kill Monsters: + 30 scores in player scores</p>
+            <p>Collect Swords: + 200 in player attack point</p>
+            <p>Collect Gem: 10 scores</p>
+            <p></p>
+
+            <br>
+
+            <h3>Player Movements:</h3>
+            <h4>Player1</h4>
+            <p>Move: W:"Up", A:"Left", S:"Down", D: "Right" </p>
+            <p>Attack: Q</p>
+            <h4>Player2: </h4>
+            <p>Move: Arrow key ↑:"Up", ←:"Left", ↓:"Down", →:"Right"</p>
+            <p>Attack: Shift</p>
+            <p></p>
+
+            <br>
+
+            <h3>Cheat Modes:</h3>
+            <p>Click on Keyboard Space Key</p>
+            <ol>
+                <li>The attack range is increased</li>
+                <li>All the monsters can be killed by one attack regardless of the levels of difficulty</li>
+                <li>The speed is increased</li>
+            </ol>
+            <p></p>
+
+            <br>
+
+            <h3>After finishing the game, there are two buttons to select</h3>
+            <p>Click on "Restart" Button: back to the pair up page</p>
+            <p>Click on "Back Home" Button: back to the home page</p>
+            <p></p>
+        </div>
+    </div>
+    <p></p>
+
+    <div class="two-players">
+        <button class="pair-up-button" id="join-player1">Player 1</button>
+        <button class="pair-up-button" id="join-player2">Player 2</button>
+    </div>
+</div>
+
+<!-- Game Page -->
+<div id="game-container">
+    <canvas id="game-canvas" width="854px" height="480px"></canvas>
+
+    <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+        <text x="10" y="35">
+            TIME:
+            <tspan id="time-remaining">20</tspan>
+        </text>
+    </svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+        <defs>
+            <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0.2" stop-color="red"/>
+                <stop offset="0.4" stop-color="yellow"/>
+                <stop offset="0.6" stop-color="green"/>
+                <stop offset="0.8" stop-color="purple"/>
+            </linearGradient>
+        </defs>
+        <p id="game-title" x="50%" y="45%">GEM RUSH!</p>
+        <p x="50%" y="60%">Click here to start the game</p>
+    </svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
+        <defs>
+            <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="red"/>
+                <stop offset="0.5" stop-color="yellow"/>
+                <stop offset="1" stop-color="red"/>
+            </linearGradient>
+        </defs>
+        <text x="50%" y="50%">
+            Time's up! You have collected
+            <tspan id="final-gems">0</tspan>
+            gem(s).
+        </text>
+    </svg>
+</div>
+
+
+<script src="/socket.io/socket.io.min.js"></script>
+<script src="scripts/socket.js"></script>
+<script src="scripts/avatar.js"></script>
+<script src="scripts/ui.js"></script>
+<script src="scripts/registration.js"></script>
+<script src="scripts/authentication.js"></script>
+
+<script src="game_scripts/bounding_box.js"></script>
+<script src="game_scripts/sprite.js"></script>
+<script src="game_scripts/player.js"></script>
+<script src="game_scripts/gem.js"></script>
+<script src="game_scripts/fire.js"></script>
+<script src="game_scripts/game.js"></script>
+<script src="game_scripts/sound.js"></script>
+
+<script>
+    $(document).ready(function () {
         // Initialize the UI
         UI.initialize();
 
@@ -172,6 +202,6 @@
             }
         );
     });
-    </script>
+</script>
 </body>
 </html>
