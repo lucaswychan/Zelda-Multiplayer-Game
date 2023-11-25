@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zelda Multi-Player Gaem</title>
+    <title>Zelda Mpti-Player Gaem</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -26,14 +26,15 @@
 <!--        </div>-->
 <!--    </div>-->
 
+ <!-- Game Page -->
     <div id="game-container">
-        <canvas width="854px" height="480px"></canvas>
+        <!-- <canvas width="854px" height="480px"></canvas> -->
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-            <text x="10" y="35">
-                TIME:<tspan id="time-remaining">20</tspan>
-            </text>
-        </svg>
+        <!-- <svg xmlns="http://www.w3.org/2000/svg" id="counter"> -->
+            <!-- <text x="10" y="35"> -->
+                <!-- TIME:<tspan id="time-remaining">20</tspan> -->
+            <!-- </text> -->
+        <!-- </svg> -->
 
 <!--        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">-->
 <!--            <defs>-->
@@ -44,31 +45,27 @@
 <!--                    <stop offset="0.8" stop-color="purple" />-->
 <!--                </linearGradient>-->
 <!--            </defs>-->
-<!--            <text id="game-title" x="50%" y="45%">GEM RUSH!</text>-->
-<!--            <text x="50%" y="60%">Click here to start the game</text>-->
+<!--            <p id="game-title" x="50%" y="45%">GEM RUSH!</p>-->
+<!--            <p x="50%" y="60%">Click here to start the game</p>-->
 <!--        </svg>-->
     </div>
 
+    <!-- Home Page: Signin and Register -->
     <div id="home-page">
         <div class="overlay">
             <div class="home-page-row">
-                <div id="game-title">Zelda Multi-Player Game</div>
+                <div id="game-title">Zelda Mpti-Player Game</div>
             </div>
 
-     
-            <div class="content shadow home-page-row ">
-               
+            <div class="content shadow home-page-row ">               
                 <form id="signin-form" class="home-page-col">
                     <div class="caption">Sign In</div>
                     <input id="signin-username" placeholder="Enter your username"></input>
                     <input id="signin-password" type="password" placeholder="Enter your password"></input>
                     <button type="submit">Sign In</button>
                     <div id="signin-message" class="warning center"></div>
-        
                 </form>
-                
-                <div class="spacer-0"></div>
-                
+                    
                 <form id="register-form" class="home-page-col">
                     <div class="caption">Register Account</div>     
                     <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
@@ -85,6 +82,64 @@
         </div>
 
     </div>
+
+
+    <!-- Pair Up Page -->
+    <div class="pair-up-container" id="pair-up-page">
+        <div class="" id="instruction-page">
+            <h1 class="instruction-title">Instructions</h1>
+            <div class="instructions-container">
+                    <p>Game Duration: 2 minutess</p>
+                    <p>The Higher Score Player can win the game</p>
+
+                    <h3>Initial Player Arreibutes:</h3>
+                    <p>Attack Point: 100</p>
+                    <p>Score: 0</p>
+                    <p>Speed of movement:200</p>
+                    <p></p>
+
+                    <h3 >Game flow:</h3>
+                    <h4>Pair Up</h4>
+                    <p>1. Pressing either "Player 1" button or "Player 2" button</p>
+                    <p>2. Wait for other Player to join the game</p>
+
+                    <h4>Game Characters</h4>
+                    <p>Monster have 400-1000 Health Point, the last player kill the monster can earn points</p>
+                    <p>Kill Monsters: + 30 scores in player scores</p>
+                    <p>Collect Swords:  + 200 in player attack point</p>
+                    <p>Collect Gem: 10 scores</p>
+                    <p></p>
+                   
+                    <h3>Player movements:</h3>
+                    <h4>Player1</h4>
+                    <p>Move: W:"Up", A:"Left", S:"Down", D: "Right" </p>
+                    <p>Attack: Q</p>
+                    <h4>Player2: </h4>
+                    <p>Move: Arrow key ↑:"Up", ←:"Left", ↓:"Down", →:"Right"</p>
+                    <p>Attack: Shift</p>
+                    <p></p>
+
+                    <h3>Cheat modes:</h3>
+                    <p>Click on Keyboard Space Key</p>
+                    <p>1. The attack range is increased </p>
+                    <p>2. All the monsters can be killed by one attack regardless of the levels of difficulty </p>
+                    <p>3. The speed is increased</p>
+                    <p></p>
+
+                    <h3>After finishing the game, there are two buttons to select</h3>
+                    <p>Click on "Restart" Button: back to the pair up page</p>
+                    <p>Click on "Back Home" Button: back to the home page</p>
+                    <p></p>
+            </div>       
+        </div>
+        <p></p>
+
+        <div class="two-players">
+            <button class="pair-up-button" id="player1">Player 1</button>
+            <button class="pair-up-button" id="player2">Player 2</button>
+        </div>
+    </div>
+
 
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/socket.js"></script>
@@ -108,14 +163,14 @@
         // Validate the signin
         Authentication.validate(
             () => {
-                SignInForm.hide();
-                UserPanel.update(Authentication.getUser());
-                UserPanel.show();
+                HomePage.hide();
+                PariUpPage.update(Authentication.getUser());
+                PariUpPage.show();
                 Socket.connect();
-                game.start();
+                // game.start();
             },
             () => {
-                SignInForm.show();
+                HomePage.show();
             }
         );
     });

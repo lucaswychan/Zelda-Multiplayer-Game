@@ -1,4 +1,4 @@
-const SignInForm = (function () {
+const HomePage = (function () {
     // This function initializes the UI
     const initialize = function () {
         // Populate the avatar selection
@@ -20,8 +20,8 @@ const SignInForm = (function () {
             Authentication.signin(username, password,
                 () => {
                     hide();
-                    UserPanel.update(Authentication.getUser());
-                    UserPanel.show();
+                    PariUpPage.update(Authentication.getUser());
+                    PariUpPage.show();
 
                     Socket.connect();
                 },
@@ -72,7 +72,7 @@ const SignInForm = (function () {
     return { initialize, show, hide };
 })();
 
-const UserPanel = (function () {
+const PariUpPage = (function () {
     // This function initializes the UI
     const initialize = function () {
         // Hide it
@@ -86,20 +86,22 @@ const UserPanel = (function () {
                     Socket.disconnect();
 
                     hide();
-                    SignInForm.show();
+                    HomePage.show();
                 }
             );
         });
+
+        
     };
 
     // This function shows the form with the user
     const show = function (user) {
-        $("#game-container").show();
+        $("#pair-up-page").show();
     };
 
     // This function hides the form
     const hide = function () {
-        $("#game-container").hide();
+        $("#pair-up-page").hide();
     };
 
     // This function updates the user panel
@@ -116,6 +118,7 @@ const UserPanel = (function () {
 
     return { initialize, show, hide, update };
 })();
+
 
 const OnlineUsersPanel = (function () {
     // This function initializes the UI
@@ -262,7 +265,7 @@ const UI = (function () {
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, OnlineUsersPanel, ChatPanel];
+    const components = [HomePage, PariUpPage, OnlineUsersPanel, ChatPanel];
 
     // This function initializes the UI
     const initialize = function () {
