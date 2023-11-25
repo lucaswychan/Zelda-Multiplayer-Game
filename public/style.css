@@ -1,4 +1,4 @@
-@import url('https://fonts.cdnfonts.com/css/return-of-ganon');
+@import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
 :root {
     --material-icons-color: black;
     --field-color: gray;
@@ -30,7 +30,7 @@
     --game-title-color: rgb(239, 15, 15);
 }
 * {
-    font-family: 'Return of Ganon', sans-serif;
+    font-family: "Abel", sans-serif;
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -42,8 +42,6 @@ body {
     height: 100vh;
     padding: 0;
     margin: 0;
-    /*background-repeat: no-repeat;*/
-    /*background-size: cover;*/
 }
 
 .center { text-align: center; }
