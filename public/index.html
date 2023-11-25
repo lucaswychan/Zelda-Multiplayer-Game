@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zelda Multi-Player Game</title>
+    <title>Zelda Multi-Player Gaem</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -49,37 +49,41 @@
 <!--        </svg>-->
     </div>
 
-    <div id="signin-overlay" class="overlay row">
-        <div class="content shadow row">
-            <form id="signin-form" class="col">
-                <div class="caption">Sign In</div>
+    <div id="home-page">
+        <div class="overlay">
+            <div class="home-page-row">
+                <div id="game-title">Zelda Multi-Player Game</div>
+            </div>
+
+     
+            <div class="content shadow home-page-row ">
+               
+                <form id="signin-form" class="home-page-col">
+                    <div class="caption">Sign In</div>
+                    <input id="signin-username" placeholder="Enter your username"></input>
+                    <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                    <button type="submit">Sign In</button>
+                    <div id="signin-message" class="warning center"></div>
+        
+                </form>
+                
                 <div class="spacer-0"></div>
-                <input id="signin-username" placeholder="Enter your username"></input>
-                <input id="signin-password" type="password" placeholder="Enter your password"></input>
-                <div class="spacer-0"></div>
-                <button type="submit">Sign In</button>
-                <div id="signin-message" class="warning center"></div>
-                <div class="spacer-grow"></div>
-            </form>
+                
+                <form id="register-form" class="home-page-col">
+                    <div class="caption">Register Account</div>     
+                    <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+                    <input id="register-password" type="password" placeholder="Enter your password"></input>
+                    <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+                    <button type="submit">Register</button>
+                    <div id="register-message" class="warning center"></div>
+                </form>
+            </div>
 
-            <div class="spacer-0"></div>
-
-            <form id="register-form" class="col">
-                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
-                <div class="spacer-0"></div>
-                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-
-
-           
-
-
-                <input id="register-password" type="password" placeholder="Enter your password"></input>
-                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
-                <div class="spacer-0"></div>
-                <button type="submit">Register</button>
-                <div id="register-message" class="warning center"></div>
-            </form>
+            <div class="home-page-row">
+            <button>Game Instruction</button>
+            </div>
         </div>
+
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>

@@ -42,8 +42,6 @@ app.post("/register", (req, res) => {
     // E. Checking for the user data correctness
     //
     if (username === '') res.json({ status: "error", error: "The username cannot be empty." });
-    if (avatar === '') res.json({ status: "error", error: "The avatar cannot be empty." });
-    if (name === '') res.json({ status: "error", error: "The name cannot be empty." });
     if (password === '') res.json({ status: "error", error: "The password cannot be empty." });
 
     if (!containWordCharsOnly(username)) res.json({ status: "error", error: "The username can contain only underscores, letters or number" });
@@ -55,8 +53,6 @@ app.post("/register", (req, res) => {
     //
     const hash = bcrypt.hashSync(password, 10);
     users[username] = { "avatar": "&#128057;", "name": username, "password": hash };
-    // console.log(JSON.stringify(users, null, " "));
-
     //
     // H. Saving the users.json file
     //
@@ -95,8 +91,6 @@ app.post("/signin", (req, res) => {
     req.session.user = save_user;
     res.json({ status: "success", user: save_user });
 
-    // Delete when appropriate
-    // res.json({ status: "error", error: "This endpoint is not yet implemented." });
 });
 
 // Handle the /validate endpoint

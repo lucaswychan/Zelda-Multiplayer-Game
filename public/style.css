@@ -26,6 +26,8 @@
     --button-color: white;
     --button-background: #f2855d;
     --button-background-hover: #f8b58b;
+
+    --game-title-color: rgb(239, 15, 15);
 }
 * {
     font-family: "Abel", sans-serif;
@@ -43,15 +45,9 @@ body {
 }
 
 .center { text-align: center; }
-/* .shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); } */
-
-/* Google icon */
-/* .material-icons {
-    color: var(--material-icons-color);
-} */
 
 /* Flexbox related */
-.row, .col {
+.home-page-row {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,36 +55,61 @@ body {
     padding: 20px;
 }
 
+.home-page-col { 
+    flex-direction: column;  
+}
 
-.col { flex-direction: column; }
-
-.spacer-0 { width: 0; height: 0; }
-.spacer-1 { width: 5px; height: 5px; }
-.spacer-2 { width: 10px; height: 10px; }
-.spacer-grow { flex-grow: 1; }
+#game-title {
+    font-size: 200%;
+    color: var(--game-title-color);
+}
 
 /* Overlay */
 .overlay {
     position: fixed;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     background: var(--overlay-background);
 }
+
 .overlay .caption {
     font-size: 120%;
     color: var(--overlay-caption-color);
 }
+
 .overlay .content {
     background: var(--overlay-content-background);
-}
+} 
+
 .warning {
     font-weight: bold;
     color: var(--warning-color);
 }
 
 /* Form related */
+#signin-form, #register-form {
+    width: 270px;
+    text-align: center; /* Align text within forms */
+}
+
+/* Signin overlay */
+/* #signin-form {
+    width: 270px;
+    align-self: stretch;
+}*/
+
+#register-form {
+    width: 350px;
+    background: var(--register-form-background);
+    padding: 20px;
+} 
+
+
 form input, form select {
     width: 100%;
+    margin-bottom: 20px; 
 }
 
 input, select {
@@ -98,6 +119,7 @@ input, select {
     border-radius: 20px;
     padding: 10px 15px;
 }
+
 input::placeholder, select {
     color: gray;
 }
@@ -249,16 +271,7 @@ button.icon:active {
     overflow-y: auto;
 }
 
-/* Signin overlay */
-#signin-form {
-    width: 270px;
-    align-self: stretch;
-}
-#register-form {
-    width: 380px;
-    background: var(--register-form-background);
-    padding: 20px;
-}
+
 
 /* Edit user overlay */
 #edit-user-form {
@@ -311,9 +324,7 @@ canvas {
     text-anchor: middle;
 }
 
-
 /* End of game Interface*/
-
 
 .main-layout{
     display: flex;

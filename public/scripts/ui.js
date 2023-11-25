@@ -5,7 +5,7 @@ const SignInForm = (function () {
         Avatar.populate($("#register-avatar"));
 
         // Hide it
-        $("#signin-overlay").hide();
+        $("#home-page").hide();
 
         // Submit event for the signin form
         $("#signin-form").on("submit", (e) => {
@@ -58,7 +58,7 @@ const SignInForm = (function () {
 
     // This function shows the form
     const show = function () {
-        $("#signin-overlay").fadeIn(500);
+        $("#home-page").fadeIn(500);
     };
 
     // This function hides the form
@@ -66,7 +66,7 @@ const SignInForm = (function () {
         $("#signin-form").get(0).reset();
         $("#signin-message").text("");
         $("#register-message").text("");
-        $("#signin-overlay").fadeOut(500);
+        $("#home-page").fadeOut(500);
     };
 
     return { initialize, show, hide };
@@ -105,11 +105,11 @@ const UserPanel = (function () {
     // This function updates the user panel
     const update = function (user) {
         if (user) {
-            $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
+            // $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
             $("#user-panel .user-name").text(user.name);
         }
         else {
-            $("#user-panel .user-avatar").html("");
+            // $("#user-panel .user-avatar").html("");
             $("#user-panel .user-name").text("");
         }
     };
