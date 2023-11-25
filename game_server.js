@@ -140,6 +140,8 @@ io.use((socket, next) => {
 });
 
 const onlineUsers = {};
+let players = { player1: null, player2: null };
+
 
 io.on("connection", (socket) => {
     if (socket.request.session.user != null) {
@@ -159,18 +161,20 @@ io.on("connection", (socket) => {
             socket.emit("messages", JSON.stringify(chatroom));
         });
 
-        socket.on("post message", (content) => {
-            const chat_details = { "user": socket.request.session.user, "datetime": new Date(), "content": content };
-            chatroom.push(chat_details);
-            // console.log(chatroom);
-            fs.writeFileSync("data/chatroom.json", JSON.stringify(chatroom, null, " "));
-            io.emit("add message", JSON.stringify(chat_details));
-        });
-
         // disconnection
         socket.on("disconnect", () => {
             delete onlineUsers[socket.request.session.user.username];
             io.emit("remove user", JSON.stringify(socket.request.session.user));
+        });
+
+        socket.on("join game", (player) => {
+            if (player.id == 0) {
+                players.player1 = player.name;
+            }
+            else if (player.id == 1) {
+                players.player2 = player.name;
+            }
+            io.emit("ready join game", { name: player.name, id: player.id });
         });
     }
 });
