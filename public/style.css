@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url('https://fonts.cdnfonts.com/css/return-of-ganon');
 :root {
     --material-icons-color: black;
     --field-color: gray;
@@ -30,7 +30,7 @@
     --game-title-color: rgb(239, 15, 15);
 }
 * {
-    font-family: "Abel", sans-serif;
+    font-family: 'Return of Ganon', sans-serif;
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -42,9 +42,13 @@ body {
     height: 100vh;
     padding: 0;
     margin: 0;
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
 }
 
 .center { text-align: center; }
+
+.shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); }
 
 .warning {
     font-weight: bold;
@@ -284,13 +288,15 @@ button.icon:active {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: #5dc8f2;
+    /*background: #5dc8f2;*/
+    background: url("./images/zelda-background.png") no-repeat center;
+    background-size: cover;
 }
 
 /* Instruction title */
 .instruction-title {
     text-align: center;
-    color: #ffffff;
+    color: black;
 }
 
 /* Buttons for players */
@@ -312,14 +318,41 @@ button.icon:active {
     border-radius: 5px;
 }
 
+/* The scroll bar customization of instruction page */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px blue;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #3a9dfc;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #0f82fa;
+}
+
 .instructions-container {
     width: 700px; 
     height: 400px; 
     border: 1px solid #ccc; 
     overflow: auto;
-    background: #ffffff;
+    background: #b8e2fed1;
     padding: 20px;
+    border-radius: 10px;
+}
 
+.instructions-container h3 {
+    text-align: center;
 }
 
 /*End of pair up page*/
@@ -330,8 +363,9 @@ button.icon:active {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 20px;
     padding: 20px;
+    border-radius: 20px;
 }
 
 .home-page-col { 
@@ -340,7 +374,7 @@ button.icon:active {
 
 #game-title {
     font-size: 200%;
-    color: #ffffff;
+    color: black;
 }
 
 /* Overlay */
@@ -350,7 +384,8 @@ button.icon:active {
     top: 0;
     width: 100%;
     height: 100%;
-    background: #55c1ec;
+    background: url("./images/zelda-background.png") no-repeat center;
+    background-size: cover;
 }
 
 .overlay .caption {
@@ -360,14 +395,19 @@ button.icon:active {
 
 .overlay .content {
     background: #167ea8;
-    margin-left: 150px;
-    margin-right: 150px;
+    margin-left: 200px;
+    margin-right: 200px;
+    /*background: var(--overlay-content-background);*/
 } 
 
 /* Form related */
 #signin-form, #register-form {
     width: 270px;
     text-align: center; /* Align text within forms */
+}
+
+#signin-password {
+    color: black;
 }
 
 #register-form {
