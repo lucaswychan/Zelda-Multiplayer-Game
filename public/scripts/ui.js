@@ -91,7 +91,19 @@ const PariUpPage = (function () {
             );
         });
 
-        
+        $("#join-player1").on("click", () => {
+            let playerName = Authentication.getUser().username;
+            console.log(`${playerName} is ready to play`);
+            Socket.joinGame(playerName, 0);
+        });
+
+        $("#join-player2").on("click", () => {
+            let playerName = Authentication.getUser().username;
+            console.log(`${playerName} is ready to play`);
+            Socket.joinGame(playerName, 1);
+        });
+
+        hide();
     };
 
     // This function shows the form with the user
@@ -153,7 +165,7 @@ const OnlineUsersPanel = (function () {
         const userDiv = onlineUsersArea.find("#username-" + user.username);
 
         // Add the user
-        if (userDiv.length == 0) {
+        if (userDiv.length === 0) {
             onlineUsersArea.append(
                 $("<div id='username-" + user.username + "'></div>")
                     .append(UI.getUserDisplay(user))
@@ -173,6 +185,22 @@ const OnlineUsersPanel = (function () {
     };
 
     return { initialize, update, addUser, removeUser };
+})();
+
+const GamePage = (() => {
+
+    const initialize = () => {
+
+        hide();
+    };
+    const show = () => {
+        $("#game-container").show();
+    };
+
+    const hide = () => {
+        $("#game-container").hide();
+    }
+    return { initialize, show, hide };
 })();
 
 const ChatPanel = (function () {
@@ -198,61 +226,37 @@ const ChatPanel = (function () {
             // Clear the message
             $("#chat-input").val("");
         });
-
-        // New added codes for adding the typing message
-        let timeID;
-        let trigger = false;
-        $('#chat-input')
-            .on("keydown", () => {
-                if (!trigger) {
-                    Socket.typingMessage("typing");
-                    trigger = true;
-                    // console.log("keydown");
-                    clearTimeout(timeID);
-                }
-                // clearTimeout(timeID);
-            })
-            .on("keyup", () => {
-                if (trigger && !timeID) { 
-                    timeID = setTimeout(() => {
-                        Socket.typingMessage("remove typing");
-                        // console.log("keyup");
-                        timeID = null;
-                        trigger = false;
-                    }, 3000);
-                }
-            });
     };
 
     // This function updates the chatroom area
-    const update = function (chatroom) {
-        // Clear the online users area
-        chatArea.empty();
-
-        // Add the chat message one-by-one
-        for (const message of chatroom) {
-            addMessage(message);
-        }
-    };
+    // const update = function (chatroom) {
+    //     // Clear the online users area
+    //     chatArea.empty();
+    //
+    //     // Add the chat message one-by-one
+    //     for (const message of chatroom) {
+    //         addMessage(message);
+    //     }
+    // };
 
     // This function adds a new message at the end of the chatroom
-    const addMessage = function (message) {
-        const datetime = new Date(message.datetime);
-        const datetimeString = datetime.toLocaleDateString() + " " +
-            datetime.toLocaleTimeString();
+    // const addMessage = function (message) {
+    //     const datetime = new Date(message.datetime);
+    //     const datetimeString = datetime.toLocaleDateString() + " " +
+    //         datetime.toLocaleTimeString();
+    //
+    //     chatArea.append(
+    //         $("<div class='chat-message-panel row'></div>")
+    //             .append(UI.getUserDisplay(message.user))
+    //             .append($("<div class='chat-message col'></div>")
+    //                 .append($("<div class='chat-date'>" + datetimeString + "</div>"))
+    //                 .append($("<div class='chat-content'>" + message.content + "</div>"))
+    //             )
+    //     );
+    //     chatArea.scrollTop(chatArea[0].scrollHeight);
+    // };
 
-        chatArea.append(
-            $("<div class='chat-message-panel row'></div>")
-                .append(UI.getUserDisplay(message.user))
-                .append($("<div class='chat-message col'></div>")
-                    .append($("<div class='chat-date'>" + datetimeString + "</div>"))
-                    .append($("<div class='chat-content'>" + message.content + "</div>"))
-                )
-        );
-        chatArea.scrollTop(chatArea[0].scrollHeight);
-    };
-
-    return { initialize, update, addMessage };
+    return { initialize  };
 })();
 
 const UI = (function () {
@@ -265,7 +269,7 @@ const UI = (function () {
     };
 
     // The components of the UI are put here
-    const components = [HomePage, PariUpPage, OnlineUsersPanel, ChatPanel];
+    const components = [HomePage, PariUpPage, OnlineUsersPanel, GamePage, ChatPanel];
 
     // This function initializes the UI
     const initialize = function () {
@@ -275,9 +279,5 @@ const UI = (function () {
         }
     };
 
-    const addTypingMessage = (username) => {
-        $("#chat-input-form").prepend($('<div style="font-style: italic;"' + username + " is typing..." + "</div>"));
-    };
-
-    return { getUserDisplay, initialize, addTypingMessage };
+    return { getUserDisplay, initialize };
 })();

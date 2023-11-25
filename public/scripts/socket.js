@@ -1,6 +1,7 @@
 const Socket = (function () {
     // This stores the current Socket.IO socket
     let socket = null;
+    let playerID = null;
 
     // This function gets the socket from the module
     const getSocket = function () {
@@ -44,20 +45,22 @@ const Socket = (function () {
             OnlineUsersPanel.removeUser(user);
         });
 
-        // Set up the messages event
-        socket.on("messages", (chatroom) => {
-            chatroom = JSON.parse(chatroom);
+        socket.on("ready join game", (player) => {
+            const player1Button = $("#join-player1");
+            const player2Button = $("#join-player2");
 
-            // Show the chatroom messages
-            ChatPanel.update(chatroom);
-        });
-
-        // Set up the add message event
-        socket.on("add message", (message) => {
-            message = JSON.parse(message);
-
-            // Add the message to the chatroom
-            ChatPanel.addMessage(message);
+            if (player.id === 0) {
+                player1Button.html(player.name);
+                player1Button.css("background", "purple");
+            }
+            else if (player.id === 1) {
+                player2Button.html(player.name);
+                player2Button.css("background", "purple");
+            }
+            if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2" /*&& player1Button.html() != player2Button.html()*/) {
+                PariUpPage.hide();
+                game.start();
+            }
         });
     };
 
@@ -68,12 +71,12 @@ const Socket = (function () {
     };
 
     // This function sends a post message event to the server
-    const postMessage = function (content) {
-        if (socket && socket.connected) {
-            socket.emit("post message", content);
-        }
-    };
+
+    const joinGame = (name, id) => {
+        playerID = id;
+        socket.emit("join game", { name, id });
+    }
 
 
-    return { getSocket, connect, disconnect, postMessage };
+    return { getSocket, connect, disconnect, postMessage, joinGame };
 })();
