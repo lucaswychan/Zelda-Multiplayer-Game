@@ -9,24 +9,6 @@
 </head>
 
 <body>
-<!--    <div id="container" class="col">-->
-<!--        <div id="header" class="row">-->
-<!--            <div id="title">Game Room-->
-<!--                <span class="material-icons">chat</span>-->
-<!--            </div>-->
-
-<!--            <div class="spacer-grow"></div>-->
-
-<!--            <div id="user-panel" class="row">-->
-<!--                <div class="field-content row shadow">-->
-<!--                    <span class="user-avatar"></span>-->
-<!--                    <span class="user-name">-</span>-->
-<!--                </div>-->
-<!--                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
 <!-- Home Page: Signin and Register -->
 <div id="home-page">
     <div class="overlay">
@@ -137,18 +119,8 @@
                 TIME:
                 <tspan id="time-remaining">20</tspan>
             </text>
-        </svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
-            <defs>
-                <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="red"/>
-                    <stop offset="0.5" stop-color="yellow"/>
-                    <stop offset="1" stop-color="red"/>
-                </linearGradient>
-            </defs>
-            <text x="50%" y="50%">
-                Time's up! You have collected
+            <text x="10" y="50">
+                You have collected
                 <tspan id="final-gems">0</tspan>
                 gem(s).
             </text>
@@ -246,9 +218,7 @@
                 HomePage.hide();
                 PariUpPage.update(Authentication.getUser());
                 PariUpPage.show();
-                // GameOverPage.show();
                 Socket.connect();
-                // game.start();
             },
             () => {
                 HomePage.show();

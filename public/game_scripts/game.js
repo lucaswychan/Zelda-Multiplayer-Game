@@ -1,15 +1,20 @@
-const game = (() => {
+const game = (function ()  {
     // $("#game-canvas").css('opacity', '0.1');
-    const totalGameTime = 20;   // Total game time in seconds
-    const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
-    let gameStartTime = 0;      // The timestamp when the game starts
-    let collectedGems = 0;      // The number of gems collected in the game
 
     const start = () => {
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
 
         const gameArea = BoundingBox(context, 165, 60, 420, 800);
+
+        const totalGameTime = 10;   // Total game time in seconds
+        const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
+        let gameStartTime = 0;      // The timestamp when the game starts
+        let collectedGems = 0;      // The number of gems collected in the game
+
+        // Clear Data first
+        $("#time-remaining").text(totalGameTime);
+        $("#final-gems").text(collectedGems);
 
         /* Create the sprites in the game */
         const player = Player(context, 427, 240, gameArea); // The player
@@ -35,8 +40,8 @@ const game = (() => {
             /* Handle the game over situation here */
             if (timeRemaining == 0) {
                 $("#final-gems").text(collectedGems);
-                $("#game-over").show();
                 console.log("Game is ended")
+
                 // show the game over page
                 GamePage.hide()
                 GameOverPage.show()
@@ -62,6 +67,8 @@ const game = (() => {
                 sounds.collect.currentTime = 0;
                 sounds.collect.play();
                 collectedGems++;
+
+                $("#final-gems").text(collectedGems);
             }
 
 
@@ -131,5 +138,5 @@ const game = (() => {
     }
     return { start };
 })();
-//End of game
+//End of games
 

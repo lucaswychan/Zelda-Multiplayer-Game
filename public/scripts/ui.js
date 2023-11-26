@@ -24,6 +24,10 @@ const HomePage = (function () {
                     PariUpPage.show();
 
                     Socket.connect();
+
+                    // Restart the the setting each time
+                    Socket.restart();
+
                 },
                 (error) => { $("#signin-message").text(error); }
             );
@@ -240,13 +244,10 @@ const GameOverPage = (() => {
         // Socket.getRanking();s
         $("#back-to-pair-up").on("click", () => {
             // Send a signout request
-            Authentication.signout(
-                () => {
-                   
-                    hide();
-                    PariUpPage.show();
-                }
-            );
+          
+            hide();
+            Socket.restart();
+            PariUpPage.show();
         });
 
          // Click event for the signout button
@@ -254,10 +255,11 @@ const GameOverPage = (() => {
             // Send a signout request
             Authentication.signout(
                 () => {
+                   
                     Socket.disconnect();
-
                     hide();
                     HomePage.show();
+                
                 }
             );
         });

@@ -86,6 +86,7 @@ const Socket = (function () {
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
                 GamePage.show();
                 PariUpPage.hide();
+                //start the game 
                 game.start();
             }
         });
@@ -124,6 +125,26 @@ const Socket = (function () {
 
         });
 
+        socket.on("restart", (players) => {
+            const player1Button = $("#join-player1");
+            const player2Button = $("#join-player2");
+            players["player1"] = null
+            players["player2"] = null
+            // Reset the pair up button
+            player1Button.html('Player 1');
+            player1Button.css("background", "rgb(117, 183, 229)");
+            
+            player2Button.html('Player 2');
+            player2Button.css("background", "rgb(117, 183, 229)");
+
+            //clear chatroom data
+            const chatroomArea = $('#chat-area');
+            chatroomArea.empty();
+
+            $('#chat-input').val('');
+
+        });
+
         
     };
 
@@ -159,14 +180,14 @@ const Socket = (function () {
         socket.emit("get players name", true);
     }
 
-
-
     const getRanking = function () {
         socket.emit("get ranking", true);
     }
 
-
+    const restart = function () {
+        socket.emit("restart", true);
+    }
 
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
-         getRanking};
+         getRanking, restart};
 })();
