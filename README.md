@@ -1,5 +1,5 @@
 # Zelda-Multiplayer-Game
 
 ## Run Code
-`npm install`
-`node game_server.js`
+1. `npm install`
+2. `node game_server.js`
