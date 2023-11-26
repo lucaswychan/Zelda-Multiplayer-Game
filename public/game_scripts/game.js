@@ -1,4 +1,4 @@
-const game = (function ()  {
+const game = (function () {
     // $("#game-canvas").css('opacity', '0.1');
 
     const start = () => {
@@ -9,8 +9,10 @@ const game = (function ()  {
 
         const totalGameTime = 10;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
+        const swordMaxAge = 3000;
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
+        let swordDamage = 0;
 
         // Clear Data first
         $("#time-remaining").text(totalGameTime);
@@ -86,7 +88,6 @@ const game = (function ()  {
             }
 
 
-
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
 
@@ -99,58 +100,58 @@ const game = (function ()  {
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }
-            
-          
-            /* Handle the keydown of arrow keys and spacebar */
-            $(document).on("keydown", function (event) {
 
-                /* TODO */
-                /* Handle the key down */
-                switch (event.keyCode) {
-                    case 37:
-                        player.move(1);
-                        break;
-                    case 38:
-                        player.move(2);
-                        break;
-                    case 39:
-                        player.move(3);
-                        break;
-                    case 40:
-                        player.move(4);
-                        break;
-                    case 32:
-                        player.speedUp();
-                        break;
-                }
-            });
 
-            /* Handle the keyup of arrow keys and spacebar */
-            $(document).on("keyup", function (event) {
-            
-                /* TODO */
-                /* Handle the key up */
-                switch (event.keyCode) {
-                    case 37:
-                        player.stop(1);
-                        break;
-                    case 38:
-                        player.stop(2);
-                        break;
-                    case 39:
-                        player.stop(3);
-                        break;
-                    case 40:
-                        player.stop(4);
-                        break;
-                    case 32:
-                        player.slowDown();
-                        break;
-                }
+        /* Handle the keydown of arrow keys and spacebar */
+        $(document).on("keydown", function (event) {
+
+            /* TODO */
+            /* Handle the key down */
+            switch (event.keyCode) {
+                case 37:
+                    player.move(1);
+                    break;
+                case 38:
+                    player.move(2);
+                    break;
+                case 39:
+                    player.move(3);
+                    break;
+                case 40:
+                    player.move(4);
+                    break;
+                case 32:
+                    player.speedUp();
+                    break;
+            }
         });
 
-           /* Start the game */
-           requestAnimationFrame(doFrame);
+        /* Handle the keyup of arrow keys and spacebar */
+        $(document).on("keyup", function (event) {
+
+            /* TODO */
+            /* Handle the key up */
+            switch (event.keyCode) {
+                case 37:
+                    player.stop(1);
+                    break;
+                case 38:
+                    player.stop(2);
+                    break;
+                case 39:
+                    player.stop(3);
+                    break;
+                case 40:
+                    player.stop(4);
+                    break;
+                case 32:
+                    player.slowDown();
+                    break;
+            }
+        });
+
+        /* Start the game */
+        requestAnimationFrame(doFrame);
     }
     return {start};
 })();

@@ -29,7 +29,9 @@ const HomePage = (function () {
                     Socket.restart();
 
                 },
-                (error) => { $("#signin-message").text(error); }
+                (error) => {
+                    $("#signin-message").text(error);
+                }
             );
         });
 
@@ -55,7 +57,9 @@ const HomePage = (function () {
                     $("#register-form").get(0).reset();
                     $("#register-message").text("You can sign in now.");
                 },
-                (error) => { $("#register-message").text(error); }
+                (error) => {
+                    $("#register-message").text(error);
+                }
             );
         });
     };
@@ -73,7 +77,7 @@ const HomePage = (function () {
         $("#home-page").fadeOut(500);
     };
 
-    return { initialize, show, hide };
+    return {initialize, show, hide};
 })();
 
 const PariUpPage = (function () {
@@ -125,16 +129,14 @@ const PariUpPage = (function () {
         if (user) {
             // $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
             $("#user-panel .user-name").text(user.name);
-        }
-        else {
+        } else {
             // $("#user-panel .user-avatar").html("");
             $("#user-panel .user-name").text("");
         }
     };
 
-    return { initialize, show, hide, update };
+    return {initialize, show, hide, update};
 })();
-
 
 
 const GamePage = (() => {
@@ -153,7 +155,7 @@ const GamePage = (() => {
     const hide = () => {
         $("#game-container").hide();
     }
-    return { initialize, show, hide };
+    return {initialize, show, hide};
 })();
 
 const ChatPanel = (function () {
@@ -194,7 +196,7 @@ const ChatPanel = (function () {
                 // clearTimeout(timeID);
             })
             .on("keyup", () => {
-                if (trigger && !timeID) { 
+                if (trigger && !timeID) {
                     timeID = setTimeout(() => {
                         Socket.typingMessage("remove typing");
                         // console.log("keyup");
@@ -233,9 +235,8 @@ const ChatPanel = (function () {
         chatArea.scrollTop(chatArea[0].scrollHeight);
     };
 
-    return { initialize, update, addMessage};
+    return {initialize, update, addMessage};
 })();
-
 
 
 const GameOverPage = (() => {
@@ -244,22 +245,22 @@ const GameOverPage = (() => {
         // Socket.getRanking();s
         $("#back-to-pair-up").on("click", () => {
             // Send a signout request
-          
+
             hide();
             Socket.restart();
             PariUpPage.show();
         });
 
-         // Click event for the signout button
-         $("#back-to-home").on("click", () => {
+        // Click event for the signout button
+        $("#back-to-home").on("click", () => {
             // Send a signout request
             Authentication.signout(
                 () => {
-                   
+
                     Socket.disconnect();
                     hide();
                     HomePage.show();
-                
+
                 }
             );
         });
@@ -274,9 +275,8 @@ const GameOverPage = (() => {
     const hide = () => {
         $("#game-over-page").hide();
     }
-    return { initialize, show, hide };
+    return {initialize, show, hide};
 })();
-
 
 
 const UI = (function () {
@@ -299,5 +299,5 @@ const UI = (function () {
         }
     };
 
-    return { getUserDisplay, initialize };
+    return {getUserDisplay, initialize};
 })();
