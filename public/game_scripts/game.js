@@ -1,5 +1,5 @@
 const game = (() => {
-
+    // $("#game-canvas").css('opacity', '0.1');
     const totalGameTime = 20;   // Total game time in seconds
     const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
     let gameStartTime = 0;      // The timestamp when the game starts
@@ -32,7 +32,7 @@ const game = (() => {
             const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
             $("#time-remaining").text(timeRemaining);
 
-
+            sounds.background.play();
             /* TODO */
             /* Handle the game over situation here */
             if (timeRemaining == 0) {
@@ -74,19 +74,10 @@ const game = (() => {
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }
-
-        /* Handle the start of the game */
-        $("#game-start").on("click", function () {
-            /* Hide the start screen */
-            $("#game-start").hide();
-
-            gem.randomize(gameArea);
-
-            sounds.background.play();
-
+            
+          
             /* Handle the keydown of arrow keys and spacebar */
             $(document).on("keydown", function (event) {
-
 
                 /* TODO */
                 /* Handle the key down */
@@ -107,14 +98,11 @@ const game = (() => {
                         player.speedUp();
                         break;
                 }
-
-
             });
 
             /* Handle the keyup of arrow keys and spacebar */
             $(document).on("keyup", function (event) {
-
-
+            
                 /* TODO */
                 /* Handle the key up */
                 switch (event.keyCode) {
@@ -134,12 +122,10 @@ const game = (() => {
                         player.slowDown();
                         break;
                 }
-
-            });
-
-            /* Start the game */
-            requestAnimationFrame(doFrame);
         });
+
+           /* Start the game */
+           requestAnimationFrame(doFrame);
     }
     return { start };
 })();

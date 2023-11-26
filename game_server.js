@@ -74,8 +74,7 @@ app.post("/signin", (req, res) => {
     // D. Reading the users.json file
     //
     const users = JSON.parse(fs.readFileSync("data/users.json"));
-    console.log("users in server : ", users);
-
+    
     //
     // E. Checking for username/password
     //  
