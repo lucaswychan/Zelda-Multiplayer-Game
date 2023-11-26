@@ -181,6 +181,15 @@ io.on("connection", (socket) => {
         socket.on("disconnect", () => {
             delete onlineUsers[socket.request.session.user.username];
             io.emit("remove user", JSON.stringify(socket.request.session.user));
+
+            //Delete Players
+            players['player1'] = null;
+            players['player2'] = null;
+
+            //clear chatroom Data
+            const emptyData = []
+            fs.writeFileSync('data/chatroom.json', JSON.stringify(emptyData));
+
         });
 
         socket.on("join game", (player) => {
@@ -202,6 +211,19 @@ io.on("connection", (socket) => {
             let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
             socket.emit("get ranking", rankingData);
         });
+
+        socket.on("restart", (players) => {
+            //Clear User Data
+            players["player1"] = null;
+            players["player2"] = null;
+            // Clear chatroom Data
+            // let chatroomData = JSON.parse(fs.readFileSync("data/chatroom.json"));s
+            const emptyData = []
+            fs.writeFileSync('data/chatroom.json', JSON.stringify(emptyData));
+            
+            io.emit("restart", players);
+        });
+    
 
     }
 });
