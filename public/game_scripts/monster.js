@@ -23,22 +23,22 @@ const Monster = function(ctx, x, y, gameArea, MonsterID) {
 
     const sequencesForMonster2 = {
         /* Idling sprite sequences for facing different directions */
-        idleDown:  { x: 0, y: 19, width: 25, height: 33, count: 4, timing: 500, loop: true },
-        idleRight: { x: 0, y: 53, width: 22, height: 32, count: 4, timing: 500, loop: true },
-        idleUp:    { x: 0, y: 86, width: 23, height: 32, count: 4, timing: 500, loop: true },
-        idleLeft:  { x: 0, y: 121, width: 22, height: 32, count: 4, timing: 500, loop: true },
+        idleDown:  { x: 1, y: 19, width: 30, height: 37, count: 8, timing: 500, loop: true },
+        idleRight: { x: 1, y: 57, width: 29, height: 40, count: 8, timing: 500, loop: true },
+        idleUp:    { x: 1, y: 98, width: 29, height: 37, count: 8, timing: 500, loop: true },
+        idleLeft:  { x: 1, y: 136, width: 29, height: 40, count: 8, timing: 500, loop: true },
 
         /* Moving sprite sequences for facing different directions */
-        moveDown:  { x: 323, y: 19, width: 24, height: 35, count: 6, timing: 50, loop: true },
-        moveRight: { x: 324, y: 55, width: 25, height: 33, count: 6, timing: 50, loop: true },
-        moveUp:    { x: 326, y: 90, width: 26.16, height: 36, count: 6, timing: 50, loop: true },
-        moveLeft:  { x: 324, y: 127, width: 25, height: 33, count: 6, timing: 50, loop: true },
+        moveDown:  { x: 365, y: 19, width: 25, height: 38, count: 6, timing: 50, loop: true },
+        moveRight: { x: 365, y: 58, width: 29, height: 37, count: 6, timing: 50, loop: true },
+        moveUp:    { x: 365, y: 96, width: 25, height: 38, count: 6, timing: 50, loop: true },
+        moveLeft:  { x: 365, y: 136, width: 29, height: 37, count: 6, timing: 50, loop: true },
     };
 
     // This is the sprite object of the monster created from the Sprite module.
     const sprite = Sprite(ctx, x, y);
-    const sequences = MonsterID === 1 ? sequencesForMonster1 : sequencesForMonster1;
-    const spriteSheet = MonsterID === 1 ? "./images/monster1.png" : "./images/monster1.png";
+    const sequences = MonsterID === 1 ? sequencesForMonster1 : sequencesForMonster2;
+    const spriteSheet = MonsterID === 1 ? "./images/monster1.png" : "./images/monster2.png";
     const stopProbability = 0.7;
     const moveDuration = 200;
     const stopDuration = 1500;

@@ -9,9 +9,9 @@ const game = (function () {
 
         const totalGameTime = 20;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
-        const monsterMoveDuration = 500;
-        const monsterStopDuration = 1500;
-        let MonsterToMoveAge = monsterMoveDuration; // The time monsters need to move
+        const monsterMoveDuration = [500,300];
+        const monsterStopDuration = [1500,1000];
+        let MonsterToMoveAge = [monsterMoveDuration[0],monsterMoveDuration[1]]; // The time monsters need to move
         const swordMaxAge = 3000;
         const attackRange = 15;
         let gameStartTime = 0;      // The timestamp when the game starts
@@ -28,7 +28,8 @@ const game = (function () {
         /* Create the sprites in the game */
         const players = [Player(context, 60, 250, gameArea, 1),
             Player(context, 800, 360, gameArea, 2)]
-        const monsters = [Monster(context, 125, 235, gameArea,1)]
+        const monsters = [Monster(context, 125, 235, gameArea,1),
+            Monster(context, 700, 400, gameArea,2)]
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left
@@ -81,13 +82,13 @@ const game = (function () {
             /* Randomize the gem and collect the gem here */
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
             if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
-            monsters.forEach(monster => {
-                if (monster.getMoveAge(now) >= MonsterToMoveAge) {
-                    if(monster.randomStop()){
-                        MonsterToMoveAge = monsterStopDuration;
+            monsters.forEach((monster, index) => {
+                if (monster.getMoveAge(now) >= MonsterToMoveAge[index]) {
+                    if (monster.randomStop()) {
+                        MonsterToMoveAge[index] = monsterStopDuration[index];
                         monster.stop(monster.getDir());
                     } else {
-                        MonsterToMoveAge = monsterMoveDuration;
+                        MonsterToMoveAge[index] = monsterMoveDuration[index];
                         monster.randomMove();
                     }
                 }
