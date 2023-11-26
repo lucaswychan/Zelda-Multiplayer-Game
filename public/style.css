@@ -216,8 +216,34 @@ button.icon:active {
     padding-left: 40px
 }
 
-/* Chatroom */
+/* Player Data */
 
+#player-data{
+    margin-bottom: 5px;
+    background: #40779cd1;
+    margin: 10px;
+    padding: 10px;
+}
+
+#Player1{
+    margin-bottom: 20px;
+}
+
+#Player1 p,
+#player2 p{
+    margin: 5px 0;
+    color:white;
+}
+
+#Player1 p span,
+#player2 p span{
+    color:white;
+}
+
+
+
+
+/* Chatroom */
 
 /* Data field caption and content */
 .field-content {
