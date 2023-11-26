@@ -216,8 +216,34 @@ button.icon:active {
     padding-left: 40px
 }
 
-/* Chatroom */
+/* Player Data */
 
+#player-data{
+    margin-bottom: 5px;
+    background: #40779cd1;
+    margin: 10px;
+    padding: 10px;
+}
+
+#Player1{
+    margin-bottom: 20px;
+}
+
+#Player1 p,
+#player2 p{
+    margin: 5px 0;
+    color:white;
+}
+
+#Player1 p span,
+#player2 p span{
+    color:white;
+}
+
+
+
+
+/* Chatroom */
 
 /* Data field caption and content */
 .field-content {
@@ -433,3 +459,90 @@ button.icon:active {
 } 
 
 /*End of Home page*/
+
+/* Game Over Page*/
+#game-over-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url("./images/zelda-background.png") no-repeat center;
+    background-size: cover;
+}
+
+#game-over-container{
+    background-color: #8ec9f1;
+    padding: 20px;
+    border-radius: 15px;
+    width: 60%;
+}
+
+#player-result {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.ranking-result{
+    padding: 3px;
+    border-radius: 15px;
+    background-color: #ffffff;
+}
+
+.leaderboard-table {
+    background:#117cc3;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.ranking-result h3{
+    color:#117cc3;
+    text-align: center;
+}
+
+.leaderboard-table th {
+    background-color: #ffffff;
+    text-align: left;
+  
+}
+
+.leaderboard-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.leaderboard-table tbody tr td {
+   padding-left: 10px;
+}
+
+/* Styling for the game-over page buttons */
+#game-over-page-button {
+    display: flex;
+    justify-content: space-around;
+}
+
+#back-to-pair-up,
+#back-to-home {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #3498db;
+    color: #fff;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#back-to-pair-up:hover,
+#back-to-home:hover {
+    background-color: #2980b9;
+}
+
+#player1-result p,
+#player2-result p{
+    margin: 0 0;
+}
+

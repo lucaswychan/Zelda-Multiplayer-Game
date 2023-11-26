@@ -132,68 +132,17 @@ const PariUpPage = (function () {
 })();
 
 
-const OnlineUsersPanel = (function () {
-    // This function initializes the UI
-    const initialize = function () { };
-
-    // This function updates the online users panel
-    const update = function (onlineUsers) {
-        const onlineUsersArea = $("#online-users-area");
-
-        // Clear the online users area
-        onlineUsersArea.empty();
-
-        // Get the current user
-        const currentUser = Authentication.getUser();
-
-        // Add the user one-by-one
-        for (const username in onlineUsers) {
-            if (username != currentUser.username) {
-                onlineUsersArea.append(
-                    $("<div id='username-" + username + "'></div>")
-                        .append(UI.getUserDisplay(onlineUsers[username]))
-                );
-            }
-        }
-    };
-
-    // This function adds a user in the panel
-    const addUser = function (user) {
-        const onlineUsersArea = $("#online-users-area");
-
-        // Find the user
-        const userDiv = onlineUsersArea.find("#username-" + user.username);
-
-        // Add the user
-        if (userDiv.length === 0) {
-            onlineUsersArea.append(
-                $("<div id='username-" + user.username + "'></div>")
-                    .append(UI.getUserDisplay(user))
-            );
-        }
-    };
-
-    // This function removes a user from the panel
-    const removeUser = function (user) {
-        const onlineUsersArea = $("#online-users-area");
-
-        // Find the user
-        const userDiv = onlineUsersArea.find("#username-" + user.username);
-
-        // Remove the user
-        if (userDiv.length > 0) userDiv.remove();
-    };
-
-    return { initialize, update, addUser, removeUser };
-})();
 
 const GamePage = (() => {
 
     const initialize = () => {
+        // Socket.getPlayers();
 
         hide();
     };
+
     const show = () => {
+        Socket.getPlayersName();
         $("#game-container").show();
     };
 
@@ -283,6 +232,51 @@ const ChatPanel = (function () {
     return { initialize, update, addMessage};
 })();
 
+
+
+const GameOverPage = (() => {
+
+    const initialize = () => {
+        // Socket.getRanking();s
+        $("#back-to-pair-up").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                   
+                    hide();
+                    PariUpPage.show();
+                }
+            );
+        });
+
+         // Click event for the signout button
+         $("#back-to-home").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                    Socket.disconnect();
+
+                    hide();
+                    HomePage.show();
+                }
+            );
+        });
+
+        hide();
+    };
+    const show = () => {
+        Socket.getRanking();
+        $("#game-over-page").show();
+    };
+
+    const hide = () => {
+        $("#game-over-page").hide();
+    }
+    return { initialize, show, hide };
+})();
+
+
+
 const UI = (function () {
     // This function gets the user display
     const getUserDisplay = function (user) {
@@ -293,7 +287,7 @@ const UI = (function () {
     };
 
     // The components of the UI are put here
-    const components = [HomePage, PariUpPage, OnlineUsersPanel, GamePage, ChatPanel];
+    const components = [HomePage, PariUpPage, GamePage, ChatPanel, GameOverPage];
 
     // This function initializes the UI
     const initialize = function () {

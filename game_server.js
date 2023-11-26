@@ -74,8 +74,7 @@ app.post("/signin", (req, res) => {
     // D. Reading the users.json file
     //
     const users = JSON.parse(fs.readFileSync("data/users.json"));
-    console.log("users in server : ", users);
-
+    
     //
     // E. Checking for username/password
     //  
@@ -191,8 +190,19 @@ io.on("connection", (socket) => {
             else if (player.id == 1) {
                 players.player2 = player.name;
             }
+
             io.emit("ready join game", { name: player.name, id: player.id });
         });
+
+        socket.on("get players name", () => {
+            io.emit("get players name", players);
+        });
+        
+        socket.on("get ranking", () => {
+            let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+            socket.emit("get ranking", rankingData);
+        });
+
     }
 });
 

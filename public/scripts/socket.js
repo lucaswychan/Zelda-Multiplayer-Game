@@ -83,10 +83,45 @@ const Socket = (function () {
                 player2Button.html(player.name);
                 player2Button.css("background", "purple");
             }
-            if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2" /*&& player1Button.html() != player2Button.html()*/) {
+            if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
+                GamePage.show();
                 PariUpPage.hide();
                 game.start();
             }
+        });
+
+        socket.on("get players name", (players) => {
+            if (players["player1"] != null) {
+                $("#player1-name").html(players["player1"]);
+            }
+            if (players["player2"] != null) {
+                $("#player2-name").html(players["player2"]);
+            }
+        });
+
+        socket.on("get ranking", (rankingsData) => {
+            console.log("rankingsData:",rankingsData)
+            const dataArray = Object.entries(rankingsData).map(([name, score]) => ({ name, score }));
+             
+            // Sort in descending order based on the score
+            dataArray.sort((a, b) => b.score - a.score);
+
+            // Get the tbody element to populate
+            const rankingList = $('#ranking-list');
+
+            // Clear any existing content in the table body
+            rankingList.empty();
+
+            // Populate the table body with the sorted data
+            dataArray.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.score}</td>
+                </tr>`;
+                rankingList.append(row);
+            });
+
         });
 
         
@@ -120,6 +155,18 @@ const Socket = (function () {
         socket.emit("join game", { name, id });
     }
 
+    const getPlayersName = function () {
+        socket.emit("get players name", true);
+    }
 
-    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame };
+
+
+    const getRanking = function () {
+        socket.emit("get ranking", true);
+    }
+
+
+
+    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
+         getRanking};
 })();

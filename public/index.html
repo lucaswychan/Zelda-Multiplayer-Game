@@ -139,19 +139,6 @@
             </text>
         </svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-            <defs>
-                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0.2" stop-color="red"/>
-                    <stop offset="0.4" stop-color="yellow"/>
-                    <stop offset="0.6" stop-color="green"/>
-                    <stop offset="0.8" stop-color="purple"/>
-                </linearGradient>
-            </defs>
-            <p id="game-title" x="50%" y="45%">GEM RUSH!</p>
-            <p x="50%" y="60%">Click here to start the game</p>
-        </svg>
-
         <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
             <defs>
                 <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
@@ -170,8 +157,16 @@
 
     <div id="side-panel">
         <div id="player-data">
-            <div id="Player1" ></div>
-            <div id="player2" ></div>  
+            <div id="Player1">
+                <p>Player 1: <span id="player1-name"></span></p>
+                <p>Score: <span id="player1-score">0</span></p>
+                <p>Attack Monster Score: <span id="player1-monster-score">100</span></p>
+            </div>
+            <div id="player2">
+                <p>Player 2: <span id="player2-name"></span></p>
+                <p>Score: <span id="player2-score">0</span></p>
+                <p>Attack Monster Score: <span id="player2-monster-score">100</span></p>
+            </div>
         </div>
 
         <div id="chat-panel">
@@ -182,9 +177,46 @@
             </form>
         </div>
     </div>
+</div>
 
+  <!-- Game end screen -->
+  <div id="game-over-page">
+    <div id="game-over-container">
+        <div id="player-result">
+            <div id="player1-result">
+                <h2 id="player1-game-result">Winner</h2>
+                <p>Player 1: <span id="player1-name"></span></p>
+                <p>Score: <span id="player1-score">0</span></p>
+            </div>
+            <div id="player2-result">
+                <h2 id="player2-game-result">Loser</h2>
+                <p>Player 2: <span id="player2-name"></span></p>
+                <p>Score: <span id="player2-score">0</span></p>
+            </div>
+        </div>
 
-    
+        <div class="ranking-result">
+            <h3>Game Ranking</h3>
+            <table class="leaderboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Ranking</th>
+                        <th>Player Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-list"></tbody>
+            </table>
+        </div>
+        <div id="game-over-page-button">
+        <button id="back-to-pair-up">Back To Pair Up</button>
+        <button id="back-to-home">Back To Home Pages</button>
+        </div>
+    </div>
+
+</div>
+
 </div>
 
 
@@ -214,8 +246,8 @@
             () => {
                 HomePage.hide();
                 PariUpPage.update(Authentication.getUser());
-                // PariUpPage.show();
-                GamePage.show();
+                PariUpPage.show();
+                // GameOverPage.show();
                 Socket.connect();
                 // game.start();
             },

@@ -1,5 +1,4 @@
 .vscode
 node_modules
 data/users.json
-package-lock.json
 .idea
