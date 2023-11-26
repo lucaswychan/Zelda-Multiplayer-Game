@@ -384,8 +384,9 @@ button.icon:active {
 }
 
 .instructions-container {
-    width: 700px; 
-    height: 400px; 
+    width: 800px; 
+    max-height: 500px; 
+    font-size:130%;
     border: 1px solid #ccc; 
     overflow: auto;
     background: #b8e2fed1;
@@ -437,9 +438,9 @@ button.icon:active {
 
 .overlay .content {
     background: #167ea8;
-    margin-left: 200px;
-    margin-right: 200px;
-    /*background: var(--overlay-content-background);*/
+    margin-left: 350px;
+    margin-right: 350px;
+    font-size: 130%;
 } 
 
 /* Form related */
@@ -515,6 +516,8 @@ button.icon:active {
 
 .leaderboard-table tbody tr td {
    padding-left: 10px;
+
+   
 }
 
 /* Styling for the game-over page buttons */
