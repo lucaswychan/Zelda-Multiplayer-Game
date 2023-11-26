@@ -77,11 +77,11 @@ const Socket = (function () {
 
             if (player.id === 0) {
                 player1Button.html(player.name);
-                player1Button.css("background", "purple");
+                // player1Button.css("background", "purple");
             }
             else if (player.id === 1) {
                 player2Button.html(player.name);
-                player2Button.css("background", "purple");
+                // player2Button.css("background", "purple");
             }
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
                 GamePage.show();
@@ -94,13 +94,21 @@ const Socket = (function () {
         socket.on("get players name", (players) => {
             if (players["player1"] != null) {
                 $("#player1-name").html(players["player1"]);
+                $("#game-over-player1-name").html(players["player1"]);                
             }
             if (players["player2"] != null) {
                 $("#player2-name").html(players["player2"]);
+                $("#game-over-player2-name").html(players["player2"]);   
             }
         });
 
         socket.on("get ranking", (rankingsData) => {
+
+            // we can get the player name and data in html here and store the score in the page
+            // append both player result to ranking list
+            // sort and get the top 10 result
+            // write the need to write the result back the json
+
             console.log("rankingsData:",rankingsData)
             const dataArray = Object.entries(rankingsData).map(([name, score]) => ({ name, score }));
              
@@ -132,10 +140,10 @@ const Socket = (function () {
             players["player2"] = null
             // Reset the pair up button
             player1Button.html('Player 1');
-            player1Button.css("background", "rgb(117, 183, 229)");
+            // player1Button.css("background", "rgb(117, 183, 229)");
             
             player2Button.html('Player 2');
-            player2Button.css("background", "rgb(117, 183, 229)");
+            // player2Button.css("background", "rgb(117, 183, 229)");
 
             //clear chatroom data
             const chatroomArea = $('#chat-area');

@@ -176,10 +176,10 @@ button.icon:active {
 #game-canvas, #game-start, #game-over {
     border: 1px solid gray;
     width: 854px;
-    height: 480px;
+    height: 740px;
 }
 #game-canvas {
-    background: url(./images/background.png);
+    background: url(./images/map.png);
     background-size: cover;
 }
 #game-start, #game-over {
