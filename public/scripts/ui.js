@@ -244,7 +244,6 @@ const GameOverPage = (() => {
                 () => {
                    
                     hide();
-                    Socket.restartGame();
                     PariUpPage.show();
                 }
             );
