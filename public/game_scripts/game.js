@@ -2,8 +2,10 @@ const game = (() => {
 
     const totalGameTime = 20;   // Total game time in seconds
     const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
+    const swordMaxAge = 30000;
     let gameStartTime = 0;      // The timestamp when the game starts
     let collectedGems = 0;      // The number of gems collected in the game
+    let swordDamage = 0;
 
     const start = () => {
         GamePage.show();
@@ -22,6 +24,7 @@ const game = (() => {
             Fire(context, 800, 180), // top-right
             Fire(context, 800, 430)  // bottom-right
         ];
+        const sword = Sword(context, 300, 300);
 
         /* The main processing of the game */
         function doFrame(now) {
@@ -53,13 +56,22 @@ const game = (() => {
             /* TODO */
             /* Randomize the gem and collect the gem here */
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
+            if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
 
-            const { x, y } = gem.getXY();
+            const {x, y} = gem.getXY();
             if (player.getBoundingBox().isPointInBox(x, y)) {
                 gem.randomize(gameArea);
                 sounds.collect.currentTime = 0;
                 sounds.collect.play();
                 collectedGems++;
+            }
+
+            const {x2, y2} = sword.getXY();
+            if (player.getBoundingBox().isPointInBox(x2, y2)) {
+                sword.remove(x2, y2, 16, 16);
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                swordDamage += 50
             }
 
 
@@ -141,7 +153,7 @@ const game = (() => {
             requestAnimationFrame(doFrame);
         });
     }
-    return { start };
+    return {start};
 })();
 //End of game
 
