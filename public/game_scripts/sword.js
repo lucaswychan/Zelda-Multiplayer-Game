@@ -20,8 +20,13 @@ const Sword = function (ctx, x, y) {
 
     const randomize = function (area) {
         /* Randomize the position */
+        console.log("Sword randomize");
+        // sprite.setSequence(sequences);
+        birthTime = performance.now();
         const {x, y} = area.randomPoint();
+        console.log("In Sword Set the x = ", x, " and y = ", y);
         sprite.setXY(x, y);
+        console.log("After setting, x = ", sprite.getXY().x, " and y = ", sprite.getXY().y);
     };
 
     // The methods are returned as an object here.
@@ -31,7 +36,6 @@ const Sword = function (ctx, x, y) {
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
         update: sprite.update,
-        remove: sprite.remove,
         getAge: getAge,
         randomize: randomize
     };
