@@ -140,6 +140,7 @@ const GamePage = (() => {
 
         hide();
     };
+
     const show = () => {
         Socket.getPlayersName();
         $("#game-container").show();
@@ -236,11 +237,36 @@ const ChatPanel = (function () {
 const GameOverPage = (() => {
 
     const initialize = () => {
-        // Socket.getPlayers();
+        // Socket.getRanking();s
+        $("#back-to-pair-up").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                   
+                    hide();
+                    Socket.restartGame();
+                    PariUpPage.show();
+                }
+            );
+        });
+
+         // Click event for the signout button
+         $("#back-to-home").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                    Socket.disconnect();
+
+                    hide();
+                    HomePage.show();
+                }
+            );
+        });
 
         hide();
     };
     const show = () => {
+        Socket.getRanking();
         $("#game-over-page").show();
     };
 
