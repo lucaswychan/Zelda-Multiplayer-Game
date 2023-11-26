@@ -3,11 +3,11 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player1 = function(ctx, x, y, gameArea) {
+const Player = function(ctx, x, y, gameArea, playerID) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
-    const sequences = {
+    const sequencesForPlayer1 = {
         /* Idling sprite sequences for facing different directions */
         idleDown:  { x: 0, y: 20, width: 25, height: 32, count: 4, timing: 500, loop: true },
         idleRight: { x: 0, y: 53, width: 22, height: 30, count: 4, timing: 500, loop: true },
@@ -21,14 +21,31 @@ const Player1 = function(ctx, x, y, gameArea) {
         moveLeft:  { x: 326, y: 127, width: 24, height: 33, count: 6, timing: 50, loop: true },
     };
 
+    const sequencesForPlayer2 = {
+        /* Idling sprite sequences for facing different directions */
+        idleDown:  { x: 0, y: 19, width: 25, height: 33, count: 4, timing: 500, loop: true },
+        idleRight: { x: 0, y: 53, width: 22, height: 32, count: 4, timing: 500, loop: true },
+        idleUp:    { x: 0, y: 86, width: 23, height: 32, count: 4, timing: 500, loop: true },
+        idleLeft:  { x: 0, y: 121, width: 22, height: 32, count: 4, timing: 500, loop: true },
+
+        /* Moving sprite sequences for facing different directions */
+        moveDown:  { x: 323, y: 19, width: 24, height: 35, count: 6, timing: 50, loop: true },
+        moveRight: { x: 324, y: 55, width: 25, height: 33, count: 6, timing: 50, loop: true },
+        moveUp:    { x: 326, y: 90, width: 26.16, height: 36, count: 6, timing: 50, loop: true },
+        moveLeft:  { x: 324, y: 127, width: 25, height: 33, count: 6, timing: 50, loop: true },
+    };
+
     // This is the sprite object of the player created from the Sprite module.
     const sprite = Sprite(ctx, x, y);
+    const sequences = playerID === 1 ? sequencesForPlayer1 : sequencesForPlayer2;
+    const spriteSheet = playerID === 1 ? "./images/player1.png" : "./images/player2.png";
 
     // The sprite object is configured for the player sprite here.
-    sprite.setSequence(sequences.idleDown)
-          .setScale(2)
-          .setShadowScale({ x: 0.75, y: 0.20 })
-          .useSheet("./images/player1.png");
+    sprite
+        .setSequence(sequences.idleDown)
+        .setScale(2)
+        .setShadowScale({ x: 0.75, y: 0.20 })
+        .useSheet(spriteSheet);
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving
@@ -111,6 +128,7 @@ const Player1 = function(ctx, x, y, gameArea) {
         speedUp: speedUp,
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
+        getXY: sprite.getXY,
         draw: sprite.draw,
         update: update
     };

@@ -24,9 +24,7 @@ const Sword = function (ctx, x, y) {
         // sprite.setSequence(sequences);
         birthTime = performance.now();
         const {x, y} = area.randomPoint();
-        console.log("In Sword Set the x = ", x, " and y = ", y);
         sprite.setXY(x, y);
-        console.log("After setting, x = ", sprite.getXY().x, " and y = ", sprite.getXY().y);
     };
 
     // The methods are returned as an object here.
