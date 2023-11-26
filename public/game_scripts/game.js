@@ -126,38 +126,41 @@ const game = (function ()  {
                 }
             });
 
-            /* Handle the keyup of arrow keys and spacebar */
-            $(document).on("keyup", function (event) {
-            
-                /* TODO */
-                /* Handle the key up */
-                switch (event.keyCode) {
-                    case 37:
-                        players.forEach(player => {
-                            player.stop(1);
-                        });
-                        break;
-                    case 38:
-                        players.forEach(player => {
-                            player.stop(2);
-                        });
-                        break;
-                    case 39:
-                        players.forEach(player => {
-                            player.stop(3);
-                        });
-                        break;
-                    case 40:
-                        players.forEach(player => {
-                            player.stop(4);
-                        });
-                        break;
-                    case 32:
-                        players.forEach(player => {
-                            player.slowDown();
-                        });
-                        break;
-                }
+        /* Handle the keydown of arrow keys*/
+        $(document).on("keydown", function (event) {
+
+            /* TODO */
+            /* Handle the key down */
+            switch (event.keyCode) {
+                case 37:
+                    players.forEach(player => {
+                        player.move(1);
+                    });
+                    break;
+                case 38:
+                    players.forEach(player => {
+                        player.move(2);
+                    });
+                    break;
+                case 39:
+                    players.forEach(player => {
+                        player.move(3);
+                    });
+                    break;
+                case 40:
+                    players.forEach(player => {
+                        player.move(4);
+                    });
+                    break;
+                case 32:
+                    players.forEach(player => {
+                        player.speedUp();
+                    });
+                    break;
+                case 77:  //M
+                    isAttack = true;
+                    break;
+            }
         });
 
            /* Start the game */
