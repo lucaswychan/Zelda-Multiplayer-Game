@@ -20,8 +20,8 @@ const HomePage = (function () {
             Authentication.signin(username, password,
                 () => {
                     hide();
-                    PariUpPage.update(Authentication.getUser());
-                    PariUpPage.show();
+                    PairUpPage.update(Authentication.getUser());
+                    PairUpPage.show();
 
                     Socket.connect();
 
@@ -248,7 +248,7 @@ const GameOverPage = (() => {
 
             hide();
             Socket.restart();
-            PariUpPage.show();
+            PairUpPage.show();
         });
 
         // Click event for the signout button
@@ -289,7 +289,7 @@ const UI = (function () {
     };
 
     // The components of the UI are put here
-    const components = [HomePage, PariUpPage, GamePage, ChatPanel, GameOverPage];
+    const components = [HomePage, PairUpPage, GamePage, ChatPanel, GameOverPage];
 
     // This function initializes the UI
     const initialize = function () {
