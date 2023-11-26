@@ -9,9 +9,11 @@ const game = (function () {
 
         const totalGameTime = 20;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
+        const monsterMoveDuration = 500;
+        const monsterStopDuration = 1500;
+        let MonsterToMoveAge = monsterMoveDuration; // The time monsters need to move
         const swordMaxAge = 3000;
         const attackRange = 15;
-
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
         let swordDamage = 0;
@@ -26,6 +28,7 @@ const game = (function () {
         /* Create the sprites in the game */
         const players = [Player(context, 60, 250, gameArea, 1),
             Player(context, 800, 360, gameArea, 2)]
+        const monsters = [Monster(context, 125, 235, gameArea,1)]
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left
@@ -70,12 +73,26 @@ const game = (function () {
             players.forEach(player => {
                 player.update(now);
             });
+            monsters.forEach(monster => {
+                monster.update(now);
+            });
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
             if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
-
+            monsters.forEach(monster => {
+                if (monster.getMoveAge(now) >= MonsterToMoveAge) {
+                    if(monster.randomStop()){
+                        MonsterToMoveAge = monsterStopDuration;
+                        monster.stop(monster.getDir());
+                    } else {
+                        MonsterToMoveAge = monsterMoveDuration;
+                        monster.randomMove();
+                    }
+                }
+            });
+            const { x, y } = gem.getXY();
             players.forEach(player => {
                 if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                     gem.randomize(gameArea);
@@ -116,13 +133,15 @@ const game = (function () {
             players.forEach(player => {
                 player.draw();
             });
+            monsters.forEach(monster =>{
+                monster.draw();
+            })
 
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }
 
 
-        /* Handle the keydown of arrow keys and spacebar */
         /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
 
