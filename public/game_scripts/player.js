@@ -111,6 +111,7 @@ const Player = function(ctx, x, y, gameArea) {
         speedUp: speedUp,
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
+        getXY: sprite.getXY,
         draw: sprite.draw,
         update: update
     };
