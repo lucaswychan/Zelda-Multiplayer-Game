@@ -9,6 +9,9 @@ const game = (function ()  {
 
         const totalGameTime = 10;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
+        const monsterMoveDuration = 500;
+        const monsterStopDuration = 1500;
+        let MonsterToMoveAge = monsterMoveDuration; // The time monsters need to move
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
 
@@ -19,6 +22,7 @@ const game = (function ()  {
         /* Create the sprites in the game */
         const players = [Player(context, 427, 240, gameArea,1),
                                 Player(context,  75, 200, gameArea,2)]
+        const monsters = [Monster(context, 125, 235, gameArea,1)]
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left
@@ -59,11 +63,24 @@ const game = (function ()  {
             players.forEach(player => {
                 player.update(now);
             });
+            monsters.forEach(monster => {
+                monster.update(now);
+            });
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
-
+            monsters.forEach(monster => {
+                if (monster.getMoveAge(now) >= MonsterToMoveAge) {
+                    if(monster.randomStop()){
+                        MonsterToMoveAge = monsterStopDuration;
+                        monster.stop(monster.getDir());
+                    } else {
+                        MonsterToMoveAge = monsterMoveDuration;
+                        monster.randomMove();
+                    }
+                }
+            });
             const { x, y } = gem.getXY();
             players.forEach(player => {
                 if (player.getBoundingBox().isPointInBox(x, y)) {
@@ -86,6 +103,9 @@ const game = (function ()  {
             players.forEach(player => {
                 player.draw();
             });
+            monsters.forEach(monster =>{
+                monster.draw();
+            })
 
             /* Process the next frame */
             requestAnimationFrame(doFrame);
@@ -126,39 +146,39 @@ const game = (function ()  {
                 }
             });
 
-        /* Handle the keydown of arrow keys*/
-        $(document).on("keydown", function (event) {
+        /* Handle the  keyup of arrow keys*/
+        $(document).on("keyup", function (event) {
 
             /* TODO */
             /* Handle the key down */
             switch (event.keyCode) {
                 case 37:
                     players.forEach(player => {
-                        player.move(1);
+                        player.stop(1);
                     });
                     break;
                 case 38:
                     players.forEach(player => {
-                        player.move(2);
+                        player.stop(2);
                     });
                     break;
                 case 39:
                     players.forEach(player => {
-                        player.move(3);
+                        player.stop(3);
                     });
                     break;
                 case 40:
                     players.forEach(player => {
-                        player.move(4);
+                        player.stop(4);
                     });
                     break;
                 case 32:
                     players.forEach(player => {
-                        player.speedUp();
+                        player.slowDown();
                     });
                     break;
                 case 77:  //M
-                    isAttack = true;
+                    isAttack = false;
                     break;
             }
         });
