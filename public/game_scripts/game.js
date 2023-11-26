@@ -17,7 +17,8 @@ const game = (function ()  {
         $("#final-gems").text(collectedGems);
 
         /* Create the sprites in the game */
-        const player = Player(context, 427, 240, gameArea); // The player
+        const players = [Player(context, 427, 240, gameArea,1),
+                                Player(context,  75, 200, gameArea,2)]
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left
@@ -28,7 +29,7 @@ const game = (function ()  {
 
         /* The main processing of the game */
         function doFrame(now) {
-            if (gameStartTime == 0) gameStartTime = now;
+            if (gameStartTime === 0) gameStartTime = now;
 
             /* Update the time remaining */
             const gameTimeSoFar = now - gameStartTime;
@@ -38,7 +39,7 @@ const game = (function ()  {
             sounds.background.play();
             /* TODO */
             /* Handle the game over situation here */
-            if (timeRemaining == 0) {
+            if (timeRemaining === 0) {
                 $("#final-gems").text(collectedGems);
                 console.log("Game is ended")
 
@@ -55,21 +56,25 @@ const game = (function ()  {
             /* Update the sprites */
             for (const fire of fires) fire.update(now);
             gem.update(now);
-            player.update(now);
+            players.forEach(player => {
+                player.update(now);
+            });
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
 
             const { x, y } = gem.getXY();
-            if (player.getBoundingBox().isPointInBox(x, y)) {
-                gem.randomize(gameArea);
-                sounds.collect.currentTime = 0;
-                sounds.collect.play();
-                collectedGems++;
+            players.forEach(player => {
+                if (player.getBoundingBox().isPointInBox(x, y)) {
+                    gem.randomize(gameArea);
+                    sounds.collect.currentTime = 0;
+                    sounds.collect.play();
+                    collectedGems++;
 
-                $("#final-gems").text(collectedGems);
-            }
+                    $("#final-gems").text(collectedGems);
+                }
+            });
 
 
             /* Clear the screen */
@@ -78,7 +83,9 @@ const game = (function ()  {
             /* Draw the sprites */
             for (const fire of fires) fire.draw();
             gem.draw();
-            player.draw();
+            players.forEach(player => {
+                player.draw();
+            });
 
             /* Process the next frame */
             requestAnimationFrame(doFrame);
@@ -92,19 +99,29 @@ const game = (function ()  {
                 /* Handle the key down */
                 switch (event.keyCode) {
                     case 37:
-                        player.move(1);
+                        players.forEach(player => {
+                            player.move(1);
+                        });
                         break;
                     case 38:
-                        player.move(2);
+                        players.forEach(player => {
+                            player.move(2);
+                        });
                         break;
                     case 39:
-                        player.move(3);
+                        players.forEach(player => {
+                            player.move(3);
+                        });
                         break;
                     case 40:
-                        player.move(4);
+                        players.forEach(player => {
+                            player.move(4);
+                        });
                         break;
                     case 32:
-                        player.speedUp();
+                        players.forEach(player => {
+                            player.speedUp();
+                        });
                         break;
                 }
             });
@@ -116,19 +133,29 @@ const game = (function ()  {
                 /* Handle the key up */
                 switch (event.keyCode) {
                     case 37:
-                        player.stop(1);
+                        players.forEach(player => {
+                            player.stop(1);
+                        });
                         break;
                     case 38:
-                        player.stop(2);
+                        players.forEach(player => {
+                            player.stop(2);
+                        });
                         break;
                     case 39:
-                        player.stop(3);
+                        players.forEach(player => {
+                            player.stop(3);
+                        });
                         break;
                     case 40:
-                        player.stop(4);
+                        players.forEach(player => {
+                            player.stop(4);
+                        });
                         break;
                     case 32:
-                        player.slowDown();
+                        players.forEach(player => {
+                            player.slowDown();
+                        });
                         break;
                 }
         });
