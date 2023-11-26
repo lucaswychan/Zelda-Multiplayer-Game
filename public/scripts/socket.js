@@ -83,9 +83,18 @@ const Socket = (function () {
                 player2Button.html(player.name);
                 player2Button.css("background", "purple");
             }
-            if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2" /*&& player1Button.html() != player2Button.html()*/) {
+            if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
                 PariUpPage.hide();
                 game.start();
+            }
+        });
+
+        socket.on("get players name", (players) => {
+            if (players["player1"] != null) {
+                $("#player1-name").html(players["player1"]);
+            }
+            if (players["player2"] != null) {
+                $("#player2-name").html(players["player2"]);
             }
         });
 
@@ -120,6 +129,9 @@ const Socket = (function () {
         socket.emit("join game", { name, id });
     }
 
+    const getPlayersName = function () {
+        socket.emit("get players name", true);
+    }
 
-    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame };
+    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName};
 })();

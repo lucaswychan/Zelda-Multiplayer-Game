@@ -191,8 +191,14 @@ io.on("connection", (socket) => {
             else if (player.id == 1) {
                 players.player2 = player.name;
             }
+
             io.emit("ready join game", { name: player.name, id: player.id });
         });
+
+        socket.on("get players name", () => {
+            io.emit("get players name", players);
+        });
+
     }
 });
 

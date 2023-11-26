@@ -190,10 +190,12 @@ const OnlineUsersPanel = (function () {
 const GamePage = (() => {
 
     const initialize = () => {
+        // Socket.getPlayers();
 
         hide();
     };
     const show = () => {
+        Socket.getPlayersName();
         $("#game-container").show();
     };
 
@@ -282,6 +284,27 @@ const ChatPanel = (function () {
 
     return { initialize, update, addMessage};
 })();
+
+
+
+const GameOverPage = (() => {
+
+    const initialize = () => {
+        // Socket.getPlayers();
+
+        hide();
+    };
+    const show = () => {
+        $("#game-container").show();
+    };
+
+    const hide = () => {
+        $("#game-container").hide();
+    }
+    return { initialize, show, hide };
+})();
+
+
 
 const UI = (function () {
     // This function gets the user display
