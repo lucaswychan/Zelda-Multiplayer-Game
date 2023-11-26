@@ -99,6 +99,31 @@ const Socket = (function () {
             }
         });
 
+        socket.on("get ranking", (rankingsData) => {
+            console.log("rankingsData:",rankingsData)
+            const dataArray = Object.entries(rankingsData).map(([name, score]) => ({ name, score }));
+             
+            // Sort in descending order based on the score
+            dataArray.sort((a, b) => b.score - a.score);
+
+            // Get the tbody element to populate
+            const rankingList = $('#ranking-list');
+
+            // Clear any existing content in the table body
+            rankingList.empty();
+
+            // Populate the table body with the sorted data
+            dataArray.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.score}</td>
+                </tr>`;
+                rankingList.append(row);
+            });
+
+        });
+
         
     };
 
@@ -134,5 +159,14 @@ const Socket = (function () {
         socket.emit("get players name", true);
     }
 
-    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName};
+
+
+    const getRanking = function () {
+        socket.emit("get ranking", true);
+    }
+
+
+
+    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
+         getRanking};
 })();

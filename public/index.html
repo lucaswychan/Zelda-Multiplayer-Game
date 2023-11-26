@@ -206,15 +206,7 @@
                         <th>Score</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tbody id="ranking-list">
-                    <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>500</td>
-                    </tr>
-                   
-                </tbody>
+                <tbody id="ranking-list"></tbody>
             </table>
         </div>
         <div id="game-over-page-button">
@@ -253,8 +245,8 @@
             () => {
                 HomePage.hide();
                 PariUpPage.update(Authentication.getUser());
-                // PariUpPage.show();
-                GameOverPage.show();
+                PariUpPage.show();
+                // GameOverPage.show();
                 Socket.connect();
                 // game.start();
             },

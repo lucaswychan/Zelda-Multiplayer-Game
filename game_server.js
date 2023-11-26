@@ -197,6 +197,11 @@ io.on("connection", (socket) => {
         socket.on("get players name", () => {
             io.emit("get players name", players);
         });
+        
+        socket.on("get ranking", () => {
+            let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+            socket.emit("get ranking", rankingData);
+        });
 
     }
 });
