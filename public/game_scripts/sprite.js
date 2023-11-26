@@ -189,10 +189,6 @@ const Sprite = function (ctx, x, y) {
         return this;
     };
 
-    const removeSprite = (x, y, width, height) => {
-        ctx.clearRect(x, y, width, height);
-    }
-
     // The methods are returned as an object here.
     return {
         useSheet: useSheet,

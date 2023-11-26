@@ -5,7 +5,7 @@ const game = (function () {
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
 
-        const gameArea = BoundingBox(context, 165, 60, 420, 800);
+        const gameArea = BoundingBox(context, 60, 60, 700, 800);
 
         const totalGameTime = 20;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
@@ -24,8 +24,8 @@ const game = (function () {
         $("#final-gems").text(collectedGems);
 
         /* Create the sprites in the game */
-        const players = [Player(context, 427, 240, gameArea, 1),
-            Player(context, 75, 200, gameArea, 2)]
+        const players = [Player(context, 60, 250, gameArea, 1),
+            Player(context, 800, 360, gameArea, 2)]
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left

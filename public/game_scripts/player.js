@@ -43,7 +43,7 @@ const Player = function(ctx, x, y, gameArea, playerID) {
     // The sprite object is configured for the player sprite here.
     sprite
         .setSequence(sequences.idleDown)
-        .setScale(2)
+        .setScale(1)
         .setShadowScale({ x: 0.75, y: 0.20 })
         .useSheet(spriteSheet);
 
