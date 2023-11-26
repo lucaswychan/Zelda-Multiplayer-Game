@@ -143,7 +143,6 @@ const game = (function () {
 
 
         /* Handle the keydown of arrow keys and spacebar */
-        /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
 
             /* TODO */
