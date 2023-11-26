@@ -117,13 +117,9 @@
         <svg xmlns="http://www.w3.org/2000/svg" id="counter">
             <text x="10" y="35">
                 TIME:
-                <tspan id="time-remaining">20</tspan>
+                <tspan id="time-remaining"></tspan>
             </text>
-            <text x="10" y="50">
-                You have collected
-                <tspan id="final-gems">0</tspan>
-                gem(s).
-            </text>
+           
         </svg>
     </div>
 
@@ -157,13 +153,13 @@
         <div id="player-result">
             <div id="player1-result">
                 <h2 id="player1-game-result">Winner</h2>
-                <p>Player 1: <span id="player1-name"></span></p>
-                <p>Score: <span id="player1-score">0</span></p>
+                <p>Player 1: <span id="game-over-player1-name"></span></p>
+                <p>Score: <span id="game-over-player1-score">0</span></p>
             </div>
             <div id="player2-result">
                 <h2 id="player2-game-result">Loser</h2>
-                <p>Player 2: <span id="player2-name"></span></p>
-                <p>Score: <span id="player2-score">0</span></p>
+                <p>Player 2: <span id="game-over-player2-name"></span></p>
+                <p>Score: <span id="game-over-player2-score">0</span></p>
             </div>
         </div>
 
@@ -201,7 +197,8 @@
 
 <script src="game_scripts/bounding_box.js"></script>
 <script src="game_scripts/sprite.js"></script>
-<script src="game_scripts/player.js"></script>
+<script src="game_scripts/player1.js"></script>
+<script src="game_scripts/player2.js"></script>
 <script src="game_scripts/gem.js"></script>
 <script src="game_scripts/fire.js"></script>
 <script src="game_scripts/game.js"></script>
