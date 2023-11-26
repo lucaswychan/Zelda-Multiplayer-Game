@@ -80,7 +80,7 @@ const HomePage = (function () {
     return {initialize, show, hide};
 })();
 
-const PariUpPage = (function () {
+const PairUpPage = (function () {
     // This function initializes the UI
     const initialize = function () {
         // Hide it

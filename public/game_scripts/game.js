@@ -7,12 +7,17 @@ const game = (function () {
 
         const gameArea = BoundingBox(context, 165, 60, 420, 800);
 
-        const totalGameTime = 10;   // Total game time in seconds
+        const totalGameTime = 20;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         const swordMaxAge = 3000;
+        const attackRange = 15;
+
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
         let swordDamage = 0;
+        let attackTime = null;
+
+        let isAttack = false;
 
         // Clear Data first
         $("#time-remaining").text(totalGameTime);
@@ -29,6 +34,7 @@ const game = (function () {
             Fire(context, 800, 430)  // bottom-right
         ];
         const sword = Sword(context, 427, 240);
+        const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
 
         /* The main processing of the game */
         function doFrame(now) {
@@ -60,6 +66,7 @@ const game = (function () {
             for (const fire of fires) fire.update(now);
             sword.update(now);
             gem.update(now);
+            attackEffect.update(now);
             players.forEach(player => {
                 player.update(now);
             });
@@ -89,6 +96,33 @@ const game = (function () {
             });
    
 
+            if (Math.abs(player.getXY().x - fires[0].getXY().x) <= attackRange && Math.abs(player.getXY().y - fires[0].getXY().y) <= attackRange && isAttack) {
+                console.log("Attacking the first fire !!!");
+                attackTime = now;
+                // attackEffect.setXY(0, 0);
+            }
+
+            if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
+                console.log("Successfully get the sword");
+                // sword.remove(x2, y2, 16, 16);
+                sword.randomize(gameArea);
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                swordDamage += 50
+                // $("#player1-monster-score").html(swordDamage);
+            }
+
+            const {x, y} = gem.getXY();
+            // console.log("Gem.x = ", x, "  Gem.y = ", y);
+            if (player.getBoundingBox().isPointInBox(x, y)) {
+                console.log("Successfully get the gem");
+                gem.randomize(gameArea);
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                collectedGems++;
+
+                $("#final-gems").text(collectedGems);
+            }
 
 
             /* Clear the screen */
@@ -98,6 +132,12 @@ const game = (function () {
             for (const fire of fires) fire.draw();
             sword.draw();
             gem.draw();
+            // draw the attack effect for a fixed time duration for enough time to display
+            if (attackTime != null && Math.ceil((now - attackTime) / 1000) <= 1) attackEffect.draw();
+            else {
+                // console.log("The effect should not be displayed !!!");
+                attackTime = null;
+            }
             players.forEach(player => {
                 player.draw();
             });
@@ -128,6 +168,8 @@ const game = (function () {
                 case 32:
                     player.speedUp();
                     break;
+                case 77: // M
+                    isAttack = true;
             }
         });
 
@@ -152,6 +194,9 @@ const game = (function () {
                 case 32:
                     player.slowDown();
                     break;
+                case 77: // M
+                    console.log("M key is released");
+                    isAttack = false;
             }
         });
 
