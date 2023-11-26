@@ -12,6 +12,12 @@ const Socket = (function () {
     const connect = function () {
         socket = io();
 
+        socket.on("playerBehaviour", (data) => {
+            setTimeout(function () {
+                game.playerBehaviour(data.playerID, data.behaviour, data.direction)
+            }, 10);
+        });
+
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
             // Get the online user list
@@ -152,7 +158,6 @@ const Socket = (function () {
             $('#chat-input').val('');
 
         });
-
         
     };
 
@@ -196,6 +201,12 @@ const Socket = (function () {
         socket.emit("restart", true);
     }
 
+    const postBehaviour = function (behaviour, direction) {
+        setTimeout(function () {
+            socket.emit("playerBehaviour", { playerID: playerID, behaviour: behaviour, direction: direction });
+        }, 10);
+    }
+
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
-         getRanking, restart};
+         getRanking, restart, postBehaviour};
 })();

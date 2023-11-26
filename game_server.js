@@ -223,8 +223,12 @@ io.on("connection", (socket) => {
             
             io.emit("restart", players);
         });
-    
 
+        socket.on("playerBehaviour", (data) => {
+            setTimeout(function () {
+                io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
+            }, 10);
+        });
     }
 });
 

@@ -1,6 +1,7 @@
 const game = (function () {
     // $("#game-canvas").css('opacity', '0.1');
 
+    const players =[];
     const start = () => {
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
@@ -26,8 +27,8 @@ const game = (function () {
         $("#final-gems").text(collectedGems);
 
         /* Create the sprites in the game */
-        const players = [Player(context, 60, 250, gameArea, 1),
-            Player(context, 800, 360, gameArea, 2)]
+        players.push(Player(context, 60, 250, gameArea, 1));
+        players.push(Player(context, 800, 360, gameArea, 2));
         const monsters = [Monster(context, 125, 235, gameArea,1),
             Monster(context, 700, 400, gameArea,2)]
         const gem = Gem(context, 427, 350, "green");        // The gem
@@ -150,29 +151,23 @@ const game = (function () {
             /* Handle the key down */
             switch (event.keyCode) {
                 case 37:
-                    players.forEach(player => {
-                        player.move(1);
-                    });
+                    console.log("move")
+                    Socket.postBehaviour("move", 1);
                     break;
                 case 38:
-                    players.forEach(player => {
-                        player.move(2);
-                    });
+                    console.log("move")
+                    Socket.postBehaviour("move", 2);
                     break;
                 case 39:
-                    players.forEach(player => {
-                        player.move(3);
-                    });
+                    console.log("move")
+                    Socket.postBehaviour("move", 3);
                     break;
                 case 40:
-                    players.forEach(player => {
-                        player.move(4);
-                    });
+                    console.log("move")
+                    Socket.postBehaviour("move", 4);
                     break;
                 case 32:
-                    players.forEach(player => {
-                        player.speedUp();
-                    });
+                    Socket.postBehaviour("speedUp", null);
                     break;
                 case 77:  //M
                     isAttack = true;
@@ -187,29 +182,19 @@ const game = (function () {
             /* Handle the key up */
             switch (event.keyCode) {
                 case 37:
-                    players.forEach(player => {
-                        player.stop(1);
-                    });
+                    Socket.postBehaviour("stop", 1);
                     break;
                 case 38:
-                    players.forEach(player => {
-                        player.stop(2);
-                    });
+                    Socket.postBehaviour("stop", 2);
                     break;
                 case 39:
-                    players.forEach(player => {
-                        player.stop(3);
-                    });
+                    Socket.postBehaviour("stop", 3);
                     break;
                 case 40:
-                    players.forEach(player => {
-                        player.stop(4);
-                    });
+                    Socket.postBehaviour("stop", 4);
                     break;
                 case 32:
-                    players.forEach(player => {
-                        player.slowDown();
-                    });
+                    Socket.postBehaviour("slowDown", null);
                     break;
                 case 77:  //M
                     isAttack = false;
@@ -220,7 +205,27 @@ const game = (function () {
         /* Start the game */
         requestAnimationFrame(doFrame);
     }
-    return {start};
+
+    const playerBehaviour = function(playerID, behaviour, direction){
+        if(behaviour === "move"){
+            console.log("Player" + playerID +"move on" + direction);
+            players[playerID].move(direction);
+        }
+        if (behaviour === "stop")
+            players[playerID].stop(direction);
+
+        if (behaviour === "speedUp")
+            players[playerID].speedUp();
+
+        if (behaviour === "slowDown")
+            players[playerID].slowDown();
+
+        if (behaviour === "attack"){
+            //TODO socketTODO
+        }
+
+    }
+    return {start, playerBehaviour};
 })();
 //End of games
 
