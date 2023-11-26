@@ -161,6 +161,23 @@ io.on("connection", (socket) => {
             socket.emit("messages", JSON.stringify(chatroom));
         });
 
+        socket.on("post message", (content) => {
+            const chat_details = { "user": socket.request.session.user, "datetime": new Date(), "content": content };
+            chatroom.push(chat_details);
+            // console.log(chatroom);
+            fs.writeFileSync("data/chatroom.json", JSON.stringify(chatroom, null, " "));
+            io.emit("add message", JSON.stringify(chat_details));
+        });
+
+        socket.on("typing", () => {
+            io.emit("add typing", socket.request.session.user.name);
+        });
+
+        socket.on("remove typing", () => {
+            io.emit("remove typing message");
+        });
+
+
         // disconnection
         socket.on("disconnect", () => {
             delete onlineUsers[socket.request.session.user.username];

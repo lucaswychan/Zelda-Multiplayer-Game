@@ -129,42 +129,62 @@
 
 <!-- Game Page -->
 <div id="game-container">
-    <canvas id="game-canvas" width="854px" height="480px"></canvas>
+    <div id="main-game">
+        <canvas id="game-canvas" width="854px" height="480px"></canvas>
 
-    <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-        <text x="10" y="35">
-            TIME:
-            <tspan id="time-remaining">20</tspan>
-        </text>
-    </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+            <text x="10" y="35">
+                TIME:
+                <tspan id="time-remaining">20</tspan>
+            </text>
+        </svg>
 
-    <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-        <defs>
-            <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0.2" stop-color="red"/>
-                <stop offset="0.4" stop-color="yellow"/>
-                <stop offset="0.6" stop-color="green"/>
-                <stop offset="0.8" stop-color="purple"/>
-            </linearGradient>
-        </defs>
-        <p id="game-title" x="50%" y="45%">GEM RUSH!</p>
-        <p x="50%" y="60%">Click here to start the game</p>
-    </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+            <defs>
+                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0.2" stop-color="red"/>
+                    <stop offset="0.4" stop-color="yellow"/>
+                    <stop offset="0.6" stop-color="green"/>
+                    <stop offset="0.8" stop-color="purple"/>
+                </linearGradient>
+            </defs>
+            <p id="game-title" x="50%" y="45%">GEM RUSH!</p>
+            <p x="50%" y="60%">Click here to start the game</p>
+        </svg>
 
-    <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
-        <defs>
-            <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="red"/>
-                <stop offset="0.5" stop-color="yellow"/>
-                <stop offset="1" stop-color="red"/>
-            </linearGradient>
-        </defs>
-        <text x="50%" y="50%">
-            Time's up! You have collected
-            <tspan id="final-gems">0</tspan>
-            gem(s).
-        </text>
-    </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
+            <defs>
+                <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="red"/>
+                    <stop offset="0.5" stop-color="yellow"/>
+                    <stop offset="1" stop-color="red"/>
+                </linearGradient>
+            </defs>
+            <text x="50%" y="50%">
+                Time's up! You have collected
+                <tspan id="final-gems">0</tspan>
+                gem(s).
+            </text>
+        </svg>
+    </div>
+
+    <div id="side-panel">
+        <div id="player-data">
+            <div id="Player1" ></div>
+            <div id="player2" ></div>  
+        </div>
+
+        <div id="chat-panel">
+            <h3>ChatRoom</h3>
+            <div id="chat-area"></div>            
+            <form id="chat-input-form" autocomplete="off">
+                <input id="chat-input" placeholder="Enter your message" ></input>
+            </form>
+        </div>
+    </div>
+
+
+    
 </div>
 
 
@@ -193,7 +213,8 @@
             () => {
                 HomePage.hide();
                 PariUpPage.update(Authentication.getUser());
-                PariUpPage.show();
+                // PariUpPage.show();
+                GamePage.show();
                 Socket.connect();
                 // game.start();
             },

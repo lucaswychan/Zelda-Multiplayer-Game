@@ -226,45 +226,69 @@ const ChatPanel = (function () {
             // Clear the message
             $("#chat-input").val("");
         });
+
+        // New added codes for adding the typing message
+        let timeID;
+        let trigger = false;
+        $('#chat-input')
+            .on("keydown", () => {
+                if (!trigger) {
+                    Socket.typingMessage("typing");
+                    trigger = true;
+                    // console.log("keydown");
+                    clearTimeout(timeID);
+                }
+                // clearTimeout(timeID);
+            })
+            .on("keyup", () => {
+                if (trigger && !timeID) { 
+                    timeID = setTimeout(() => {
+                        Socket.typingMessage("remove typing");
+                        // console.log("keyup");
+                        timeID = null;
+                        trigger = false;
+                    }, 3000);
+                }
+            });
     };
 
     // This function updates the chatroom area
-    // const update = function (chatroom) {
-    //     // Clear the online users area
-    //     chatArea.empty();
-    //
-    //     // Add the chat message one-by-one
-    //     for (const message of chatroom) {
-    //         addMessage(message);
-    //     }
-    // };
+    const update = function (chatroom) {
+        // Clear the online users area
+        chatArea.empty();
+
+        // Add the chat message one-by-one
+        for (const message of chatroom) {
+            addMessage(message);
+        }
+    };
 
     // This function adds a new message at the end of the chatroom
-    // const addMessage = function (message) {
-    //     const datetime = new Date(message.datetime);
-    //     const datetimeString = datetime.toLocaleDateString() + " " +
-    //         datetime.toLocaleTimeString();
-    //
-    //     chatArea.append(
-    //         $("<div class='chat-message-panel row'></div>")
-    //             .append(UI.getUserDisplay(message.user))
-    //             .append($("<div class='chat-message col'></div>")
-    //                 .append($("<div class='chat-date'>" + datetimeString + "</div>"))
-    //                 .append($("<div class='chat-content'>" + message.content + "</div>"))
-    //             )
-    //     );
-    //     chatArea.scrollTop(chatArea[0].scrollHeight);
-    // };
+    const addMessage = function (message) {
+        // const datetime = new Date(message.datetime);
+        // const datetimeString = datetime.toLocaleDateString() + " " +
+        //     datetime.toLocaleTimeString();
 
-    return { initialize  };
+        chatArea.append(
+            $("<div class='chat-message-panel row'></div>")
+                .append(UI.getUserDisplay(message.user))
+                .append($("<div class='chat-message col'></div>")
+                    // .append($("<div class='chat-date'>" + datetimeString + "</div>"))
+                    .append($("<div class='chat-content'>" + message.content + "</div>"))
+                )
+        );
+        chatArea.scrollTop(chatArea[0].scrollHeight);
+    };
+
+    return { initialize, update, addMessage};
 })();
 
 const UI = (function () {
     // This function gets the user display
     const getUserDisplay = function (user) {
         return $("<div class='field-content row shadow'></div>")
-            .append($("<span class='user-avatar'>" +
-                Avatar.getCode(user.avatar) + "</span>"))
+            // .append($("<span class='user-avatar'>" +
+            //     Avatar.getCode(user.avatar) + "</span>"))
             .append($("<span class='user-name'>" + user.name + "</span>"));
     };
 
