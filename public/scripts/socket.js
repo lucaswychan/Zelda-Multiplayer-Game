@@ -84,6 +84,7 @@ const Socket = (function () {
                 player2Button.css("background", "purple");
             }
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
+                GamePage.show();
                 PariUpPage.hide();
                 game.start();
             }

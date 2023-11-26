@@ -6,8 +6,6 @@ const game = (() => {
     let collectedGems = 0;      // The number of gems collected in the game
 
     const start = () => {
-        GamePage.show();
-
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
 
@@ -38,6 +36,10 @@ const game = (() => {
             if (timeRemaining == 0) {
                 $("#final-gems").text(collectedGems);
                 $("#game-over").show();
+                console.log("Game is ended")
+                // show the game over page
+                GamePage.hide()
+                GameOverPage.show()
 
                 sounds.background.pause();
                 sounds.gameOver.play();

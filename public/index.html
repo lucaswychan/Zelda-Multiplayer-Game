@@ -177,9 +177,54 @@
             </form>
         </div>
     </div>
+</div>
 
+  <!-- Game end screen -->
+  <div id="game-over-page">
+    <div id="game-over-container">
+        <div id="player-result">
+            <div id="player1-result">
+                <h2 id="player1-game-result">Winner</h2>
+                <p>Player 1: <span id="player1-name"></span></p>
+                <p>Score: <span id="player1-score">0</span></p>
+            </div>
+            <div id="player2-result">
+                <h2 id="player2-game-result">Loser</h2>
+                <p>Player 2: <span id="player2-name"></span></p>
+                <p>Score: <span id="player2-score">0</span></p>
+            </div>
+        </div>
 
-    
+        <div class="ranking-result">
+            <h3>Game Ranking</h3>
+            <table class="leaderboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Ranking</th>
+                        <th>Player Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody id="ranking-list">
+                    <tr>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>500</td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+        <div id="game-over-page-button">
+        <button id="back-to-pair-up">Back To Pair Up</button>
+        <button id="back-to-home">Back To Home Pages</button>
+        </div>
+    </div>
+
+</div>
+
 </div>
 
 
@@ -209,7 +254,7 @@
                 HomePage.hide();
                 PariUpPage.update(Authentication.getUser());
                 // PariUpPage.show();
-                GamePage.show();
+                GameOverPage.show();
                 Socket.connect();
                 // game.start();
             },

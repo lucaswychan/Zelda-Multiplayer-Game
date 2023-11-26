@@ -241,11 +241,11 @@ const GameOverPage = (() => {
         hide();
     };
     const show = () => {
-        $("#game-container").show();
+        $("#game-over-page").show();
     };
 
     const hide = () => {
-        $("#game-container").hide();
+        $("#game-over-page").hide();
     }
     return { initialize, show, hide };
 })();
@@ -262,7 +262,7 @@ const UI = (function () {
     };
 
     // The components of the UI are put here
-    const components = [HomePage, PariUpPage, GamePage, ChatPanel];
+    const components = [HomePage, PariUpPage, GamePage, ChatPanel, GameOverPage];
 
     // This function initializes the UI
     const initialize = function () {
