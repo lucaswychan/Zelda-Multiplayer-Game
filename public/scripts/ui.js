@@ -268,6 +268,7 @@ const GameOverPage = (() => {
         hide();
     };
     const show = () => {
+        Socket.getPlayersName();
         Socket.getRanking();
         $("#game-over-page").show();
     };
