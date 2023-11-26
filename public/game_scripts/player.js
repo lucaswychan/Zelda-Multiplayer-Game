@@ -9,16 +9,16 @@ const Player = function(ctx, x, y, gameArea) {
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
     const sequences = {
         /* Idling sprite sequences for facing different directions */
-        idleLeft:  { x: 0, y: 25, width: 24, height: 25, count: 3, timing: 2000, loop: false },
-        idleUp:    { x: 0, y: 50, width: 24, height: 25, count: 1, timing: 2000, loop: false },
-        idleRight: { x: 0, y: 75, width: 24, height: 25, count: 3, timing: 2000, loop: false },
-        idleDown:  { x: 0, y:  0, width: 24, height: 25, count: 3, timing: 2000, loop: false },
+        idleDown:  { x: 0, y: 20, width: 25, height: 32, count: 4, timing: 500, loop: true },
+        idleRight: { x: 0, y: 53, width: 22, height: 30, count: 4, timing: 500, loop: true },
+        idleUp:    { x: 0, y: 86, width: 23, height: 30, count: 4, timing: 500, loop: true },
+        idleLeft:  { x: 0, y: 119, width: 22, height: 30, count: 4, timing: 500, loop: true },
 
         /* Moving sprite sequences for facing different directions */
-        moveLeft:  { x: 0, y: 125, width: 24, height: 25, count: 10, timing: 50, loop: true },
-        moveUp:    { x: 0, y: 150, width: 24, height: 25, count: 10, timing: 50, loop: true },
-        moveRight: { x: 0, y: 175, width: 24, height: 25, count: 10, timing: 50, loop: true },
-        moveDown:  { x: 0, y: 100, width: 24, height: 25, count: 10, timing: 50, loop: true }
+        moveDown:  { x: 324, y: 20, width: 23.83, height: 35, count: 6, timing: 50, loop: true },
+        moveRight: { x: 326, y: 56, width: 24, height: 33, count: 6, timing: 50, loop: true },
+        moveUp:    { x: 326, y: 90, width: 26.16, height: 36, count: 6, timing: 50, loop: true },
+        moveLeft:  { x: 326, y: 127, width: 24, height: 33, count: 6, timing: 50, loop: true },
     };
 
     // This is the sprite object of the player created from the Sprite module.
@@ -28,7 +28,7 @@ const Player = function(ctx, x, y, gameArea) {
     sprite.setSequence(sequences.idleDown)
           .setScale(2)
           .setShadowScale({ x: 0.75, y: 0.20 })
-          .useSheet("./images/player_sprite.png");
+          .useSheet("./images/player1.png");
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving
@@ -65,6 +65,7 @@ const Player = function(ctx, x, y, gameArea) {
                 case 3: sprite.setSequence(sequences.idleRight); break;
                 case 4: sprite.setSequence(sequences.idleDown); break;
             }
+
             direction = 0;
         }
     };
