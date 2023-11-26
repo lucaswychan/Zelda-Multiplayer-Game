@@ -1,5 +1,4 @@
 // This function defines the Fire module.
-
 const Fire = function(ctx, x, y) {
 
     const sequences = { x: 0, y:  160, width: 16, height: 16, count: 7, timing: 200, loop: true };
