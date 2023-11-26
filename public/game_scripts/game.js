@@ -24,8 +24,8 @@ const game = (function () {
         $("#final-gems").text(collectedGems);
 
         /* Create the sprites in the game */
-        const players = [Player(context, 427, 240, gameArea,1),
-                                Player(context,  75, 200, gameArea,2)]
+        const players = [Player(context, 427, 240, gameArea, 1),
+            Player(context, 75, 200, gameArea, 2)]
         const gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left
@@ -75,55 +75,30 @@ const game = (function () {
             /* Randomize the gem and collect the gem here */
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
             if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
-			const { x, y } = gem.getXY();
+
             players.forEach(player => {
-                if (player.getBoundingBox().isPointInBox(x, y)) {
+                if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                     gem.randomize(gameArea);
                     sounds.collect.currentTime = 0;
                     sounds.collect.play();
                     collectedGems++;
                     $("#final-gems").text(collectedGems);
                 }
-                
-            	if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
-                	console.log("Successfully get the sword");
-                	// sword.remove(x2, y2, 16, 16);
-                	sword.randomize(gameArea);
-                	sounds.collect.currentTime = 0;
-                	sounds.collect.play();
-                	swordDamage += 50
-            	}
+
+                if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
+                    console.log("Successfully get the sword");
+                    // sword.remove(x2, y2, 16, 16);
+                    sword.randomize(gameArea);
+                    sounds.collect.currentTime = 0;
+                    sounds.collect.play();
+                    swordDamage += 50
+                }
+                if (Math.abs(player.getXY().x - fires[0].getXY().x) <= attackRange && Math.abs(player.getXY().y - fires[0].getXY().y) <= attackRange && isAttack) {
+                    console.log("Attacking the first fire !!!");
+                    attackTime = now;
+                    // attackEffect.setXY(0, 0);
+                }
             });
-   
-
-            if (Math.abs(player.getXY().x - fires[0].getXY().x) <= attackRange && Math.abs(player.getXY().y - fires[0].getXY().y) <= attackRange && isAttack) {
-                console.log("Attacking the first fire !!!");
-                attackTime = now;
-                // attackEffect.setXY(0, 0);
-            }
-
-            if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
-                console.log("Successfully get the sword");
-                // sword.remove(x2, y2, 16, 16);
-                sword.randomize(gameArea);
-                sounds.collect.currentTime = 0;
-                sounds.collect.play();
-                swordDamage += 50
-                // $("#player1-monster-score").html(swordDamage);
-            }
-
-            const {x, y} = gem.getXY();
-            // console.log("Gem.x = ", x, "  Gem.y = ", y);
-            if (player.getBoundingBox().isPointInBox(x, y)) {
-                console.log("Successfully get the gem");
-                gem.randomize(gameArea);
-                sounds.collect.currentTime = 0;
-                sounds.collect.play();
-                collectedGems++;
-
-                $("#final-gems").text(collectedGems);
-            }
-
 
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -148,28 +123,40 @@ const game = (function () {
 
 
         /* Handle the keydown of arrow keys and spacebar */
+        /* Handle the keydown of arrow keys and spacebar */
         $(document).on("keydown", function (event) {
 
             /* TODO */
             /* Handle the key down */
             switch (event.keyCode) {
                 case 37:
-                    player.move(1);
+                    players.forEach(player => {
+                        player.move(1);
+                    });
                     break;
                 case 38:
-                    player.move(2);
+                    players.forEach(player => {
+                        player.move(2);
+                    });
                     break;
                 case 39:
-                    player.move(3);
+                    players.forEach(player => {
+                        player.move(3);
+                    });
                     break;
                 case 40:
-                    player.move(4);
+                    players.forEach(player => {
+                        player.move(4);
+                    });
                     break;
                 case 32:
-                    player.speedUp();
+                    players.forEach(player => {
+                        player.speedUp();
+                    });
                     break;
-                case 77: // M
+                case 77:  //M
                     isAttack = true;
+                    break;
             }
         });
 
@@ -180,23 +167,33 @@ const game = (function () {
             /* Handle the key up */
             switch (event.keyCode) {
                 case 37:
-                    player.stop(1);
+                    players.forEach(player => {
+                        player.stop(1);
+                    });
                     break;
                 case 38:
-                    player.stop(2);
+                    players.forEach(player => {
+                        player.stop(2);
+                    });
                     break;
                 case 39:
-                    player.stop(3);
+                    players.forEach(player => {
+                        player.stop(3);
+                    });
                     break;
                 case 40:
-                    player.stop(4);
+                    players.forEach(player => {
+                        player.stop(4);
+                    });
                     break;
                 case 32:
-                    player.slowDown();
+                    players.forEach(player => {
+                        player.slowDown();
+                    });
                     break;
-                case 77: // M
-                    console.log("M key is released");
+                case 77:  //M
                     isAttack = false;
+                    break;
             }
         });
 
