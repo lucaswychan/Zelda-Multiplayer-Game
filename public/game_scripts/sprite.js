@@ -3,7 +3,6 @@
 // - `x` - The initial x position of the sprite
 // - `y` - The initial y position of the sprite
 const Sprite = function (ctx, x, y) {
-
     // This is the image object for the sprite sheet.
     const sheet = new Image();
 
@@ -179,23 +178,11 @@ const Sprite = function (ctx, x, y) {
 
         /* TODO */
         /* Move to the next sprite when the timing is right */
-        let count = 1;
-        if (sequence.timing <= (time - lastUpdate)) {
+        if (time - lastUpdate >= sequence.timing) {
             index++;
-            // Gem
-            if (sequence.loop == true) {
-                if (index >= sequence.count) {
-                    index = 0;
-                }
-
-                // player
-            } else if (sequence.loop == false) {
-
-                if (index >= sequence.count) {
-                    index = sequence.count - 1;
-                }
+            if (index >= sequence.count) {
+                index = (sequence.loop)? 0: sequence.count-1;
             }
-
             lastUpdate = time;
         }
 

@@ -2,7 +2,7 @@ const game = (() => {
 
     const totalGameTime = 20;   // Total game time in seconds
     const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
-    const swordMaxAge = 30000;
+    const swordMaxAge = 3000;
     let gameStartTime = 0;      // The timestamp when the game starts
     let collectedGems = 0;      // The number of gems collected in the game
     let swordDamage = 0;
@@ -24,7 +24,7 @@ const game = (() => {
             Fire(context, 800, 180), // top-right
             Fire(context, 800, 430)  // bottom-right
         ];
-        const sword = Sword(context, 300, 300);
+        const sword = Sword(context, 427, 240);
 
         /* The main processing of the game */
         function doFrame(now) {
@@ -38,7 +38,7 @@ const game = (() => {
 
             /* TODO */
             /* Handle the game over situation here */
-            if (timeRemaining == 0) {
+            if (timeRemaining === 0) {
                 $("#final-gems").text(collectedGems);
                 $("#game-over").show();
 
@@ -50,6 +50,7 @@ const game = (() => {
 
             /* Update the sprites */
             for (const fire of fires) fire.update(now);
+            sword.update(now);
             gem.update(now);
             player.update(now);
 
@@ -58,21 +59,25 @@ const game = (() => {
             if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
             if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
 
+            if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
+                console.log("Successfully get the sword");
+                // sword.remove(x2, y2, 16, 16);
+                sword.randomize(gameArea);
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                swordDamage += 50
+            }
+
             const {x, y} = gem.getXY();
+            // console.log("Gem.x = ", x, "  Gem.y = ", y);
             if (player.getBoundingBox().isPointInBox(x, y)) {
+                console.log("Successfully get the gem");
                 gem.randomize(gameArea);
                 sounds.collect.currentTime = 0;
                 sounds.collect.play();
                 collectedGems++;
             }
 
-            const {x2, y2} = sword.getXY();
-            if (player.getBoundingBox().isPointInBox(x2, y2)) {
-                sword.remove(x2, y2, 16, 16);
-                sounds.collect.currentTime = 0;
-                sounds.collect.play();
-                swordDamage += 50
-            }
 
 
             /* Clear the screen */
@@ -80,6 +85,7 @@ const game = (() => {
 
             /* Draw the sprites */
             for (const fire of fires) fire.draw();
+            sword.draw();
             gem.draw();
             player.draw();
 
@@ -93,6 +99,7 @@ const game = (() => {
             $("#game-start").hide();
 
             gem.randomize(gameArea);
+            sword.randomize(gameArea);
 
             sounds.background.play();
 

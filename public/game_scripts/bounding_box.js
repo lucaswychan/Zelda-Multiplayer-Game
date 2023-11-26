@@ -49,6 +49,7 @@ const BoundingBox = function(ctx, top, left, bottom, right) {
     // This function tests whether a point is in the bounding box.
     // - `x`, `y` - The (x, y) position to be tested
     const isPointInBox = function(x, y) {
+        // console.log("Same position : ", x, y);
         return ctx.isPointInPath(path, x, y);
     };
 
