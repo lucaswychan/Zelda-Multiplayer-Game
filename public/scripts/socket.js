@@ -145,6 +145,32 @@ const Socket = (function () {
             $('#chat-input').val('');
 
         });
+
+        socket.on("end game", (data) => {
+            console.log("Updating the end game details");
+            $("#game-over-player1-score").text(data.playersScore[0]);
+            $("#game-over-player2-score").text(data.playersScore[1]);
+            let player1Result = $("#player1-game-result");
+            let player2Result = $("#player2-game-result");
+            if (data.playersScore[0] < data.playersScore[1]) {
+                player1Result.text("Loser");
+                player1Result.css("color", "red");
+                player2Result.text("Winner");
+                player2Result.css("color", "green");
+            }
+            else if (data.playersScore[0] > data.playersScore[1]) {
+                player2Result.text("Loser");
+                player2Result.css("color", "red");
+                player1Result.text("Winner");
+                player1Result.css("color", "green");
+            }
+            else {
+                player2Result.text("Draw");
+                player2Result.css("color", "purple");
+                player1Result.text("Draw");
+                player1Result.css("color", "purple");
+            }
+        })
         
     };
 
@@ -198,6 +224,11 @@ const Socket = (function () {
         socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
     }
 
+    const endGame = (playersScore) => {
+        console.log("socket.endGame");
+        socket.emit("end game", {playersScore});
+    }
+
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
-         getRanking, restart, postBehaviour, postGameEvents};
+         getRanking, restart, postBehaviour, postGameEvents, endGame};
 })();

@@ -80,7 +80,8 @@ const game = (function () {
             /* Handle the game over situation here */
             if (timeRemaining <= 0) {
                 // $("#final-gems").text(playerScore);
-                Socket.postBehaviour("release final score", null);
+                // Socket.postBehaviour("release final score", null);
+                Socket.endGame(PlayerScores);
                 console.log("Game is ended")
 
                 // show the game over page
@@ -260,8 +261,6 @@ const game = (function () {
             console.log("player: " + playerID + " increase score!");
             PlayerScores[playerID] += gemScore;
             playerScores[playerID].text(PlayerScores[playerID]);
-        } else if (behaviour === "release final score") {
-            playerFinalScores[playerID].text(PlayerScores[playerID]);
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
