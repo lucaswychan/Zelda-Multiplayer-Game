@@ -163,7 +163,7 @@ const game = (function () {
                 }
             });
 
-            // Draw the attack effect starting at now
+            // Draw the attack effect starting from now
             if (attackMonsterData.x != null && attackMonsterData.y != null) {
                 attackTime = now;
                 attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
