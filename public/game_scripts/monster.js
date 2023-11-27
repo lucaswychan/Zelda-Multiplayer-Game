@@ -160,6 +160,11 @@ const Monster = function(ctx, x, y, gameArea, MonsterID) {
         return Math.random() < stopProbability;
     }
 
+    const randomize = (area) => {
+        const {x, y} = area.randomPoint();
+        sprite.setXY(x, y);
+    }
+
     // The methods are returned as an object here.
     return {
         getXY: sprite.getXY,
@@ -174,5 +179,6 @@ const Monster = function(ctx, x, y, gameArea, MonsterID) {
         getMoveAge:getMoveAge,
         randomMove:randomMove,
         randomStop:randomStop,
+        randomize: randomize,
     };
 };

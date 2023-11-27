@@ -1,7 +1,6 @@
 const game = (function () {
     // $("#game-canvas").css('opacity', '0.1');
 
-    const players =[];
     const playerScores = [
         $("#player1-score"),
         $("#player2-score")
@@ -10,33 +9,45 @@ const game = (function () {
         $("#game-over-player1-score"),
         $("#game-over-player2-score")
     ];
-    let PlayerScores = [0,0];    //Play Score
+    let PlayerScores = [0, 0];    //Play Score
     let gameStartTime = 0;      // The timestamp when the game starts
     let gameTimeSoFar;
     const totalGameTime = 20;   // Total game time in seconds
     let timeRemaining;
     let gem;
+    let attackMonsterData = {x: null, y: null, monsterID: null};
 
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
 
+    const gameArea = BoundingBox(context, 60, 60, 700, 800);
+    const players = [];
+    players[0] = Player(context, 60, 250, gameArea, 1);
+    players[1] = Player(context, 800, 360, gameArea, 2);
+    // players.push(Player(context, 60, 250, gameArea, 1));
+    // players.push(Player(context, 800, 360, gameArea, 2));
+    const monsters = [Monster(context, 125, 235, gameArea, 1),
+        Monster(context, 700, 400, gameArea, 2)]
+    gem = Gem(context, 427, 350, "green");        // The gem
+    const fires = [
+        Fire(context, 60, 180),  // top-left
+        Fire(context, 60, 430),  // bottom-left
+        Fire(context, 800, 180), // top-right
+        Fire(context, 800, 430)  // bottom-right
+    ];
+    const sword = Sword(context, 427, 240);
+    const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
+
     const start = () => {
-
-        const gameArea = BoundingBox(context, 60, 60, 700, 800);
-
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
-        const monsterMoveDuration = [500,300];
-        const monsterStopDuration = [1500,1000];
-        let MonsterToMoveAge = [monsterMoveDuration[0],monsterMoveDuration[1]]; // The time monsters need to move
+        const monsterMoveDuration = [500, 300];
+        const monsterStopDuration = [1500, 1000];
+        let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
         const swordMaxAge = 3000;
-        const attackRange = 15;
-
 
         let monsterScore = 100;
         let swordDamage = 0;
         let attackTime = null;
-
-        let isAttack = false;
 
         // Clear Data first
         $("#time-remaining").text(totalGameTime);
@@ -51,21 +62,6 @@ const game = (function () {
 
         /* Create the sprites in the game */
         console.log("player: ", players)
-        players[0]=Player(context, 60, 250, gameArea, 1);
-        players[1]=Player(context, 800, 360, gameArea, 2);
-        // players.push(Player(context, 60, 250, gameArea, 1));
-        // players.push(Player(context, 800, 360, gameArea, 2));
-        const monsters = [Monster(context, 125, 235, gameArea,1),
-            Monster(context, 700, 400, gameArea,2)]
-        gem = Gem(context, 427, 350, "green");        // The gem
-        const fires = [
-            Fire(context, 60, 180),  // top-left
-            Fire(context, 60, 430),  // bottom-left
-            Fire(context, 800, 180), // top-right
-            Fire(context, 800, 430)  // bottom-right
-        ];
-        const sword = Sword(context, 427, 240);
-        const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
 
         /* The main processing of the game */
         function doFrame(now) {
@@ -76,7 +72,7 @@ const game = (function () {
             timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
             Socket.postGameEvents("updateTimer", timeRemaining);
 
-            sounds.background.play();
+            sounds.battle.play();
             /* TODO */
             /* Handle the game over situation here */
             if (timeRemaining <= 0) {
@@ -88,7 +84,7 @@ const game = (function () {
                 GamePage.hide()
                 GameOverPage.show()
 
-                sounds.background.pause();
+                sounds.battle.pause();
                 sounds.gameOver.play();
                 return;
             }
@@ -99,10 +95,10 @@ const game = (function () {
             sword.update(now);
             gem.update(now);
             attackEffect.update(now);
-            
+
             players.forEach(player => {
                 player.update(now);
-                
+
             });
             monsters.forEach(monster => {
                 monster.update(now);
@@ -113,9 +109,11 @@ const game = (function () {
             if (gem.getAge(now) >= gemMaxAge) {
                 gem.randomize(gameArea);
                 console.log(gem);
-                Socket.postGameEvents("randomGem", {x:gem.getXY().x, y:gem.getXY().y, color:gem.getColor()});
+                Socket.postGameEvents("randomGem", {x: gem.getXY().x, y: gem.getXY().y, color: gem.getColor()});
             }
-            if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
+            if (sword.getAge(now) >= swordMaxAge) {
+                sword.randomize(gameArea);
+            }
             monsters.forEach((monster, index) => {
                 if (monster.getMoveAge(now) >= MonsterToMoveAge[index]) {
                     if (monster.randomStop()) {
@@ -127,6 +125,7 @@ const game = (function () {
                     }
                 }
             });
+
             players.forEach(player => {
                 if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                     gem.randomize(gameArea);
@@ -134,20 +133,24 @@ const game = (function () {
                     sounds.collect.play();
                     Socket.postBehaviour("increase score", null);
                 }
+
                 if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
                     console.log("Successfully get the sword");
                     // sword.remove(x2, y2, 16, 16);
                     sword.randomize(gameArea);
-                    sounds.collect.currentTime = 0;
-                    sounds.collect.play();
+                    player.incrementAttackScore();
+                    sounds.sword.currentTime = 0;
+                    sounds.sword.play();
                     swordDamage += 50
                 }
-                if (Math.abs(player.getXY().x - fires[0].getXY().x) <= attackRange && Math.abs(player.getXY().y - fires[0].getXY().y) <= attackRange && isAttack) {
-                    console.log("Attacking the first fire !!!");
-                    attackTime = now;
-                    // attackEffect.setXY(0, 0);
-                }
             });
+
+            // Draw the attack effect starting at now
+            if (attackMonsterData.x != null && attackMonsterData.y != null) {
+                attackTime = now;
+                attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
+                monsters[attackMonsterData.monsterID].randomize(gameArea);
+            }
 
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -157,16 +160,15 @@ const game = (function () {
             sword.draw();
             gem.draw();
             // draw the attack effect for a fixed time duration for enough time to display
-            if (attackTime != null && Math.ceil((now - attackTime) / 1000) <= 1) attackEffect.draw();
-            else {
-                // console.log("The effect should not be displayed !!!");
-                attackTime = null;
+            if (attackTime != null) {
+                if (Math.ceil((now - attackTime) / 1000) <= 1) attackEffect.draw();
+                else attackTime = null;
             }
 
             players.forEach(player => {
                 player.draw();
             });
-            monsters.forEach(monster =>{
+            monsters.forEach(monster => {
                 monster.draw();
             })
 
@@ -182,22 +184,26 @@ const game = (function () {
             /* Handle the key down */
             switch (event.keyCode) {
                 case 37:
+                    console.log("move")
                     Socket.postBehaviour("move", 1);
                     break;
                 case 38:
+                    console.log("move")
                     Socket.postBehaviour("move", 2);
                     break;
                 case 39:
+                    console.log("move")
                     Socket.postBehaviour("move", 3);
                     break;
                 case 40:
+                    console.log("move")
                     Socket.postBehaviour("move", 4);
                     break;
                 case 32:
-                    Socket.postBehaviour("speedUp", null);
+                    Socket.postBehaviour("cheat mode", null);
                     break;
-                case 77:  //M
-                    isAttack = true;
+                case 16:  // Shift
+                    Socket.postBehaviour("attack", null);
                     break;
             }
         });
@@ -221,10 +227,9 @@ const game = (function () {
                     Socket.postBehaviour("stop", 4);
                     break;
                 case 32:
-                    Socket.postBehaviour("slowDown", null);
+                    Socket.postBehaviour("end cheat mode", null);
                     break;
-                case 77:  //M
-                    isAttack = false;
+                case 16:  // Shift
                     break;
             }
         });
@@ -233,41 +238,38 @@ const game = (function () {
         requestAnimationFrame(doFrame);
     }
 
-    const playerBehaviour = function(playerID, behaviour, direction){
-        const gemScore =20;
-        if(behaviour === "move"){
+    const playerBehaviour = function (playerID, behaviour, direction) {
+        const gemScore = 20;
+        if (behaviour === "move") {
             players[playerID].move(direction);
-        }
-        if (behaviour === "stop")
+        } else if (behaviour === "stop") {
             players[playerID].stop(direction);
-
-        if (behaviour === "speedUp")
-            players[playerID].speedUp();
-
-        if (behaviour === "slowDown")
-            players[playerID].slowDown();
-
-        if (behaviour === "attack"){
-            //TODO socketTODO
-        }
-        if(behaviour === "increase score"){
+        } else if (behaviour === "cheat mode") {
+            players[playerID].cheat();
+        } else if (behaviour === "increase score") {
             console.log("player: " + playerID + " increase score!");
             PlayerScores[playerID] += gemScore;
             playerScores[playerID].text(PlayerScores[playerID]);
-        }
-        if(behaviour === "release final score"){
+        } else if (behaviour === "release final score") {
             playerFinalScores[playerID].text(PlayerScores[playerID]);
+        } else if (behaviour === "end cheat mode") {
+            players[playerID].endCheat();
+        } else if (behaviour === "attack") {
+            attackMonsterData = players[playerID].attack(monsters);
+        } else if (behaviour === "kill monster") {
+            console.log("kill the monsters!!!!")
+            PlayerScores[playerID] += players[playerID].getAttackScore();
+            playerScores[playerID].text(PlayerScores[playerID]);
         }
-
     }
 
-    const gameControl = function(gameEvent, value) {
-        if(gameEvent === "updateTimer"){
+    const gameControl = function (gameEvent, value) {
+        if (gameEvent === "updateTimer") {
             $("#time-remaining").text(value);
         }
-        if(gameEvent === "randomGem") {
+        if (gameEvent === "randomGem") {
             console.log(value);
-            gem = Gem(context,value.x,value.y,value.color);
+            gem = Gem(context, value.x, value.y, value.color);
         }
     }
 
