@@ -16,6 +16,7 @@ const Gem = function(ctx, x, y, color) {
 
     // This is the sprite object of the gem created from the Sprite module.
     const sprite = Sprite(ctx, x, y);
+    let actualColor;
 
     // The sprite object is configured for the gem sprite here.
     sprite.setSequence(sequences[color])
@@ -45,12 +46,17 @@ const Gem = function(ctx, x, y, color) {
     const randomize = function(area) {
         /* Randomize the color */
         const colors = ["green", "red", "yellow", "purple"];
-        setColor(colors[Math.floor(Math.random() * 4)]);
+        actualColor = colors[Math.floor(Math.random() * 4)];
+        setColor(actualColor);
 
         /* Randomize the position */
         const {x, y} = area.randomPoint();
         sprite.setXY(x, y);
     };
+
+    const getColor = function(){
+        return actualColor;
+    }
 
     // The methods are returned as an object here.
     return {
@@ -61,6 +67,7 @@ const Gem = function(ctx, x, y, color) {
         getBoundingBox: sprite.getBoundingBox,
         randomize: randomize,
         draw: sprite.draw,
-        update: sprite.update
+        update: sprite.update,
+        getColor:getColor,
     };
 };
