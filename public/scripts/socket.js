@@ -147,13 +147,13 @@ const Socket = (function () {
         });
 
         // get back from server
-        //gemX: gemPos.x, gemY: gemPos.y   
+        // gemX, gemY gemColor
         socket.on("collect gem", (data) => {
-            setTimeout(function () {
+            // setTimeout(function () {
             console.log("back to the client collect function")
         
-                game.genNewGem(data.gemX, data.gemY);
-            }, 10);
+                game.genNewGem(data.gemX, data.gemY, data.gemColor);
+        //    }, 10); 
           
         });
 

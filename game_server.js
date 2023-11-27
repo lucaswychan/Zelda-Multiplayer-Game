@@ -235,25 +235,30 @@ io.on("connection", (socket) => {
         });
 
         socket.on("collect gem", (data) => {
-                gemPos = generateRandomPosition();
-                console.log("gemPos: ", gemPos)
-                io.emit("collect gem", { gemX: gemPos.x, gemY: gemPos.y});
+                newGem = generateRandomPosition();
+                console.log("gemPos: ", newGem)
+                io.emit("collect gem", { gemX: newGem.x, gemY: newGem.y, gemColor: newGem.randomColor});
         });
 
         
     }
 });
 
+// This function is ramdon generate a Gem in Canvas
 function generateRandomPosition() {
     const canvasMinX = 60;
     const canvasMinY = 60;
     const canvasMaxX = 700;
     const canvasMaxY = 800;
+    const colors = ["green", "red", "yellow", "purple"];
   
     const x = Math.floor(Math.random() * (canvasMaxX - canvasMinX) + canvasMinX);
     const y = Math.floor(Math.random() * (canvasMaxY - canvasMinY) + canvasMinY);
+
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    const randomColor = colors[randomIndex];
   
-    return { x, y };
+    return { x, y , randomColor};
   }
 
 

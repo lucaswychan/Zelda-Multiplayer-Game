@@ -44,6 +44,8 @@ const game = (function () {
     const sword = Sword(context, 427, 240);
     const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
 
+    
+
     const start = () => {
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         const monsterMoveDuration = [500, 300];
@@ -137,7 +139,7 @@ const game = (function () {
                     //send to server to generate a new Gems
                     Socket.collectGem(player);
 
-                    console.log("gemData: ", gemData, player)
+                    console.log("Collect Gem and gemData: ", gemData, player)
 
                     gem = Gem(context, gemData.x, gemData.x, gemData.color); 
 
@@ -279,16 +281,17 @@ const game = (function () {
         if (gameEvent === "updateTimer") {
             $("#time-remaining").text(value);
         }
-        if (gameEvent === "randomGem") {
-            console.log(value);
-            gem = Gem(context, value.x, value.y, value.color);
-        }
+        // if (gameEvent === "randomGem") {
+        //     console.log(value);
+        //     gem = Gem(context, value.x, value.y, value.color);
+        // }
     }
 
-    const genNewGem = function (gemPosX, gemPosY) {
+    const genNewGem = function (gemPosX, gemPosY, gemColor) {
         console.log("new gem in game.js:", gemPosX,gemPosY)
         gemData.x = gemPosX;
         gemData.y = gemPosY;
+        gemData.color = gemColor;
         // gem = Gem(context, gemPosX, gemPosY, value.color);
     }
 
