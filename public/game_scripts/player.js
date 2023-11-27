@@ -107,8 +107,8 @@ const Player = function (ctx, x, y, gameArea, playerID) {
     };
 
     // This function speeds up the player.
-    const speedUp = function () {
-        speed = 250;
+    const speedUp = function() {
+        speed = 450;
     };
 
     // This function slows down the player.

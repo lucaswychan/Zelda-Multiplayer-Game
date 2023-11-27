@@ -2,18 +2,30 @@ const game = (function () {
     // $("#game-canvas").css('opacity', '0.1');
 
     const players =[];
-    const player1Score = $("#player1-score")
-    const player2Score = $("#player2-score")
+    const playerScores = [
+        $("#player1-score"),
+        $("#player2-score")
+    ];
+    const playerFinalScores = [
+        $("#game-over-player1-score"),
+        $("#game-over-player2-score")
+    ];
+    let PlayerScores = [0,0];    //Play Score
+    let gameStartTime = 0;      // The timestamp when the game starts
+    let gameTimeSoFar;
+    const totalGameTime = 20;   // Total game time in seconds
+    let timeRemaining;
+    let gem;
+
+    const cv = $("canvas").get(0);
+    const context = cv.getContext("2d");
 
     let attackEffectPosition = { x: null , y: null };
 
     const start = () => {
-        const cv = $("canvas").get(0);
-        const context = cv.getContext("2d");
 
         const gameArea = BoundingBox(context, 60, 60, 700, 800);
 
-        const totalGameTime = 20;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         const monsterMoveDuration = [500,300];
         const monsterStopDuration = [1500,1000];
@@ -21,10 +33,7 @@ const game = (function () {
         const swordMaxAge = 3000;
         const attackRange = 15;
 
-        let gameStartTime = 0;      // The timestamp when the game starts
-        let playerScore = 0;    //Play Score
 
-        let gemScore =20;
         let monsterScore = 100;
         let swordDamage = 0;
         let attackTime = null;
@@ -33,7 +42,14 @@ const game = (function () {
 
         // Clear Data first
         $("#time-remaining").text(totalGameTime);
-        $("#final-gems").text(playerScore);
+
+        playerFinalScores.forEach((playerFinalScore, index) => {
+            PlayerScores[index] = 0;
+            playerScores[index].text(0);
+            playerFinalScore.text(0); // Update the score to 0
+        });
+
+        gameStartTime = 0;
 
         /* Create the sprites in the game */
         console.log("player: ", players)
@@ -43,7 +59,7 @@ const game = (function () {
         // players.push(Player(context, 800, 360, gameArea, 2));
         const monsters = [Monster(context, 125, 235, gameArea,1),
             Monster(context, 700, 400, gameArea,2)]
-        const gem = Gem(context, 427, 350, "green");        // The gem
+        gem = Gem(context, 427, 350, "green");        // The gem
         const fires = [
             Fire(context, 60, 180),  // top-left
             Fire(context, 60, 430),  // bottom-left
@@ -58,15 +74,16 @@ const game = (function () {
             if (gameStartTime === 0) gameStartTime = now;
 
             /* Update the time remaining */
-            const gameTimeSoFar = now - gameStartTime;
-            const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
-            $("#time-remaining").text(timeRemaining);
+            gameTimeSoFar = now - gameStartTime;
+            timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
+            Socket.postGameEvents("updateTimer", timeRemaining);
 
             sounds.battle.play();
             /* TODO */
             /* Handle the game over situation here */
             if (timeRemaining <= 0) {
-                $("#final-gems").text(playerScore);
+                // $("#final-gems").text(playerScore);
+                Socket.postBehaviour("release final score", null);
                 console.log("Game is ended")
 
                 // show the game over page
@@ -95,7 +112,11 @@ const game = (function () {
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
-            if (gem.getAge(now) >= gemMaxAge) gem.randomize(gameArea);
+            if (gem.getAge(now) >= gemMaxAge) {
+                gem.randomize(gameArea);
+                console.log(gem);
+                Socket.postGameEvents("randomGem", {x:gem.getXY().x, y:gem.getXY().y, color:gem.getColor()});
+            }
             if (sword.getAge(now) >= swordMaxAge) sword.randomize(gameArea);
             monsters.forEach((monster, index) => {
                 if (monster.getMoveAge(now) >= MonsterToMoveAge[index]) {
@@ -114,10 +135,8 @@ const game = (function () {
                     gem.randomize(gameArea);
                     sounds.collect.currentTime = 0;
                     sounds.collect.play();
-                    playerScore += gemScore;
-                    player1Score.text(playerScore);
+                    Socket.postBehaviour("increase score", null);
                 }
-
                 if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
                     console.log("Successfully get the sword");
                     // sword.remove(x2, y2, 16, 16);
@@ -221,9 +240,9 @@ const game = (function () {
         requestAnimationFrame(doFrame);
     }
 
-    const playerBehaviour = function(playerID, behaviour, direction, monsters){
+    const playerBehaviour = function(playerID, behaviour, direction){
+        const gemScore =20;
         if(behaviour === "move"){
-            // console.log("Player" + playerID +"move on" + direction);
             players[playerID].move(direction);
         }
         else if (behaviour === "stop")
@@ -231,6 +250,14 @@ const game = (function () {
 
         else if (behaviour === "speedUp") {
             players[playerID].speedUp();
+        }
+        if(behaviour === "increase score"){
+            console.log("player: " + playerID + " increase score!");
+            PlayerScores[playerID] += gemScore;
+            playerScores[playerID].text(PlayerScores[playerID]);
+        }
+        if(behaviour === "release final score"){
+            playerFinalScores[playerID].text(PlayerScores[playerID]);
         }
 
         else if (behaviour === "slowDown") {
@@ -249,7 +276,18 @@ const game = (function () {
         //     players[playerID].stopAttack();
         // }
     }
-    return {start, playerBehaviour};
+
+    const gameControl = function(gameEvent, value) {
+        if(gameEvent === "updateTimer"){
+            $("#time-remaining").text(value);
+        }
+        if(gameEvent === "randomGem") {
+            console.log(value);
+            gem = Gem(context,value.x,value.y,value.color);
+        }
+    }
+
+    return {start, playerBehaviour, gameControl};
 })();
 //End of games
 
