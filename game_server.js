@@ -227,6 +227,12 @@ io.on("connection", (socket) => {
                 io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
             }, 10);
         });
+
+        socket.on("gameEvent", (data) => {
+            setTimeout(function () {
+                io.emit("gameEvent", { gameEvent: data.gameEvent, value: data.value});
+            }, 10);
+        });
     }
 });
 

@@ -18,6 +18,17 @@ const Socket = (function () {
             }, 10);
         });
 
+        socket.on("gameEvent", (data) => {
+            // if(data.gameEvent === "randomGem"){
+            //     let value = {
+            //         x:data.value.x, y:data.value.y, color:data.value.color
+            //     }
+            // }
+            setTimeout(function () {
+                game.gameControl(data.gameEvent, data.value)
+            }, 10);
+        });
+
         // Wait for the socket to connect successfully
         socket.on("connect", () => {
             // Get the online user list
@@ -183,6 +194,10 @@ const Socket = (function () {
         }, 10);
     }
 
+    const postGameEvents = function(gameEvent, value) {
+        socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
+    }
+
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
-         getRanking, restart, postBehaviour};
+         getRanking, restart, postBehaviour, postGameEvents};
 })();
