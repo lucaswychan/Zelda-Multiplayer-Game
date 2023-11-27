@@ -26,7 +26,7 @@ const game = (function () {
     const players = [];
     players[0] = Player(context, 60, 250, gameArea, 1);
     players[1] = Player(context, 800, 360, gameArea, 2);
-    const monsters = [Monster(context, 125, 235, gameArea, 1),
+    let monsters = [Monster(context, 125, 235, gameArea, 1),
         Monster(context, 700, 400, gameArea, 2)]
     gem = Gem(context, 427, 350, "green");        // The gem
     const fires = [
@@ -42,9 +42,9 @@ const game = (function () {
 
     const start = () => {
         endGame = false;
-        const monsterMoveDuration = [500, 300];
-        const monsterStopDuration = [1500, 1000];
-        let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
+        // const monsterMoveDuration = [500, 300];
+        // const monsterStopDuration = [1500, 1000];
+        // let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
 
         let monsterScore = 100;
         let attackTime = null;
@@ -95,19 +95,7 @@ const game = (function () {
             monsters.forEach(monster => {
                 monster.update(now);
             });
-
-
-            monsters.forEach((monster, index) => {
-                if (monster.getMoveAge(now) >= MonsterToMoveAge[index]) {
-                    if (monster.randomStop()) {
-                        MonsterToMoveAge[index] = monsterStopDuration[index];
-                        monster.stop(monster.getDir());
-                    } else {
-                        MonsterToMoveAge[index] = monsterMoveDuration[index];
-                        monster.randomMove();
-                    }
-                }
-            });
+            
 
             if (players[roleID].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                 console.log(roleID + " collected the gem");
@@ -265,6 +253,10 @@ const game = (function () {
 
     const gameControl = function (gameEvent, value) {
         if(gameEvent === "startGame"){
+            players[0] = Player(context, 60, 250, gameArea, 1);
+            players[1] = Player(context, 800, 360, gameArea, 2);
+            monsters = [Monster(context, 125, 235, gameArea, 1),
+                Monster(context, 700, 400, gameArea, 2)]
             endGame = false;
         }
         if (gameEvent === "updateTimer") {
@@ -281,6 +273,12 @@ const game = (function () {
         }
         if (gameEvent === "randomSword") {
             sword = Sword(context, value.x, value.y);
+        }
+        if(gameEvent === "MonsterStop") {
+            monsters[value].stop(monsters[value].getDir());
+        }
+        if(gameEvent === "MonsterMove"){
+            monsters[value.index].move(value.direction);
         }
     }
 
