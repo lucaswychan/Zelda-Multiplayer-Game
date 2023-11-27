@@ -273,15 +273,17 @@ button.icon:active {
     border: 1px solid #ccc; 
     background: #40779cd1;
     margin: 10px;
-    height: 400px;
+    height: 420px;
     color:white;
+    padding: 7px;
     /* padding: 5px; */
 }
 
 #chat-panel h2{
-    font-size: 100%;
+    font-size: 130%;
     text-align: center;
     color:white;
+   
 }
 
 #chat-area {
@@ -292,7 +294,7 @@ button.icon:active {
     /* width:95%; */
     height: 300px;
     overflow-y: auto;
-    padding: 10px;
+    padding: 15px;
 
 }
 
@@ -464,6 +466,11 @@ button.icon:active {
 /*End of Home page*/
 
 /* Game Over Page*/
+#counter{
+    font-weight: bold;
+    font-size:150%;
+}
+
 #game-over-page {
     display: flex;
     justify-content: center;
