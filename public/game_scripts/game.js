@@ -240,7 +240,7 @@ const game = (function () {
         requestAnimationFrame(doFrame);
     }
 
-    const playerBehaviour = function(playerID, behaviour, direction){
+    const playerBehaviour = function(playerID, behaviour, direction, monsters){
         const gemScore =20;
         if(behaviour === "move"){
             players[playerID].move(direction);
