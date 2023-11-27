@@ -29,6 +29,8 @@ const Authentication = (function() {
             .then((json) => {
                 if (json.status == "success") {
                     user = json.user;
+                    sounds.logIn.currentTime = 0;
+                    sounds.logIn.play();
                     onSuccess();
                 }
                 else if (onError) onError(json.error);
