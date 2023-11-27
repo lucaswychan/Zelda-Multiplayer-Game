@@ -151,9 +151,7 @@ io.on("connection", (socket) => {
         socket.on("get users", () => {
             socket.emit("users", JSON.stringify(onlineUsers));
         });
-        // add new user to the display list 
-        io.emit("add user", JSON.stringify(socket.request.session.user));
-
+     
         // chatroom content
         const chatroom = JSON.parse(fs.readFileSync("data/chatroom.json"));
         socket.on("get messages", () => {

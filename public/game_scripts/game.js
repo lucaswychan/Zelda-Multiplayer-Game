@@ -2,6 +2,9 @@ const game = (function () {
     // $("#game-canvas").css('opacity', '0.1');
 
     const players =[];
+    const player1Score = $("#player1-score")
+    const player2Score = $("#player2-score")
+
     const start = () => {
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
@@ -15,8 +18,12 @@ const game = (function () {
         let MonsterToMoveAge = [monsterMoveDuration[0],monsterMoveDuration[1]]; // The time monsters need to move
         const swordMaxAge = 3000;
         const attackRange = 15;
+
         let gameStartTime = 0;      // The timestamp when the game starts
-        let collectedGems = 0;      // The number of gems collected in the game
+        let playerScore = 0;    //Play Score
+
+        let gemScore =20;
+        let monsterScore = 100;
         let swordDamage = 0;
         let attackTime = null;
 
@@ -24,11 +31,14 @@ const game = (function () {
 
         // Clear Data first
         $("#time-remaining").text(totalGameTime);
-        $("#final-gems").text(collectedGems);
+        $("#final-gems").text(playerScore);
 
         /* Create the sprites in the game */
-        players.push(Player(context, 60, 250, gameArea, 1));
-        players.push(Player(context, 800, 360, gameArea, 2));
+        console.log("player: ", players)
+        players[0]=Player(context, 60, 250, gameArea, 1);
+        players[1]=Player(context, 800, 360, gameArea, 2);
+        // players.push(Player(context, 60, 250, gameArea, 1));
+        // players.push(Player(context, 800, 360, gameArea, 2));
         const monsters = [Monster(context, 125, 235, gameArea,1),
             Monster(context, 700, 400, gameArea,2)]
         const gem = Gem(context, 427, 350, "green");        // The gem
@@ -54,7 +64,7 @@ const game = (function () {
             /* TODO */
             /* Handle the game over situation here */
             if (timeRemaining === 0) {
-                $("#final-gems").text(collectedGems);
+                $("#final-gems").text(playerScore);
                 console.log("Game is ended")
 
                 // show the game over page
@@ -72,8 +82,10 @@ const game = (function () {
             sword.update(now);
             gem.update(now);
             attackEffect.update(now);
+            
             players.forEach(player => {
                 player.update(now);
+                
             });
             monsters.forEach(monster => {
                 monster.update(now);
@@ -100,8 +112,8 @@ const game = (function () {
                     gem.randomize(gameArea);
                     sounds.collect.currentTime = 0;
                     sounds.collect.play();
-                    collectedGems++;
-                    $("#final-gems").text(collectedGems);
+                    playerScore += gemScore;
+                    player1Score.text(playerScore);
                 }
 
                 if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
@@ -132,6 +144,7 @@ const game = (function () {
                 // console.log("The effect should not be displayed !!!");
                 attackTime = null;
             }
+
             players.forEach(player => {
                 player.draw();
             });

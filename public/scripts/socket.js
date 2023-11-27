@@ -27,30 +27,6 @@ const Socket = (function () {
             socket.emit("get messages");
         });
 
-        // Set up the users event
-        socket.on("users", (onlineUsers) => {
-            onlineUsers = JSON.parse(onlineUsers);
-
-            // Show the online users
-            OnlineUsersPanel.update(onlineUsers);
-        });
-
-        // Set up the add user event
-        socket.on("add user", (user) => {
-            user = JSON.parse(user);
-
-            // Add the online user
-            OnlineUsersPanel.addUser(user);
-        });
-
-        // Set up the remove user event
-        socket.on("remove user", (user) => {
-            user = JSON.parse(user);
-
-            // Remove the online user
-            OnlineUsersPanel.removeUser(user);
-        });
-
         // Set up the messages event
         socket.on("messages", (chatroom) => {
             chatroom = JSON.parse(chatroom);
