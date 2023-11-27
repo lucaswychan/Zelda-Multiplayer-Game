@@ -145,6 +145,19 @@ const Socket = (function () {
             $('#chat-input').val('');
 
         });
+
+        // get back from server
+        //gemX: gemPos.x, gemY: gemPos.y   
+        socket.on("collect gem", (data) => {
+            setTimeout(function () {
+            console.log("back to the client collect function")
+        
+                game.genNewGem(data.gemX, data.gemY);
+            }, 10);
+          
+        });
+
+
         
     };
 
@@ -198,6 +211,12 @@ const Socket = (function () {
         socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
     }
 
+    // collect gem to server (called by game.js)
+    const collectGem = function (player) {
+        socket.emit("collect gem", {playerID: playerID});
+    }
+
+
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
-         getRanking, restart, postBehaviour, postGameEvents};
+         getRanking, restart, postBehaviour, postGameEvents, collectGem};
 })();

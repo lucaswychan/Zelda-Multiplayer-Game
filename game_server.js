@@ -233,8 +233,29 @@ io.on("connection", (socket) => {
                 io.emit("gameEvent", { gameEvent: data.gameEvent, value: data.value});
             }, 10);
         });
+
+        socket.on("collect gem", (data) => {
+                gemPos = generateRandomPosition();
+                console.log("gemPos: ", gemPos)
+                io.emit("collect gem", { gemX: gemPos.x, gemY: gemPos.y});
+        });
+
+        
     }
 });
+
+function generateRandomPosition() {
+    const canvasMinX = 60;
+    const canvasMinY = 60;
+    const canvasMaxX = 700;
+    const canvasMaxY = 800;
+  
+    const x = Math.floor(Math.random() * (canvasMaxX - canvasMinX) + canvasMinX);
+    const y = Math.floor(Math.random() * (canvasMaxY - canvasMinY) + canvasMinY);
+  
+    return { x, y };
+  }
+
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {

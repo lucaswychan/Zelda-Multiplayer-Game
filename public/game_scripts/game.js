@@ -12,10 +12,16 @@ const game = (function () {
     let PlayerScores = [0, 0];    //Play Score
     let gameStartTime = 0;      // The timestamp when the game starts
     let gameTimeSoFar;
-    const totalGameTime = 20;   // Total game time in seconds
+    const totalGameTime = 40;   // Total game time in seconds
     let timeRemaining;
     let gem;
     let attackMonsterData = {x: null, y: null, monsterID: null};
+
+    let gemData ={
+        x:400,
+        y:300,
+        color:"green"
+    };
 
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
@@ -106,11 +112,11 @@ const game = (function () {
 
             /* TODO */
             /* Randomize the gem and collect the gem here */
-            if (gem.getAge(now) >= gemMaxAge) {
-                gem.randomize(gameArea);
-                console.log(gem);
-                Socket.postGameEvents("randomGem", {x: gem.getXY().x, y: gem.getXY().y, color: gem.getColor()});
-            }
+            // if (gem.getAge(now) >= gemMaxAge) {
+            //     gem.randomize(gameArea);
+            //     console.log(gem);
+            //     Socket.postGameEvents("randomGem", {x: gem.getXY().x, y: gem.getXY().y, color: gem.getColor()});
+            // }
             if (sword.getAge(now) >= swordMaxAge) {
                 sword.randomize(gameArea);
             }
@@ -128,7 +134,13 @@ const game = (function () {
 
             players.forEach(player => {
                 if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
-                    gem.randomize(gameArea);
+                    //send to server to generate a new Gems
+                    Socket.collectGem(player);
+
+                    console.log("gemData: ", gemData, player)
+
+                    gem = Gem(context, gemData.x, gemData.x, gemData.color); 
+
                     sounds.collect.currentTime = 0;
                     sounds.collect.play();
                     Socket.postBehaviour("increase score", null);
@@ -273,7 +285,15 @@ const game = (function () {
         }
     }
 
-    return {start, playerBehaviour, gameControl};
+    const genNewGem = function (gemPosX, gemPosY) {
+        console.log("new gem in game.js:", gemPosX,gemPosY)
+        gemData.x = gemPosX;
+        gemData.y = gemPosY;
+        // gem = Gem(context, gemPosX, gemPosY, value.color);
+    }
+
+
+    return {start, playerBehaviour, gameControl, genNewGem};
 })();
 //End of games
 
