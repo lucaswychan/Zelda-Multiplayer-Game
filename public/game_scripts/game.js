@@ -20,6 +20,8 @@ const game = (function () {
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
 
+    let attackEffectPosition = { x: null , y: null };
+
     const start = () => {
 
         const gameArea = BoundingBox(context, 60, 60, 700, 800);
@@ -76,7 +78,7 @@ const game = (function () {
             timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
             Socket.postGameEvents("updateTimer", timeRemaining);
 
-            sounds.background.play();
+            sounds.battle.play();
             /* TODO */
             /* Handle the game over situation here */
             if (timeRemaining <= 0) {
@@ -88,7 +90,7 @@ const game = (function () {
                 GamePage.hide()
                 GameOverPage.show()
 
-                sounds.background.pause();
+                sounds.battle.pause();
                 sounds.gameOver.play();
                 return;
             }
@@ -127,6 +129,7 @@ const game = (function () {
                     }
                 }
             });
+
             players.forEach(player => {
                 if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                     gem.randomize(gameArea);
@@ -138,16 +141,16 @@ const game = (function () {
                     console.log("Successfully get the sword");
                     // sword.remove(x2, y2, 16, 16);
                     sword.randomize(gameArea);
-                    sounds.collect.currentTime = 0;
-                    sounds.collect.play();
+                    sounds.sword.currentTime = 0;
+                    sounds.sword.play();
                     swordDamage += 50
                 }
-                if (Math.abs(player.getXY().x - fires[0].getXY().x) <= attackRange && Math.abs(player.getXY().y - fires[0].getXY().y) <= attackRange && isAttack) {
-                    console.log("Attacking the first fire !!!");
-                    attackTime = now;
-                    // attackEffect.setXY(0, 0);
-                }
             });
+
+            if (attackEffectPosition.x != null && attackEffectPosition.y != null) {
+                attackTime = now;
+                attackEffect.setXY(attackEffectPosition.x, attackEffectPosition.y);
+            }
 
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -182,22 +185,26 @@ const game = (function () {
             /* Handle the key down */
             switch (event.keyCode) {
                 case 37:
-                    Socket.postBehaviour("move", 1);
+                    console.log("move")
+                    Socket.postBehaviour("move", 1, null);
                     break;
                 case 38:
-                    Socket.postBehaviour("move", 2);
+                    console.log("move")
+                    Socket.postBehaviour("move", 2, null);
                     break;
                 case 39:
-                    Socket.postBehaviour("move", 3);
+                    console.log("move")
+                    Socket.postBehaviour("move", 3, null);
                     break;
                 case 40:
-                    Socket.postBehaviour("move", 4);
+                    console.log("move")
+                    Socket.postBehaviour("move", 4, null);
                     break;
                 case 32:
-                    Socket.postBehaviour("speedUp", null);
+                    Socket.postBehaviour("speedUp", null, null);
                     break;
                 case 77:  //M
-                    isAttack = true;
+                    Socket.postBehaviour("attack", null, monsters);
                     break;
             }
         });
@@ -209,22 +216,22 @@ const game = (function () {
             /* Handle the key up */
             switch (event.keyCode) {
                 case 37:
-                    Socket.postBehaviour("stop", 1);
+                    Socket.postBehaviour("stop", 1, null);
                     break;
                 case 38:
-                    Socket.postBehaviour("stop", 2);
+                    Socket.postBehaviour("stop", 2, null);
                     break;
                 case 39:
-                    Socket.postBehaviour("stop", 3);
+                    Socket.postBehaviour("stop", 3, null);
                     break;
                 case 40:
-                    Socket.postBehaviour("stop", 4);
+                    Socket.postBehaviour("stop", 4, null);
                     break;
                 case 32:
-                    Socket.postBehaviour("slowDown", null);
+                    Socket.postBehaviour("slowDown", null, null);
                     break;
                 case 77:  //M
-                    isAttack = false;
+                    // Socket.postBehaviour("stop attack", null, monsters);
                     break;
             }
         });
@@ -238,17 +245,11 @@ const game = (function () {
         if(behaviour === "move"){
             players[playerID].move(direction);
         }
-        if (behaviour === "stop")
+        else if (behaviour === "stop")
             players[playerID].stop(direction);
 
-        if (behaviour === "speedUp")
+        else if (behaviour === "speedUp") {
             players[playerID].speedUp();
-
-        if (behaviour === "slowDown")
-            players[playerID].slowDown();
-
-        if (behaviour === "attack"){
-            //TODO socketTODO
         }
         if(behaviour === "increase score"){
             console.log("player: " + playerID + " increase score!");
@@ -259,6 +260,21 @@ const game = (function () {
             playerFinalScores[playerID].text(PlayerScores[playerID]);
         }
 
+        else if (behaviour === "slowDown") {
+            players[playerID].slowDown();
+
+        }
+
+        else if (behaviour === "attack"){
+            //TODO socketTODO
+            //console.log("Attacking from socket");
+            attackEffectPosition = players[playerID].attack(monsters);
+            console.log("attackEffectPosition = ", attackEffectPosition);
+        }
+        // else if (behaviour === "stop attack") {
+        //     console.log("Stop Attacking from socket");
+        //     players[playerID].stopAttack();
+        // }
     }
 
     const gameControl = function(gameEvent, value) {
