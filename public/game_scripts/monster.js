@@ -168,6 +168,7 @@ const Monster = function(ctx, x, y, gameArea, MonsterID) {
     // The methods are returned as an object here.
     return {
         getXY: sprite.getXY,
+        setXY: sprite.setXY,
         getDir: getDir,
         move: move,
         stop: stop,

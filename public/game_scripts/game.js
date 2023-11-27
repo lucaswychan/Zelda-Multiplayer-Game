@@ -123,13 +123,10 @@ const game = (function () {
                 attackTime = now;
                 attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
                 if (attackMonsterData.target === "monster") {
-                    monsters[attackMonsterData.id].randomize(gameArea);
+                    Socket.postBehaviour("attackMonster", {playerID: roleID, monsterID: attackMonsterData.id, score: PlayerScores[roleID]});
                 }
                 attackMonsterData.x = null;
                 attackMonsterData.y = null;
-                // else if (attackMonsterData.target === "player") {
-                //
-                // }
             }
 
             /* Clear the screen */
@@ -280,6 +277,9 @@ const game = (function () {
         }
         if(gameEvent === "MonsterMove"){
             monsters[value.index].move(value.direction);
+        }
+        if(gameEvent === "randomMonster"){
+            monsters[value.index].setXY(value.x, value.y);
         }
     }
 

@@ -262,6 +262,12 @@ const monsterRandomMove = function(monsterID) {
     return randomDirection;
 };
 
+const MonsterRandomize = () => {
+    const x = gameArea.left + (Math.random() * (gameArea.right - gameArea.left));
+    const y = gameArea.top + (Math.random() * (gameArea.bottom - gameArea.top));
+    return {x, y};
+}
+
 
 io.on("connection", (socket) => {
     if (socket.request.session.user != null) {
@@ -358,6 +364,10 @@ io.on("connection", (socket) => {
                 sword = randomSword();
                 io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y:sword.y } });
                 io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
+            } else if (data.behaviour === "attackMonster"){
+                MonsterNewLocaltion = MonsterRandomize();
+                io.emit('gameEvent', { gameEvent: 'randomMonster', value: { index: data.direction.monsterID, x: MonsterNewLocaltion.x, y: MonsterNewLocaltion.y } });
+                // io.emit("playerBehaviour", { playerID: data.playerID, behaviour: "kill monster", direction: data.score });
             } else {
                 setTimeout(function () {
                     io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
