@@ -10,6 +10,12 @@ const AttackEffect = (ctx, x, y) => {
         // .setShadowScale({x: 0.75, y: 0.2})
         .useSheet("./images/object_sprites.png");
 
+    let birthTime = performance.now();
+
+    const getAge = function(now) {
+        return now - birthTime;
+    };
+
 
     // The methods are returned as an object here.
     return {
@@ -18,5 +24,6 @@ const AttackEffect = (ctx, x, y) => {
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
         update: sprite.update,
+        getAge: getAge
     };
 }
