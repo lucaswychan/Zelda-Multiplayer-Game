@@ -54,6 +54,14 @@ const Gem = function(ctx, x, y, color) {
         sprite.setXY(x, y);
     };
 
+    // Base on given direction generate new one
+    const generateNewGem = function(x, y, color) {
+        console.log("Gem Function Data: ", x, y, color)
+        /* Generate new the color */
+        setColor(color);
+        sprite.setXY(x, y);
+    };
+
     const getColor = function(){
         return actualColor;
     }
@@ -69,5 +77,6 @@ const Gem = function(ctx, x, y, color) {
         draw: sprite.draw,
         update: sprite.update,
         getColor:getColor,
+        generateNewGem:generateNewGem,
     };
 };

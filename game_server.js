@@ -140,13 +140,48 @@ io.use((socket, next) => {
 
 const onlineUsers = {};
 let players = { player1: null, player2: null };
+// 0 is for player 1
+let playerScore = [0, 0];
+
+let playerData = {}; // Object to store player da
 
 
 io.on("connection", (socket) => {
+  
+
     if (socket.request.session.user != null) {
         // update the online users' list when a new user connected
         onlineUsers[socket.request.session.user.username] = { "avatar": socket.request.session.user.avatar, "name": socket.request.session.user.name };
 
+        // Assign a unique ID to the new player
+        const playerId = socket.id;
+
+        players[playerId] = {
+            id: playerId,
+            // Other player data initialization
+        };
+        
+        // Emit player's unique ID to the client
+        socket.emit('playerId', playerId);
+
+         // Handle player movements or actions from the client
+        socket.on('playerAction', (data) => {
+            // Process player actions, like collecting gems
+            // Example: Check if Player 1 or Player 2 collects a gem
+            if (data.action === 'collectGem') {
+            const player = players[data.playerId];
+            // Update game state accordingly
+            // Send updates to all clients
+            io.emit('gemCollected', { playerId: player.id, gemId: data.gemId });
+            }
+            // Other game actions
+        });
+        
+
+
+        
+
+        
         // send the online users' list to browser
         socket.on("get users", () => {
             socket.emit("users", JSON.stringify(onlineUsers));
@@ -175,20 +210,7 @@ io.on("connection", (socket) => {
         });
 
 
-        // disconnection
-        socket.on("disconnect", () => {
-            delete onlineUsers[socket.request.session.user.username];
-            io.emit("remove user", JSON.stringify(socket.request.session.user));
-
-            //Delete Players
-            players['player1'] = null;
-            players['player2'] = null;
-
-            //clear chatroom Data
-            const emptyData = []
-            fs.writeFileSync('data/chatroom.json', JSON.stringify(emptyData));
-
-        });
+   
 
         socket.on("join game", (player) => {
             if (player.id == 0) {
@@ -223,22 +245,41 @@ io.on("connection", (socket) => {
         });
 
         socket.on("playerBehaviour", (data) => {
-            setTimeout(function () {
+            // setTimeout(function () {
                 io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
-            }, 10);
+            // }, 10);s
         });
 
         socket.on("gameEvent", (data) => {
-            setTimeout(function () {
+            // setTimeout(function () {
                 io.emit("gameEvent", { gameEvent: data.gameEvent, value: data.value});
-            }, 10);
+            // }, 10);
         });
 
-        socket.on("collect gem", (data) => {
+        socket.on("collect gem", (player) => {
+                console.log("playerID: ", player.playerID)
+                playerScore[player.playerID] +=20;
                 newGem = generateRandomPosition();
                 console.log("gemPos: ", newGem)
-                io.emit("collect gem", { gemX: newGem.x, gemY: newGem.y, gemColor: newGem.randomColor});
+                io.emit("collect gem", { gemX: newGem.x, gemY: newGem.y, gemColor: newGem.randomColor, playerScore: playerScore[player.playerID]});
         });
+
+        // disconnection
+        socket.on("disconnect", () => {
+        delete onlineUsers[socket.request.session.user.username];
+        io.emit("remove user", JSON.stringify(socket.request.session.user));
+        //Delete Players
+        players['player1'] = null;
+        players['player2'] = null;
+
+        //handle user data, when user left
+        delete players[playerId];
+
+        //clear chatroom Data
+        const emptyData = []
+        fs.writeFileSync('data/chatroom.json', JSON.stringify(emptyData));
+
+    });
 
         
     }

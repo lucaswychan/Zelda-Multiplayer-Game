@@ -3,6 +3,8 @@ const Socket = (function () {
     let socket = null;
     let playerID = null;
 
+    // let playerId; // Store the player's ID
+
     // This function gets the socket from the module
     const getSocket = function () {
         return socket;
@@ -11,6 +13,12 @@ const Socket = (function () {
     // This function connects the server and initializes the socket
     const connect = function () {
         socket = io();
+
+        // Listen for the player's unique ID from the server
+        socket.on('playerId', (id) => {
+            playerId = id;
+        });
+        
 
         socket.on("playerBehaviour", (data) => {
             setTimeout(function () {
@@ -151,11 +159,14 @@ const Socket = (function () {
         socket.on("collect gem", (data) => {
             // setTimeout(function () {
             console.log("back to the client collect function")
+            $("#player1-score").text(data.playerScore);
         
-                game.genNewGem(data.gemX, data.gemY, data.gemColor);
+            game.genNewGem(data.gemX, data.gemY, data.gemColor);
         //    }, 10); 
           
         });
+
+
 
 
         
@@ -211,10 +222,30 @@ const Socket = (function () {
         socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
     }
 
-    // collect gem to server (called by game.js)
-    const collectGem = function (player) {
+    // // collect gem to server (called by game.js)
+    const collectGem = function () {
+        console.log("collect gem player: ", playerID)
         socket.emit("collect gem", {playerID: playerID});
     }
+
+    // const collectGem = function (player, playerid) {
+    //     console.log("player: ", player, "playerID: ", playerid)
+    //     const data = {
+    //       playerId: playerid,
+    //       action: 'collectGem',
+    //       gemId: gemId,
+    //     };
+    //     socket.emit('playerAction', data);
+    // }
+
+    // // Listen for updates when a gem is collected by any player
+    // socket.on('gemCollected', (data) => {
+    //     // Process the gem collection event
+    //     if (data.playerId === playerId) {
+    //     // Player 1 or Player 2 collected the gem
+    //     // Update UI or perform relevant actions
+    //     }
+    // });
 
 
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,

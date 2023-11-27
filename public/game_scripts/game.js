@@ -23,13 +23,14 @@ const game = (function () {
         color:"green"
     };
 
+    let gemCollected = false;
+
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
 
     const gameArea = BoundingBox(context, 60, 60, 700, 800);
     const players = [];
-    players[0] = Player(context, 60, 250, gameArea, 1);
-    players[1] = Player(context, 800, 360, gameArea, 2);
+   
     // players.push(Player(context, 60, 250, gameArea, 1));
     // players.push(Player(context, 800, 360, gameArea, 2));
     const monsters = [Monster(context, 125, 235, gameArea, 1),
@@ -56,8 +57,13 @@ const game = (function () {
         let swordDamage = 0;
         let attackTime = null;
 
+        
+
         // Clear Data first
         $("#time-remaining").text(totalGameTime);
+
+        players[0] = Player(context, 60, 250, gameArea, 1);
+        players[1] = Player(context, 800, 360, gameArea, 2);
 
         playerFinalScores.forEach((playerFinalScore, index) => {
             PlayerScores[index] = 0;
@@ -137,18 +143,78 @@ const game = (function () {
                 }
             });
 
+            // if (players[0].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
+                    
+            //     //send to server to generate a new Gems
+            //     Socket.collectGem(players[0], 0);
+
+            //     console.log("Collect Gem and gemData: ", gemData)
+
+            //     gem = generateNewGem(gemData.x, gemData.x, gemData.color); 
+
+            //     sounds.collect.currentTime = 0;
+            //     sounds.collect.play();
+              
+            // }else if(players[1].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
+                    
+            //     //send to server to generate a new Gems
+            //     Socket.collectGem(players[1], 1);
+
+            //     console.log("Collect Gem and gemData: ", gemData, players[1])
+
+            //     gem = generateNewGem(gemData.x, gemData.x, gemData.color); 
+
+            //     sounds.collect.currentTime = 0;
+            //     sounds.collect.play();
+            //     // Socket.postBehaviour("increase score", null);
+
+            // }
+
+            
+            if (players[0].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
+                //send to server to generate a new Gems
+                Socket.collectGem(0);
+
+                console.log("player 0 Collect Gem and gemData: ", gemData)
+        
+                gem.generateNewGem(gemData.x, gemData.x, gemData.color);
+
+                gemCollected = true;
+
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                // Socket.postBehaviour("increase score", null);
+            }else if (players[1].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
+                //send to server to generate a new Gems
+                Socket.collectGem(1);
+
+                console.log("player 1 CollectGem and gemData: ", gemData)
+        
+
+                gemCollected = true;
+
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                // Socket.postBehaviour("increase score", null);
+            }
+
+            if(gemCollected){
+                gem.generateNewGem(gemData.x, gemData.x, gemData.color);
+                gemCollected= false;
+            }
+
             players.forEach(player => {
                 if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                     //send to server to generate a new Gems
-                    Socket.collectGem(player);
+                    Socket.collectGem();
 
-                    console.log("Collect Gem and gemData: ", gemData, player)
-
-                    gem = Gem(context, gemData.x, gemData.x, gemData.color); 
+                    console.log("Collect Gem and gemData: ", gemData)
+            
+                    gem.generateNewGem(gemData.x, gemData.x, gemData.color);
 
                     sounds.collect.currentTime = 0;
                     sounds.collect.play();
-                    Socket.postBehaviour("increase score", null);
+                    // Socket.postBehaviour("increase score", null);
                 }
 
                 if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
@@ -306,14 +372,14 @@ const game = (function () {
         // }
     }
 
-    const genNewGem = function (gemPosX, gemPosY, gemColor) {
-        console.log("new gem in game.js:", gemPosX,gemPosY)
+    const genNewGem = function (gemPosX, gemPosY, gemColor, ) {
+        // console.log("new gem in game.js:", gemPosX,gemPosY)
         gemData.x = gemPosX;
         gemData.y = gemPosY;
         gemData.color = gemColor;
+        
         // gem = Gem(context, gemPosX, gemPosY, value.color);
     }
-
 
     return {start, playerBehaviour, gameControl, genNewGem};
 })();

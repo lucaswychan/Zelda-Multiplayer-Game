@@ -61,6 +61,11 @@ const Player = function (ctx, x, y, gameArea, playerID) {
     let attackRange = 15;
     let attackScore = 100;
 
+    let property ={
+        socre: 0,
+        attackScore : 100,
+    }
+
     // This function sets the player's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
     const move = function (dir) {
