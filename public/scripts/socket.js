@@ -95,36 +95,36 @@ const Socket = (function () {
             }
         });
 
-        socket.on("get ranking", (rankingsData) => {
-
-            // we can get the player name and data in html here and store the score in the page
-            // append both player result to ranking list
-            // sort and get the top 10 result
-            // write the need to write the result back the json
-
-            console.log("rankingsData:",rankingsData)
-            const dataArray = Object.entries(rankingsData).map(([name, score]) => ({ name, score }));
-             
-            // Sort in descending order based on the score
-            dataArray.sort((a, b) => b.score - a.score);
-
-            // Get the tbody element to populate
-            const rankingList = $('#ranking-list');
-
-            // Clear any existing content in the table body
-            rankingList.empty();
-
-            // Populate the table body with the sorted data
-            dataArray.forEach((item, index) => {
-                const row = `<tr>
-                    <td>${index + 1}</td>
-                    <td>${item.name}</td>
-                    <td>${item.score}</td>
-                </tr>`;
-                rankingList.append(row);
-            });
-
-        });
+        // socket.on("get ranking", (rankingsData) => {
+        //
+        //     // we can get the player name and data in html here and store the score in the page
+        //     // append both player result to ranking list
+        //     // sort and get the top 10 result
+        //     // write the need to write the result back the json
+        //
+        //     console.log("rankingsData:",rankingsData)
+        //     const dataArray = Object.entries(rankingsData).map(([name, score]) => ({ name, score }));
+        //
+        //     // Sort in descending order based on the score
+        //     dataArray.sort((a, b) => b.score - a.score);
+        //
+        //     // Get the tbody element to populate
+        //     const rankingList = $('#ranking-list');
+        //
+        //     // Clear any existing content in the table body
+        //     rankingList.empty();
+        //
+        //     // Populate the table body with the sorted data
+        //     dataArray.forEach((item, index) => {
+        //         const row = `<tr>
+        //             <td>${index + 1}</td>
+        //             <td>${item.name}</td>
+        //             <td>${item.score}</td>
+        //         </tr>`;
+        //         rankingList.append(row);
+        //     });
+        //
+        // });
 
         socket.on("restart", (players) => {
             const player1Button = $("#join-player1");
@@ -146,6 +146,54 @@ const Socket = (function () {
 
         });
 
+        socket.on("end game", (data) => {
+            console.log("Updating the end game details");
+            $("#game-over-player1-score").text(data.playersScore[0]);
+            $("#game-over-player2-score").text(data.playersScore[1]);
+            let player1Result = $("#player1-game-result");
+            let player2Result = $("#player2-game-result");
+            if (data.playersScore[0] < data.playersScore[1]) {
+                player1Result.text("Loser");
+                player1Result.css("color", "red");
+                player2Result.text("Winner");
+                player2Result.css("color", "green");
+            }
+            else if (data.playersScore[0] > data.playersScore[1]) {
+                player2Result.text("Loser");
+                player2Result.css("color", "red");
+                player1Result.text("Winner");
+                player1Result.css("color", "green");
+            }
+            else {
+                player2Result.text("Draw");
+                player2Result.css("color", "purple");
+                player1Result.text("Draw");
+                player1Result.css("color", "purple");
+            }
+
+            console.log("rankingsData:", data.rankingData)
+            const ranking = Object.entries(data.rankingData).map(([name, score]) => ({ name, score }));
+
+            // Sort in descending order based on the score
+            ranking.sort((a, b) => b.score - a.score);
+
+            // Get the tbody element to populate
+            const rankingList = $('#ranking-list');
+
+            // Clear any existing content in the table body
+            rankingList.empty();
+
+            // Populate the table body with the sorted data
+            ranking.forEach((item, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.score}</td>
+                </tr>`;
+                rankingList.append(row);
+            });
+        })
+
         // get back from server
         // gemX, gemY gemColor
         socket.on("collect gem", (data) => {
@@ -156,8 +204,6 @@ const Socket = (function () {
         //    }, 10); 
           
         });
-
-
         
     };
 
@@ -211,6 +257,15 @@ const Socket = (function () {
         socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
     }
 
+
+    const endGame = (playersScore) => {
+        console.log("socket.endGame");
+        socket.emit("end game", {playersScore});
+    }
+
+    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
+         getRanking, restart, postBehaviour, postGameEvents, endGame};
+  
     // collect gem to server (called by game.js)
     const collectGem = function (player) {
         socket.emit("collect gem", {playerID: playerID});
