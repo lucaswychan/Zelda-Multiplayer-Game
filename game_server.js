@@ -19,7 +19,7 @@ const chatSession = session({
     resave: false,
     saveUninitialized: false,
     rolling: true,
-    cookie: { maxAge: 300000 }
+    cookie: {maxAge: 300000}
 });
 app.use(chatSession);
 
@@ -31,7 +31,7 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, password } = req.body;
+    const {username, password} = req.body;
 
     //
     // D. Reading the users.json file
@@ -41,18 +41,24 @@ app.post("/register", (req, res) => {
     //
     // E. Checking for the user data correctness
     //
-    if (username === '') res.json({ status: "error", error: "The username cannot be empty." });
-    if (password === '') res.json({ status: "error", error: "The password cannot be empty." });
+    if (username === '') res.json({status: "error", error: "The username cannot be empty."});
+    if (password === '') res.json({status: "error", error: "The password cannot be empty."});
 
-    if (!containWordCharsOnly(username)) res.json({ status: "error", error: "The username can contain only underscores, letters or number" });
+    if (!containWordCharsOnly(username)) res.json({
+        status: "error",
+        error: "The username can contain only underscores, letters or number"
+    });
 
-    if (username in users) res.json({ status: "error", error: "The username has already existed in the current list of users" });
+    if (username in users) res.json({
+        status: "error",
+        error: "The username has already existed in the current list of users"
+    });
 
     //
     // G. Adding the new user account
     //
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = { "avatar": "&#128057;", "name": username, "password": hash };
+    users[username] = {"avatar": "&#128057;", "name": username, "password": hash};
     //
     // H. Saving the users.json file
     //
@@ -61,41 +67,41 @@ app.post("/register", (req, res) => {
     //
     // I. Sending a success response to the browser
     //
-    res.json({ status: "success" });
+    res.json({status: "success"});
 
-  });
+});
 
 // Handle the /signin endpoint
 app.post("/signin", (req, res) => {
     // Get the JSON data from the body
-    const { username, password } = req.body;
+    const {username, password} = req.body;
 
     //
     // D. Reading the users.json file
     //
     const users = JSON.parse(fs.readFileSync("data/users.json"));
-    
+
     //
     // E. Checking for username/password
     //  
-    if (!(username in users)) res.json({ status: "error", error: "This username is not registered yet" });
+    if (!(username in users)) res.json({status: "error", error: "This username is not registered yet"});
     const hash = users[username].password;
 
-    if (!bcrypt.compareSync(password, hash)) res.json({ status: "error", error: "Wrong Password" });
+    if (!bcrypt.compareSync(password, hash)) res.json({status: "error", error: "Wrong Password"});
 
     //
     // G. Sending a success response with the user account
     //
-    const save_user = { "username": username, "avatar": users[username].avatar, "name": users[username].name };
+    const save_user = {"username": username, "avatar": users[username].avatar, "name": users[username].name};
     req.session.user = save_user;
-    res.json({ status: "success", user: save_user });
+    res.json({status: "success", user: save_user});
 
 });
 
 // Handle the /validate endpoint
 app.get("/validate", (req, res) => {
 
-   
+
     const current_user = req.session.user;
     // B. Getting req.session.user
     //eq.session.user;
@@ -103,10 +109,10 @@ app.get("/validate", (req, res) => {
     //
     // D. Sending a success response with the user account
     //
-    if (current_user == null) res.json({ status: "error", error: "There is no current user logged in" });
+    if (current_user == null) res.json({status: "error", error: "There is no current user logged in"});
 
-    const save_user = { "username": current_user.username, "avatar": current_user.avatar, "name": current_user.name };
-    res.json({ status: "success", user: save_user });
+    const save_user = {"username": current_user.username, "avatar": current_user.avatar, "name": current_user.name};
+    res.json({status: "success", user: save_user});
 
     // Delete when appropriate
     // res.json({ status: "error", error: "This endpoint is not yet implemented." });
@@ -123,15 +129,15 @@ app.get("/signout", (req, res) => {
     //
     // Sending a success response
     //
-    res.json({ status: "success" });
+    res.json({status: "success"});
 
 });
 
 
 //
 // ***** Please insert your Lab 6 code here *****
-const { createServer } = require("http");
-const { Server } = require("socket.io");
+const {createServer} = require("http");
+const {Server} = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 io.use((socket, next) => {
@@ -139,7 +145,7 @@ io.use((socket, next) => {
 });
 
 const onlineUsers = {};
-let players = { player1: null, player2: null };
+let players = {player1: null, player2: null};
 
 
 // Game server timer logic
@@ -223,7 +229,10 @@ const randomSword = function() {
 io.on("connection", (socket) => {
     if (socket.request.session.user != null) {
         // update the online users' list when a new user connected
-        onlineUsers[socket.request.session.user.username] = { "avatar": socket.request.session.user.avatar, "name": socket.request.session.user.name };
+        onlineUsers[socket.request.session.user.username] = {
+            "avatar": socket.request.session.user.avatar,
+            "name": socket.request.session.user.name
+        };
 
         // send the online users' list to browser
         socket.on("get users", () => {
@@ -237,7 +246,7 @@ io.on("connection", (socket) => {
         });
 
         socket.on("post message", (content) => {
-            const chat_details = { "user": socket.request.session.user, "datetime": new Date(), "content": content };
+            const chat_details = {"user": socket.request.session.user, "datetime": new Date(), "content": content};
             chatroom.push(chat_details);
             // console.log(chatroom);
             fs.writeFileSync("data/chatroom.json", JSON.stringify(chatroom, null, " "));
@@ -285,11 +294,11 @@ io.on("connection", (socket) => {
         socket.on("get players name", () => {
             io.emit("get players name", players);
         });
-        
-        socket.on("get ranking", () => {
-            let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
-            socket.emit("get ranking", rankingData);
-        });
+
+        // socket.on("get ranking", () => {
+        //     let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+        //     socket.emit("get ranking", rankingData);
+        // });
 
         socket.on("restart", (players) => {
             //Clear User Data
@@ -299,7 +308,7 @@ io.on("connection", (socket) => {
             // let chatroomData = JSON.parse(fs.readFileSync("data/chatroom.json"));s
             const emptyData = []
             fs.writeFileSync('data/chatroom.json', JSON.stringify(emptyData));
-            
+
             io.emit("restart", players);
         });
 
@@ -345,8 +354,52 @@ io.on("connection", (socket) => {
         socket.on('startGame', () => {
             startGame();
         });
+
+        socket.on("end game", (data) => {
+            let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+            console.log("player1 name = ", players.player1);
+            console.log("player2 name = ", players.player2);
+            // upadte the rankings.json to add the current players into it
+            if (players.player1 in rankingData) {
+                rankingData[players.player1] = Math.max(rankingData[players.player1], data.playersScore[0]);
+            } else {
+                rankingData[players.player1] = data.playersScore[0];
+            }
+            if (players.player2 in rankingData) {
+                rankingData[players.player2] = Math.max(rankingData[players.player2], data.playersScore[1]);
+            } else {
+                rankingData[players.player2] = data.playersScore[1];
+            }
+            fs.writeFileSync("data/rankings.json", JSON.stringify(rankingData, null, " "));
+            console.log("In end game rankingData = ", rankingData);
+            io.emit("end game", {players: players, playersScore: data.playersScore, rankingData: rankingData});
+        });
+
+        socket.on("collect gem", (data) => {
+                newGem = generateRandomPosition();
+                console.log("gemPos: ", newGem)
+                io.emit("collect gem", { gemX: newGem.x, gemY: newGem.y, gemColor: newGem.randomColor});
+        });
     }
 });
+
+// This function is ramdon generate a Gem in Canvas
+function generateRandomPosition() {
+    const canvasMinX = 60;
+    const canvasMinY = 60;
+    const canvasMaxX = 700;
+    const canvasMaxY = 800;
+    const colors = ["green", "red", "yellow", "purple"];
+  
+    const x = Math.floor(Math.random() * (canvasMaxX - canvasMinX) + canvasMinX);
+    const y = Math.floor(Math.random() * (canvasMaxY - canvasMinY) + canvasMinY);
+
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    const randomColor = colors[randomIndex];
+  
+    return { x, y , randomColor};
+  }
+
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {

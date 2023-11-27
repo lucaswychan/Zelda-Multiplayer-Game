@@ -150,11 +150,12 @@ const Player = function (ctx, x, y, gameArea, playerID) {
         sprite.update(time);
     };
 
-    const attack = (monsters) => {
+    const attack = (monsters, player) => {
         //console.log("monsters in attack : ", monsters);
         let x = null;
         let y = null;
-        let monsterID = null;
+        let id = null;
+        let target = null;
 
         monsters.forEach(
             (monster, index) => {
@@ -165,12 +166,24 @@ const Player = function (ctx, x, y, gameArea, playerID) {
                     sounds.swordAttack.play();
                     x = monster.getXY().x + 10;
                     y = monster.getXY().y + 10;
-                    monsterID = index;
+                    id = index;
+                    target = "monster";
 
                     Socket.postBehaviour("kill monster", null);
                 }
             });
-        return { x, y, monsterID };
+
+        if (Math.abs(sprite.getXY().x - player.getXY().x) <= attackRange && Math.abs(sprite.getXY().y - player.getXY().y) <= attackRange) {
+            //console.log("Attacking the player !!!");
+            sounds.swordAttack.currentTime = 0;
+            sounds.swordAttack.play();
+            x = player.getXY().x + 10;
+            y = player.getXY().y + 10;
+            target = "player";
+
+            Socket.postBehaviour("hit player", null);
+        }
+        return { x, y, id, target };
     }
 
     const incrementAttackScore = () => {
@@ -179,6 +192,10 @@ const Player = function (ctx, x, y, gameArea, playerID) {
 
     const getAttackScore = () => {
         return attackScore;
+    }
+
+    const resetAttackScore = () => {
+        attackScore = 100;
     }
 
     // The methods are returned as an object here.
@@ -194,5 +211,6 @@ const Player = function (ctx, x, y, gameArea, playerID) {
         attack: attack,
         incrementAttackScore: incrementAttackScore,
         getAttackScore: getAttackScore,
+        resetAttackScore: resetAttackScore
     };
 };

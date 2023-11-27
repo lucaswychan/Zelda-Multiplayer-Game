@@ -38,6 +38,8 @@ const game = (function () {
     sword = Sword(context, 427, 240);
     const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
 
+    
+
     const start = () => {
         endGame = false;
         const monsterMoveDuration = [500, 300];
@@ -54,6 +56,10 @@ const game = (function () {
             PlayerScores[index] = 0;
             playerScores[index].text(0);
             playerFinalScore.text(0); // Update the score to 0
+        });
+
+        players.forEach(player => {
+            player.resetAttackScore();
         });
 
         gameStartTime = 0;
@@ -123,11 +129,18 @@ const game = (function () {
             }
 
 
-            // Draw the attack effect starting at now
+            // Draw the attack effect starting from now
             if (attackMonsterData.x != null && attackMonsterData.y != null) {
                 attackTime = now;
                 attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
-                monsters[attackMonsterData.monsterID].randomize(gameArea);
+                if (attackMonsterData.target === "monster") {
+                    monsters[attackMonsterData.id].randomize(gameArea);
+                }
+                attackMonsterData.x = null;
+                attackMonsterData.y = null;
+                // else if (attackMonsterData.target === "player") {
+                //
+                // }
             }
 
             /* Clear the screen */
@@ -176,7 +189,7 @@ const game = (function () {
                 case 32:
                     Socket.postBehaviour("cheat mode", null);
                     break;
-                case 16:  // Shift
+                case 90:  // Z
                     Socket.postBehaviour("attack", null);
                     break;
             }
@@ -203,7 +216,7 @@ const game = (function () {
                 case 32:
                     Socket.postBehaviour("end cheat mode", null);
                     break;
-                case 16:  // Shift
+                case 90:  // Z
                     break;
             }
         });
@@ -233,10 +246,19 @@ const game = (function () {
         else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
-            attackMonsterData = players[playerID].attack(monsters);
+            attackMonsterData = players[playerID].attack(monsters, players[(playerID + 1) % 2]);
         } else if (behaviour === "kill monster") {
             console.log("kill the monsters!!!!")
             PlayerScores[playerID] += players[playerID].getAttackScore();
+            playerScores[playerID].text(PlayerScores[playerID]);
+        } else if (behaviour === "hit player") {
+            let otherPlayer = (playerID + 1) % 2
+            if (PlayerScores[otherPlayer] > 50) {
+                PlayerScores[otherPlayer] -= 50;
+                playerScores[otherPlayer].text(PlayerScores[otherPlayer]);
+            }
+            PlayerScores[playerID] += 50;
+            console.log("The updated score after hitting other player = ", PlayerScores[playerID]);
             playerScores[playerID].text(PlayerScores[playerID]);
         }
     }
