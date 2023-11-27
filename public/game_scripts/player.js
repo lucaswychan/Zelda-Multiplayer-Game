@@ -58,8 +58,8 @@ const Player = function (ctx, x, y, gameArea, playerID) {
     // This is the moving speed (pixels per second) of the player
     let speed = 150;
 
-    let isAttack = false;
     let attackRange = 15;
+    let attackScore = 100;
 
     // This function sets the player's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
@@ -107,13 +107,15 @@ const Player = function (ctx, x, y, gameArea, playerID) {
     };
 
     // This function speeds up the player.
-    const speedUp = function() {
+    const cheat = function() {
         speed = 450;
+        attackRange = 30;
     };
 
     // This function slows down the player.
-    const slowDown = function () {
+    const endCheat = function () {
         speed = 150;
+        attackRange = 15;
     };
 
     // This function updates the player depending on his movement.
@@ -152,30 +154,45 @@ const Player = function (ctx, x, y, gameArea, playerID) {
         //console.log("monsters in attack : ", monsters);
         let x = null;
         let y = null;
+        let monsterID = null;
+
         monsters.forEach(
-            monster => {
+            (monster, index) => {
                 //console.log(monster);
-                if (Math.abs(sprite.getXY().x - monster.x) <= attackRange && Math.abs(sprite.getXY().y - monster.y) <= attackRange) {
+                if (Math.abs(sprite.getXY().x - monster.getXY().x) <= attackRange && Math.abs(sprite.getXY().y - monster.getXY().y) <= attackRange) {
                     //console.log("Attacking the monster !!!");
                     sounds.swordAttack.currentTime = 0;
                     sounds.swordAttack.play();
-                    x = monster.x + 10;
-                    y = monster.y + 10;
+                    x = monster.getXY().x + 10;
+                    y = monster.getXY().y + 10;
+                    monsterID = index;
+
+                    Socket.postBehaviour("kill monster", null);
                 }
             });
-        return { x, y };
+        return { x, y, monsterID };
+    }
+
+    const incrementAttackScore = () => {
+        attackScore += 50;
+    }
+
+    const getAttackScore = () => {
+        return attackScore;
     }
 
     // The methods are returned as an object here.
     return {
         move: move,
         stop: stop,
-        speedUp: speedUp,
-        slowDown: slowDown,
+        cheat: cheat,
+        endCheat: endCheat,
         getBoundingBox: sprite.getBoundingBox,
         getXY: sprite.getXY,
         draw: sprite.draw,
         update: update,
         attack: attack,
+        incrementAttackScore: incrementAttackScore,
+        getAttackScore: getAttackScore,
     };
 };
