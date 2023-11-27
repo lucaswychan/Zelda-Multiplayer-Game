@@ -1,7 +1,7 @@
 // This function defines the Sword module.
 const Sword = function (ctx, x, y) {
 
-    const sequences = {x: 112, y: 0, width: 16, height: 16, count: 1, timing: 200, loop: false};
+    const sequences = {x: 112, y: 0, width: 16, height: 16, count: 3, timing: 200, loop: true};
 
     // This is the sprite object of the gem created from the Sprite module.
     const sprite = Sprite(ctx, x, y);

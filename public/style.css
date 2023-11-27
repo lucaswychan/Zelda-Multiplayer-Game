@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url('https://fonts.cdnfonts.com/css/triforce');
 :root {
     --material-icons-color: black;
     --field-color: gray;
@@ -30,7 +30,7 @@
     --game-title-color: rgb(239, 15, 15);
 }
 * {
-    font-family: "Abel", sans-serif;
+    font-family: 'Triforce', sans-serif;
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -225,7 +225,8 @@ button.icon:active {
     background: #40779cd1;
     margin: 10px;
     padding: 10px;
-    font-size: 140%
+    font-size: 140%;
+    border-radius: 15px;
 }
 
 #Player1{
@@ -276,6 +277,7 @@ button.icon:active {
     height: 420px;
     color:white;
     padding: 7px;
+    border-radius: 15px;
     /* padding: 5px; */
 }
 
@@ -490,6 +492,7 @@ button.icon:active {
 #player-result {
     display: flex;
     justify-content: space-around;
+    text-align: center;
     margin-bottom: 20px;
 }
 

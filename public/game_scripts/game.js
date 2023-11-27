@@ -15,7 +15,7 @@ const game = (function () {
     const totalGameTime = 40;   // Total game time in seconds
     let timeRemaining;
     let gem;
-    let attackMonsterData = {x: null, y: null, monsterID: null};
+    let attackMonsterData = {x: null, y: null, id: null, target: null};
 
     let gemData ={
         x:400,
@@ -53,7 +53,6 @@ const game = (function () {
         let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
         const swordMaxAge = 3000;
 
-        let monsterScore = 100;
         let swordDamage = 0;
         let attackTime = null;
 
@@ -64,6 +63,10 @@ const game = (function () {
             PlayerScores[index] = 0;
             playerScores[index].text(0);
             playerFinalScore.text(0); // Update the score to 0
+        });
+
+        players.forEach(player => {
+            player.resetAttackScore();
         });
 
         gameStartTime = 0;
@@ -163,7 +166,14 @@ const game = (function () {
             if (attackMonsterData.x != null && attackMonsterData.y != null) {
                 attackTime = now;
                 attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
-                monsters[attackMonsterData.monsterID].randomize(gameArea);
+                if (attackMonsterData.target === "monster") {
+                    monsters[attackMonsterData.id].randomize(gameArea);
+                }
+                attackMonsterData.x = null;
+                attackMonsterData.y = null;
+                // else if (attackMonsterData.target === "player") {
+                //
+                // }
             }
 
             /* Clear the screen */
@@ -216,7 +226,7 @@ const game = (function () {
                 case 32:
                     Socket.postBehaviour("cheat mode", null);
                     break;
-                case 16:  // Shift
+                case 90:  // Z
                     Socket.postBehaviour("attack", null);
                     break;
             }
@@ -243,7 +253,7 @@ const game = (function () {
                 case 32:
                     Socket.postBehaviour("end cheat mode", null);
                     break;
-                case 16:  // Shift
+                case 90:  // Z
                     break;
             }
         });
@@ -269,10 +279,19 @@ const game = (function () {
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
-            attackMonsterData = players[playerID].attack(monsters);
+            attackMonsterData = players[playerID].attack(monsters, players[(playerID + 1) % 2]);
         } else if (behaviour === "kill monster") {
             console.log("kill the monsters!!!!")
             PlayerScores[playerID] += players[playerID].getAttackScore();
+            playerScores[playerID].text(PlayerScores[playerID]);
+        } else if (behaviour === "hit player") {
+            let otherPlayer = (playerID + 1) % 2
+            if (PlayerScores[otherPlayer] > 50) {
+                PlayerScores[otherPlayer] -= 50;
+                playerScores[otherPlayer].text(PlayerScores[otherPlayer]);
+            }
+            PlayerScores[playerID] += 50;
+            console.log("The updated score after hitting other player = ", PlayerScores[playerID]);
             playerScores[playerID].text(PlayerScores[playerID]);
         }
     }
