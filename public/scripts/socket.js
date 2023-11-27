@@ -193,6 +193,17 @@ const Socket = (function () {
                 rankingList.append(row);
             });
         })
+
+        // get back from server
+        // gemX, gemY gemColor
+        socket.on("collect gem", (data) => {
+            // setTimeout(function () {
+            console.log("back to the client collect function")
+        
+                game.genNewGem(data.gemX, data.gemY, data.gemColor);
+        //    }, 10); 
+          
+        });
         
     };
 
@@ -246,6 +257,7 @@ const Socket = (function () {
         socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
     }
 
+
     const endGame = (playersScore) => {
         console.log("socket.endGame");
         socket.emit("end game", {playersScore});
@@ -253,4 +265,13 @@ const Socket = (function () {
 
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
          getRanking, restart, postBehaviour, postGameEvents, endGame};
+  
+    // collect gem to server (called by game.js)
+    const collectGem = function (player) {
+        socket.emit("collect gem", {playerID: playerID});
+    }
+
+
+    return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
+         getRanking, restart, postBehaviour, postGameEvents, collectGem};
 })();
