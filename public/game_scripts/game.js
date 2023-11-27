@@ -73,6 +73,7 @@ const game = (function () {
             /* TODO */
             /* Handle the game over situation here */
             if (endGame) {
+                Socket.endGame(PlayerScores);
                 // show the game over page
                 GamePage.hide()
                 GameOverPage.show()

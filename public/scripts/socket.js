@@ -141,26 +141,6 @@ const Socket = (function () {
 
         });
 
-        socket.on("restart", (players) => {
-            const player1Button = $("#join-player1");
-            const player2Button = $("#join-player2");
-            players["player1"] = null
-            players["player2"] = null
-            // Reset the pair up button
-            player1Button.html('Player 1');
-            // player1Button.css("background", "rgb(117, 183, 229)");
-
-            player2Button.html('Player 2');
-            // player2Button.css("background", "rgb(117, 183, 229)");
-
-            //clear chatroom data
-            const chatroomArea = $('#chat-area');
-            chatroomArea.empty();
-
-            $('#chat-input').val('');
-
-        });
-
         // all end game logic are here (including showing ranking data and the two current players' data)
         socket.on("end game", (data) => {
             console.log("Updating the end game details");
@@ -193,6 +173,9 @@ const Socket = (function () {
             // Sort in descending order based on the score
             ranking.sort((a, b) => b.score - a.score);
 
+            // Get the top 10 results or all if the array length is less than 10
+            const top10 = ranking.slice(0, Math.min(10, ranking.length));
+
             // Get the tbody element to populate
             const rankingList = $('#ranking-list');
 
@@ -200,7 +183,7 @@ const Socket = (function () {
             rankingList.empty();
 
             // Populate the table body with the sorted data
-            ranking.forEach((item, index) => {
+            top10.forEach((item, index) => {
                 const row = `<tr>
                     <td>${index + 1}</td>
                     <td>${item.name}</td>
