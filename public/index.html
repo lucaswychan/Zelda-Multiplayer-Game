@@ -213,6 +213,7 @@
                 PairUpPage.update(Authentication.getUser());
                 PairUpPage.show();
                 Socket.connect();
+                Socket.restart();
             },
             () => {
                 HomePage.show();
