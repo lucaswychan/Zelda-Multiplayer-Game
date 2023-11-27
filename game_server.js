@@ -155,7 +155,11 @@ const swordMaxAge = 3000;
 let gem;
 let sword;
 let connectedClients = 0;
-
+let monsterBirthTime;
+const monsterMoveDuration = [300, 300];
+const monsterStopDuration = [1000, 500];
+const MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]];
+const stopProbability = 0.5;
 function startGameTimer() {
     let gameStartTime = Date.now();
     // Update the timer every second
@@ -189,6 +193,24 @@ function startGameTimer() {
             } else{
                 sword = randomSword();
                 io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y: sword.y } });
+            }
+
+            if(monsterBirthTime){
+                monsterBirthTime.forEach((monster, index) => {
+                    let moveAge = Date.now() - monster;
+                    if (moveAge >= MonsterToMoveAge[index]) {
+                        if (monsterRandomStop()) {
+                            MonsterToMoveAge[index] = monsterStopDuration[index];
+                            io.emit('gameEvent', { gameEvent: 'MonsterStop', value: index });
+                        } else {
+                            MonsterToMoveAge[index] = monsterMoveDuration[index];
+                            let direction = monsterRandomMove(index);
+                            io.emit('gameEvent', { gameEvent: 'MonsterMove', value: { index: index, direction: direction} });
+                        }
+                    }
+                });
+            } else{
+                monsterBirthTime = spawnMonster();
             }
         }
     }, 1000);
@@ -224,6 +246,21 @@ const randomSword = function() {
     return {x, y, birthTime};
 };
 
+const spawnMonster = function(){
+    return [Date.now(), Date.now()];
+};
+
+function monsterRandomStop() {
+    return Math.random() < stopProbability;
+}
+
+const monsterRandomMove = function(monsterID) {
+    const directions = [1, 2, 3, 4]; // 1: down, 2: right, 3: up, 4: left
+    const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+
+    monsterBirthTime[monsterID] = Date.now();
+    return randomDirection;
+};
 
 
 io.on("connection", (socket) => {
