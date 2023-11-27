@@ -146,6 +146,7 @@ const Socket = (function () {
 
         });
 
+        // all end game logic are here (including showing ranking data and the two current players' data)
         socket.on("end game", (data) => {
             console.log("Updating the end game details");
             $("#game-over-player1-score").text(data.playersScore[0]);
@@ -246,6 +247,7 @@ const Socket = (function () {
         socket.emit("gameEvent", {gameEvent: gameEvent, value: value});
     }
 
+    // call by game.js (when timeRemaining = 0)
     const endGame = (playersScore) => {
         console.log("socket.endGame");
         socket.emit("end game", {playersScore});

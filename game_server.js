@@ -250,6 +250,7 @@ io.on("connection", (socket) => {
             let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
             console.log("player1 name = ", players.player1);
             console.log("player2 name = ", players.player2);
+            // upadte the rankings.json to add the current players into it
             if (players.player1 in rankingData) {
                 rankingData[players.player1] = Math.max(rankingData[players.player1], data.playersScore[0]);
             } else {
