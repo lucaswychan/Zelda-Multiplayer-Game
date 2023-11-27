@@ -145,7 +145,9 @@ let players = { player1: null, player2: null };
 // Game server timer logic
 const totalGameTime = 20; // Total game time in seconds
 const gemMaxAge = 3000;
+const swordMaxAge = 3000;
 let gem;
+let sword;
 let connectedClients = 0;
 
 function startGameTimer() {
@@ -171,6 +173,17 @@ function startGameTimer() {
                 gem = randomGem();
                 io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
             }
+            if(sword) {
+                const currentTime = Date.now();
+                const swordAge = currentTime - sword.birthTime;
+                if (swordAge >= swordMaxAge) {
+                    sword = randomSword();
+                    io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y: sword.y} });
+                }
+            } else{
+                sword = randomSword();
+                io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y: sword.y } });
+            }
         }
     }, 1000);
 }
@@ -194,8 +207,15 @@ const randomGem = function() {
     const x = gameArea.left + (Math.random() * (gameArea.right - gameArea.left));
     const y = gameArea.top + (Math.random() * (gameArea.bottom - gameArea.top));
     const color = colors[Math.floor(Math.random() * 4)];
-        let birthTime = Date.now();
+    let birthTime = Date.now();
     return {x, y, color, birthTime};
+};
+
+const randomSword = function() {
+    const x = gameArea.left + (Math.random() * (gameArea.right - gameArea.left));
+    const y = gameArea.top + (Math.random() * (gameArea.bottom - gameArea.top));
+    let birthTime = Date.now();
+    return {x, y, birthTime};
 };
 
 
@@ -249,10 +269,10 @@ io.on("connection", (socket) => {
         });
 
         socket.on("join game", (player) => {
-            if (player.id == 0) {
+            if (player.id === 0) {
                 players.player1 = player.name;
             }
-            else if (player.id == 1) {
+            else if (player.id === 1) {
                 players.player2 = player.name;
             }
             connectedClients++
@@ -287,6 +307,10 @@ io.on("connection", (socket) => {
             if(data.behaviour === "collect gem") {
                 gem = randomGem();
                 io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
+                io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
+            } else if(data.behaviour === "pick up sword") {
+                sword = randomSword();
+                io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y:sword.y } });
                 io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
             } else {
                 setTimeout(function () {

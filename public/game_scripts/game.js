@@ -10,7 +10,9 @@ const game = (function () {
         $("#game-over-player2-score")
     ];
     let PlayerScores = [0, 0];    //Play Score
+    let swordDamage = [0,0];
     let gem;
+    let sword;
     let attackMonsterData = {x: null, y: null, monsterID: null};
     let endGame = false;
     const totalGameTime = 20;
@@ -33,19 +35,16 @@ const game = (function () {
         Fire(context, 800, 180), // top-right
         Fire(context, 800, 430)  // bottom-right
     ];
-    const sword = Sword(context, 427, 240);
+    sword = Sword(context, 427, 240);
     const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
 
     const start = () => {
         endGame = false;
-        const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         const monsterMoveDuration = [500, 300];
         const monsterStopDuration = [1500, 1000];
         let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
-        const swordMaxAge = 3000;
 
         let monsterScore = 100;
-        let swordDamage = 0;
         let attackTime = null;
 
         // Clear Data first
@@ -68,9 +67,6 @@ const game = (function () {
             /* TODO */
             /* Handle the game over situation here */
             if (endGame) {
-                Socket.postBehaviour("release final score", null);
-                Socket.postGameEvents("end game", {player1score: playerFinalScores[0],player2score: playerFinalScores[1]});
-
                 // show the game over page
                 GamePage.hide()
                 GameOverPage.show()
@@ -89,16 +85,12 @@ const game = (function () {
 
             players.forEach(player => {
                 player.update(now);
-
             });
             monsters.forEach(monster => {
                 monster.update(now);
             });
 
-            /* TODO */
-            if (sword.getAge(now) >= swordMaxAge) {
-                sword.randomize(gameArea);
-            }
+
             monsters.forEach((monster, index) => {
                 if (monster.getMoveAge(now) >= MonsterToMoveAge[index]) {
                     if (monster.randomStop()) {
@@ -112,7 +104,7 @@ const game = (function () {
             });
 
             if (players[roleID].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
-                // console.log(roleID + " collected the gem");
+                console.log(roleID + " collected the gem");
                 sounds.collect.currentTime = 0;
                 sounds.collect.play();
                 PlayerScores[roleID] += gemScore;
@@ -120,19 +112,16 @@ const game = (function () {
                 Socket.postBehaviour("collect gem", PlayerScores[roleID]);
             }
 
+            if (players[roleID].getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
+                console.log("Successfully get the sword");
+                sword.randomize(gameArea);
+                players[roleID].incrementAttackScore();
+                sounds.sword.currentTime = 0;
+                sounds.sword.play();
+                swordDamage[roleID] += 50;
+                Socket.postBehaviour("pick up sword", swordDamage[roleID]);
+            }
 
-            players.forEach(player => {
-
-                if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
-                    console.log("Successfully get the sword");
-                    // sword.remove(x2, y2, 16, 16);
-                    sword.randomize(gameArea);
-                    player.incrementAttackScore();
-                    sounds.sword.currentTime = 0;
-                    sounds.sword.play();
-                    swordDamage += 50
-                }
-            });
 
             // Draw the attack effect starting at now
             if (attackMonsterData.x != null && attackMonsterData.y != null) {
@@ -233,11 +222,15 @@ const game = (function () {
             players[playerID].cheat();
         } else if (behaviour === "collect gem") {
             if(playerID !== roleID){
+                PlayerScores[playerID] = direction;
                 playerScores[playerID].text(direction);
             }
-        } else if (behaviour === "release final score") {
-            // playerFinalScores[playerID].text(PlayerScores[playerID]);
-        } else if (behaviour === "end cheat mode") {
+        } else if(behaviour === "pick up sword") {
+            if(playerID !== roleID){
+                swordDamage[playerID] = direction;
+            }
+        }
+        else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
             attackMonsterData = players[playerID].attack(monsters);
@@ -256,10 +249,16 @@ const game = (function () {
             $("#time-remaining").text(value);
         }
         if(gameEvent === "endGame"){
+            playerFinalScores.forEach((scoreElement, index) => {
+                scoreElement.text(PlayerScores[index]);
+            });
             endGame = true;
         }
         if (gameEvent === "randomGem") {
             gem = Gem(context, value.x, value.y, value.color);
+        }
+        if (gameEvent === "randomSword") {
+            sword = Sword(context, value.x, value.y);
         }
     }
 

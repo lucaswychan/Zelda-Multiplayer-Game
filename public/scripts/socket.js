@@ -75,7 +75,6 @@ const Socket = (function () {
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
                 GamePage.show();
                 PairUpPage.hide();
-                //start the game
                 game.start();
             }
         });
