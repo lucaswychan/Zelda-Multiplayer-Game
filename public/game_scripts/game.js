@@ -10,22 +10,20 @@ const game = (function () {
         $("#game-over-player2-score")
     ];
     let PlayerScores = [0, 0];    //Play Score
-    let gameStartTime = 0;      // The timestamp when the game starts
-    let gameTimeSoFar;
-    const totalGameTime = 20;   // Total game time in seconds
-    let timeRemaining;
     let gem;
     let attackMonsterData = {x: null, y: null, monsterID: null};
+    let endGame = false;
+    const totalGameTime = 20;
+    const gemScore = 20;
 
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
+    let roleID = -1;
 
     const gameArea = BoundingBox(context, 60, 60, 700, 800);
     const players = [];
     players[0] = Player(context, 60, 250, gameArea, 1);
     players[1] = Player(context, 800, 360, gameArea, 2);
-    // players.push(Player(context, 60, 250, gameArea, 1));
-    // players.push(Player(context, 800, 360, gameArea, 2));
     const monsters = [Monster(context, 125, 235, gameArea, 1),
         Monster(context, 700, 400, gameArea, 2)]
     gem = Gem(context, 427, 350, "green");        // The gem
@@ -39,6 +37,7 @@ const game = (function () {
     const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
 
     const start = () => {
+        endGame = false;
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         const monsterMoveDuration = [500, 300];
         const monsterStopDuration = [1500, 1000];
@@ -65,20 +64,12 @@ const game = (function () {
 
         /* The main processing of the game */
         function doFrame(now) {
-            if (gameStartTime === 0) gameStartTime = now;
-
-            /* Update the time remaining */
-            gameTimeSoFar = now - gameStartTime;
-            timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
-            Socket.postGameEvents("updateTimer", timeRemaining);
-
             sounds.battle.play();
             /* TODO */
             /* Handle the game over situation here */
-            if (timeRemaining <= 0) {
-                // $("#final-gems").text(playerScore);
+            if (endGame) {
                 Socket.postBehaviour("release final score", null);
-                console.log("Game is ended")
+                Socket.postGameEvents("end game", {player1score: playerFinalScores[0],player2score: playerFinalScores[1]});
 
                 // show the game over page
                 GamePage.hide()
@@ -105,12 +96,6 @@ const game = (function () {
             });
 
             /* TODO */
-            /* Randomize the gem and collect the gem here */
-            if (gem.getAge(now) >= gemMaxAge) {
-                gem.randomize(gameArea);
-                console.log(gem);
-                Socket.postGameEvents("randomGem", {x: gem.getXY().x, y: gem.getXY().y, color: gem.getColor()});
-            }
             if (sword.getAge(now) >= swordMaxAge) {
                 sword.randomize(gameArea);
             }
@@ -126,13 +111,17 @@ const game = (function () {
                 }
             });
 
+            if (players[roleID].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
+                // console.log(roleID + " collected the gem");
+                sounds.collect.currentTime = 0;
+                sounds.collect.play();
+                PlayerScores[roleID] += gemScore;
+                playerScores[roleID].text(PlayerScores[roleID]);
+                Socket.postBehaviour("collect gem", PlayerScores[roleID]);
+            }
+
+
             players.forEach(player => {
-                if (player.getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
-                    gem.randomize(gameArea);
-                    sounds.collect.currentTime = 0;
-                    sounds.collect.play();
-                    Socket.postBehaviour("increase score", null);
-                }
 
                 if (player.getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
                     console.log("Successfully get the sword");
@@ -184,19 +173,15 @@ const game = (function () {
             /* Handle the key down */
             switch (event.keyCode) {
                 case 37:
-                    console.log("move")
                     Socket.postBehaviour("move", 1);
                     break;
                 case 38:
-                    console.log("move")
                     Socket.postBehaviour("move", 2);
                     break;
                 case 39:
-                    console.log("move")
                     Socket.postBehaviour("move", 3);
                     break;
                 case 40:
-                    console.log("move")
                     Socket.postBehaviour("move", 4);
                     break;
                 case 32:
@@ -246,12 +231,12 @@ const game = (function () {
             players[playerID].stop(direction);
         } else if (behaviour === "cheat mode") {
             players[playerID].cheat();
-        } else if (behaviour === "increase score") {
-            console.log("player: " + playerID + " increase score!");
-            PlayerScores[playerID] += gemScore;
-            playerScores[playerID].text(PlayerScores[playerID]);
+        } else if (behaviour === "collect gem") {
+            if(playerID !== roleID){
+                playerScores[playerID].text(direction);
+            }
         } else if (behaviour === "release final score") {
-            playerFinalScores[playerID].text(PlayerScores[playerID]);
+            // playerFinalScores[playerID].text(PlayerScores[playerID]);
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
@@ -264,16 +249,25 @@ const game = (function () {
     }
 
     const gameControl = function (gameEvent, value) {
+        if(gameEvent === "startGame"){
+            endGame = false;
+        }
         if (gameEvent === "updateTimer") {
             $("#time-remaining").text(value);
         }
+        if(gameEvent === "endGame"){
+            endGame = true;
+        }
         if (gameEvent === "randomGem") {
-            console.log(value);
             gem = Gem(context, value.x, value.y, value.color);
         }
     }
 
-    return {start, playerBehaviour, gameControl};
+    const setUpRole = function (gameID) {
+        roleID = gameID;
+    }
+
+    return {start, playerBehaviour, gameControl, setUpRole};
 })();
 //End of games
 

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node game_server.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon game_server.js"
   },
   "repository": {
     "type": "git",

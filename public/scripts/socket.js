@@ -19,11 +19,6 @@ const Socket = (function () {
         });
 
         socket.on("gameEvent", (data) => {
-            // if(data.gameEvent === "randomGem"){
-            //     let value = {
-            //         x:data.value.x, y:data.value.y, color:data.value.color
-            //     }
-            // }
             setTimeout(function () {
                 game.gameControl(data.gameEvent, data.value)
             }, 10);
@@ -76,10 +71,11 @@ const Socket = (function () {
                 player2Button.html(player.name);
                 // player2Button.css("background", "purple");
             }
+
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
                 GamePage.show();
                 PairUpPage.hide();
-                //start the game 
+                //start the game
                 game.start();
             }
         });
@@ -134,7 +130,27 @@ const Socket = (function () {
             // Reset the pair up button
             player1Button.html('Player 1');
             // player1Button.css("background", "rgb(117, 183, 229)");
-            
+
+            player2Button.html('Player 2');
+            // player2Button.css("background", "rgb(117, 183, 229)");
+
+            //clear chatroom data
+            const chatroomArea = $('#chat-area');
+            chatroomArea.empty();
+
+            $('#chat-input').val('');
+
+        });
+
+        socket.on("restart", (players) => {
+            const player1Button = $("#join-player1");
+            const player2Button = $("#join-player2");
+            players["player1"] = null
+            players["player2"] = null
+            // Reset the pair up button
+            player1Button.html('Player 1');
+            // player1Button.css("background", "rgb(117, 183, 229)");
+
             player2Button.html('Player 2');
             // player2Button.css("background", "rgb(117, 183, 229)");
 
@@ -173,6 +189,7 @@ const Socket = (function () {
     
     const joinGame = (name, id) => {
         playerID = id;
+        game.setUpRole(playerID);
         socket.emit("join game", { name, id });
     }
 

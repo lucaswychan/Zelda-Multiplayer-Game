@@ -142,6 +142,64 @@ const onlineUsers = {};
 let players = { player1: null, player2: null };
 
 
+// Game server timer logic
+const totalGameTime = 20; // Total game time in seconds
+const gemMaxAge = 3000;
+let gem;
+let connectedClients = 0;
+
+function startGameTimer() {
+    let gameStartTime = Date.now();
+    // Update the timer every second
+    const timer = setInterval(() => {
+        let gameTimeSoFar = Math.floor((Date.now() - gameStartTime) / 1000);
+        let timeRemaining = totalGameTime - gameTimeSoFar;
+        if (timeRemaining <= 0) {
+            connectedClients = 0;
+            clearInterval(timer);
+            io.emit('gameEvent', { gameEvent: 'endGame', value: null });
+        } else {
+            io.emit('gameEvent', { gameEvent: 'updateTimer', value: timeRemaining });
+            if(gem) {
+                const currentTime = Date.now();
+                const gemAge = currentTime - gem.birthTime;
+                if (gemAge >= gemMaxAge) {
+                    gem = randomGem();
+                    io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
+                }
+            } else{
+                gem = randomGem();
+                io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
+            }
+        }
+    }, 1000);
+}
+
+function startGame() {
+    io.emit('gameEvent', { gameEvent: 'startGame', value: null });
+    // Start the game timer
+    startGameTimer();
+}
+
+const gameArea = {
+    top: 60,
+    left: 60,
+    bottom: 700,
+    right: 800,
+};
+
+const colors = ["green", "red", "yellow", "purple"];
+
+const randomGem = function() {
+    const x = gameArea.left + (Math.random() * (gameArea.right - gameArea.left));
+    const y = gameArea.top + (Math.random() * (gameArea.bottom - gameArea.top));
+    const color = colors[Math.floor(Math.random() * 4)];
+        let birthTime = Date.now();
+    return {x, y, color, birthTime};
+};
+
+
+
 io.on("connection", (socket) => {
     if (socket.request.session.user != null) {
         // update the online users' list when a new user connected
@@ -151,7 +209,7 @@ io.on("connection", (socket) => {
         socket.on("get users", () => {
             socket.emit("users", JSON.stringify(onlineUsers));
         });
-     
+
         // chatroom content
         const chatroom = JSON.parse(fs.readFileSync("data/chatroom.json"));
         socket.on("get messages", () => {
@@ -197,7 +255,10 @@ io.on("connection", (socket) => {
             else if (player.id == 1) {
                 players.player2 = player.name;
             }
-
+            connectedClients++
+            if(connectedClients === 2) {
+                startGame();
+            }
             io.emit("ready join game", { name: player.name, id: player.id });
         });
 
@@ -223,15 +284,42 @@ io.on("connection", (socket) => {
         });
 
         socket.on("playerBehaviour", (data) => {
-            setTimeout(function () {
+            if(data.behaviour === "collect gem") {
+                gem = randomGem();
+                io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
                 io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
-            }, 10);
+            } else {
+                setTimeout(function () {
+                    io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
+                }, 10);
+            }
         });
 
         socket.on("gameEvent", (data) => {
-            setTimeout(function () {
-                io.emit("gameEvent", { gameEvent: data.gameEvent, value: data.value});
-            }, 10);
+            if(data.gameEvent ==="end game"){
+                // let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+                // let playerName = players;
+                // //existing player
+                // if (rankingData[player]){
+                //     rankingData[player] += data.value.player1score;
+                // }
+                // //new player
+                // else {
+                //     rankingData[player] = data.value.player1score;
+                // }
+                // fs.writeFileSync("data/rankings.json", JSON.stringify(rankingData));
+                // io.emit("end game", data);
+                // players["player1"] = null;
+                // players["player2"] = null;
+            } else{
+                setTimeout(function () {
+                    io.emit("gameEvent", { gameEvent: data.gameEvent, value: data.value});
+                }, 10);
+            }
+        });
+
+        socket.on('startGame', () => {
+            startGame();
         });
     }
 });
