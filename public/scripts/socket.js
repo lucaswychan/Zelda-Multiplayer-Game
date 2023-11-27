@@ -14,7 +14,7 @@ const Socket = (function () {
 
         socket.on("playerBehaviour", (data) => {
             setTimeout(function () {
-                game.playerBehaviour(data.playerID, data.behaviour, data.direction, data.monsters)
+                game.playerBehaviour(data.playerID, data.behaviour, data.direction)
             }, 10);
         });
 
@@ -188,15 +188,9 @@ const Socket = (function () {
         socket.emit("restart", true);
     }
 
-    const postBehaviour = function (behaviour, direction, monsters) {
-        let monsterCoordinate = []
-        if (monsters != null) {
-            monsters.forEach(monster => {
-                monsterCoordinate.push(monster.getXY());
-            })
-        }
+    const postBehaviour = function (behaviour, direction) {
         setTimeout(function () {
-            socket.emit("playerBehaviour", { playerID: playerID, behaviour: behaviour, direction: direction, monsters: monsterCoordinate });
+            socket.emit("playerBehaviour", { playerID: playerID, behaviour: behaviour, direction: direction });
         }, 10);
     }
 
