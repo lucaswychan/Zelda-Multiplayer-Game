@@ -213,10 +213,10 @@ io.on("connection", (socket) => {
             io.emit("get players name", players);
         });
 
-        socket.on("get ranking", () => {
-            let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
-            socket.emit("get ranking", rankingData);
-        });
+        // socket.on("get ranking", () => {
+        //     let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+        //     socket.emit("get ranking", rankingData);
+        // });
 
         socket.on("restart", (players) => {
             //Clear User Data
@@ -247,7 +247,22 @@ io.on("connection", (socket) => {
         });
 
         socket.on("end game", (data) => {
-            io.emit("end game", {players: players, playersScore: data.playersScore});
+            let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+            console.log("player1 name = ", players.player1);
+            console.log("player2 name = ", players.player2);
+            if (players.player1 in rankingData) {
+                rankingData[players.player1] = Math.max(rankingData[players.player1], data.playersScore[0]);
+            } else {
+                rankingData[players.player1] = data.playersScore[0];
+            }
+            if (players.player2 in rankingData) {
+                rankingData[players.player2] = Math.max(rankingData[players.player2], data.playersScore[1]);
+            } else {
+                rankingData[players.player2] = data.playersScore[1];
+            }
+            fs.writeFileSync("data/rankings.json", JSON.stringify(rankingData, null, " "));
+            console.log("In end game rankingData = ", rankingData);
+            io.emit("end game", {players: players, playersScore: data.playersScore, rankingData: rankingData});
         });
     }
 });
