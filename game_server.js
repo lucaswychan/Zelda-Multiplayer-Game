@@ -342,11 +342,6 @@ io.on("connection", (socket) => {
             io.emit("get players name", players);
         });
 
-        // socket.on("get ranking", () => {
-        //     let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
-        //     socket.emit("get ranking", rankingData);
-        // });
-
         socket.on("restart", (players) => {
             //Clear User Data
             players["player1"] = null;

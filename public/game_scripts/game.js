@@ -247,8 +247,8 @@ const game = (function () {
             }
         } else if (behaviour === "pick up sword") {
             if (playerID !== roleID) {
-                playerMonsterScores[playerID] = players[playerID].getAttackScore();
-                playerMonsterScoresHTML[playerID].text(playerMonsterScores[playerID]);
+                playerMonsterScores[playerID] = direction;
+                playerMonsterScoresHTML[playerID].text(direction);
             }
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
