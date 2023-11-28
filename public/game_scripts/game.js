@@ -137,7 +137,9 @@ const game = (function () {
                         let otherPlayer = (roleID + 1) % 2;
                         console.log("roleID = ", roleID, "and otherPlayer = ", otherPlayer);
                         PlayerScores[roleID] += 50;
-                        PlayerScores[otherPlayer] -= 50;
+                        if (PlayerScores[otherPlayer] - 50 > 0) {
+                            PlayerScores[otherPlayer] -= 50;
+                        }
                         playerScores[roleID].text(PlayerScores[roleID]);
                         playerScores[otherPlayer].text(PlayerScores[otherPlayer]);
                         Socket.postBehaviour("hit player", PlayerScores);  // It is an array instead of a single score);
