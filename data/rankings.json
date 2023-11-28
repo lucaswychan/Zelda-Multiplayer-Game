@@ -4,8 +4,9 @@
   "score": 1000,
   "playtime": 9
  },
- "James": 300,
- "Robert": 1000,
- "John": 230,
- "David": 40
+ "2": {
+  "name": "2",
+  "score": 0,
+  "playtime": 34
+ }
 }
