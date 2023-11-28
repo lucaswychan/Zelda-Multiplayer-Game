@@ -149,8 +149,8 @@ let players = {player1: null, player2: null};
 
 
 // Game server timer logic
-const totalGameTime = 20; // Total game time in seconds
-const gemMaxAge = 3000;
+const totalGameTime = 60; // Total game time in seconds
+const gemMaxAge = 5000;
 const swordMaxAge = 3000;
 let gem;
 let sword;

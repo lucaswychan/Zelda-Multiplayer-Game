@@ -13,15 +13,15 @@ const Socket = (function () {
         socket = io();
 
         socket.on("playerBehaviour", (data) => {
-            setTimeout(function () {
+            // setTimeout(function () {
                 game.playerBehaviour(data.playerID, data.behaviour, data.direction)
-            }, 10);
+            // }, 10);
         });
 
         socket.on("gameEvent", (data) => {
-            setTimeout(function () {
+            // setTimeout(function () {
                 game.gameControl(data.gameEvent, data.value)
-            }, 10);
+            // }, 10);
         });
 
         // Wait for the socket to connect successfully
@@ -193,16 +193,16 @@ const Socket = (function () {
             });
         })
 
-        // get back from server
-        // gemX, gemY gemColor
-        socket.on("collect gem", (data) => {
-            // setTimeout(function () {
-            console.log("back to the client collect function")
+        // // get back from server
+        // // gemX, gemY gemColor
+        // socket.on("collect gem", (data) => {
+        //     // setTimeout(function () {
+        //     console.log("back to the client collect function")
         
-                game.genNewGem(data.gemX, data.gemY, data.gemColor);
-        //    }, 10); 
+        //         game.genNewGem(data.gemX, data.gemY, data.gemColor);
+        // //    }, 10); 
           
-        });
+        // });
         
     };
 
@@ -248,9 +248,9 @@ const Socket = (function () {
     }
 
     const postBehaviour = function (behaviour, direction) {
-        setTimeout(function () {
+        // setTimeout(function () {
             socket.emit("playerBehaviour", { playerID: playerID, behaviour: behaviour, direction: direction });
-        }, 10);
+        // }, 10);
     }
 
     const postGameEvents = function(gameEvent, value) {
@@ -263,11 +263,11 @@ const Socket = (function () {
         socket.emit("end game", {playersScore});
     }
 
-    // collect gem to server (called by game.js)
-    const collectGem = function (player) {
-        socket.emit("collect gem", {playerID: playerID});
-    }
+    // // collect gem to server (called by game.js)
+    // const collectGem = function (player) {
+    //     socket.emit("collect gem", {playerID: playerID});
+    // }
 
     return { getSocket, connect, disconnect, postMessage, typingMessage, joinGame, getPlayersName,
-         getRanking, restart, postBehaviour, postGameEvents, collectGem, endGame};
+         getRanking, restart, postBehaviour, postGameEvents, endGame};
 })();
