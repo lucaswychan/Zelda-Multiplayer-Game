@@ -387,15 +387,15 @@ io.on("connection", (socket) => {
                     direction: data.direction.score
                 });
                 // io.emit("playerBehaviour", { playerID: data.playerID, behaviour: "kill monster", direction: data.score });
-            }else if(data.behaviour === "move" || data.behaviour === "stop"){
+            } else if (data.behaviour === "move" || data.behaviour === "stop") {
                 setTimeout(function () {
                     io.emit("playerBehaviour", {
                         playerID: data.playerID,
                         behaviour: data.behaviour,
                         direction: data.direction
-                   });
+                    });
                 }, 10);
-            }else if(data.behaviour === "achieve targetScore") {
+            } else if (data.behaviour === "achieve targetScore") {
                 io.emit('gameEvent', {gameEvent: 'endGame', value: null});
                 gameStart = false;
             } else {
@@ -403,7 +403,7 @@ io.on("connection", (socket) => {
                     playerID: data.playerID,
                     behaviour: data.behaviour,
                     direction: data.direction
-               });
+                });
             }
         });
 
@@ -417,51 +417,51 @@ io.on("connection", (socket) => {
 
         socket.on("end game", (data) => {
             let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
-            if(data.playersScore[0] > 1000) {
+            if (data.playersScore[0] > 1000) {
                 data.playersScore[0] = 1000;
             }
-            if(data.playersScore[1] > 1000) {
+            if (data.playersScore[1] > 1000) {
                 data.playersScore[1] = 1000;
             }
             // upadte the rankings.json to add the current players into it
-                //player 1 won
+            //player 1 won
             if (players.player1 in rankingData) {
-                if(rankingData[players.player1].score < data.playersScore[0]){
+                if (rankingData[players.player1].score < data.playersScore[0]) {
                     rankingData[players.player1].name = players.player1;
                     rankingData[players.player1].score = data.playersScore[0];
                     rankingData[players.player1].playtime = totalGameTime - timeRemaining;
-                } else if(rankingData[players.player1].score === data.playersScore[0]){
-                    if(rankingData[players.player1].playtime > totalGameTime - timeRemaining){
+                } else if (rankingData[players.player1].score === data.playersScore[0]) {
+                    if (rankingData[players.player1].playtime > totalGameTime - timeRemaining) {
                         rankingData[players.player1].name = players.player1;
                         rankingData[players.player1].score = data.playersScore[0];
                         rankingData[players.player1].playtime = totalGameTime - timeRemaining;
                     }
                 }
-            } else{
-                rankingData[players.player1]= {
+            } else {
+                rankingData[players.player1] = {
                     "name": players.player1,
-                    "score" : data.playersScore[0],
-                    "playtime" : totalGameTime - timeRemaining
+                    "score": data.playersScore[0],
+                    "playtime": totalGameTime - timeRemaining
                 }
             }
             //player2 win
             if (players.player2 in rankingData) {
-                if(rankingData[players.player2].score < data.playersScore[1]){
+                if (rankingData[players.player2].score < data.playersScore[1]) {
                     rankingData[players.player2].name = players.player2;
                     rankingData[players.player2].score = data.playersScore[1];
                     rankingData[players.player2].playtime = totalGameTime - timeRemaining;
-                } else if(rankingData[players.player2].score === data.playersScore[1]){
-                    if(rankingData[players.player2].playtime > totalGameTime - timeRemaining){
+                } else if (rankingData[players.player2].score === data.playersScore[1]) {
+                    if (rankingData[players.player2].playtime > totalGameTime - timeRemaining) {
                         rankingData[players.player2].name = players.player2;
                         rankingData[players.player2].score = data.playersScore[1];
                         rankingData[players.player2].playtime = totalGameTime - timeRemaining;
                     }
                 }
-            } else{
-                rankingData[players.player2]= {
+            } else {
+                rankingData[players.player2] = {
                     "name": players.player2,
-                    "score" : data.playersScore[1],
-                    "playtime" : totalGameTime - timeRemaining
+                    "score": data.playersScore[1],
+                    "playtime": totalGameTime - timeRemaining
                 }
             }
             // if (players.player1 in rankingData) {
