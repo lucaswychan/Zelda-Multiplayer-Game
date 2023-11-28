@@ -17,7 +17,7 @@ const game = (function () {
     let playerMonsterScores = [100, 100];
     let gem;
     let sword;
-    let attackMonsterData = {x: null, y: null, monsterID: null};
+    let attackMonsterData = {x: null, y: null, monsterID: null, onlyShow: null};
     let endGame = false;
     const totalGameTime = 20;
     const gemScore = 20;
@@ -125,24 +125,28 @@ const game = (function () {
             if (attackMonsterData.x != null && attackMonsterData.y != null) {
                 attackTime = now;
                 attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
-                if (attackMonsterData.target === "monster") {
-                    console.log("Attacking the monster!!!");
-                    PlayerScores[roleID] += players[roleID].getAttackScore();
-                    playerScores[roleID].text(PlayerScores[roleID]);
-                    Socket.postBehaviour("attackMonster", {
-                        playerID: roleID,
-                        monsterID: attackMonsterData.id,
-                        score: PlayerScores[roleID]
-                    });
-                } else if (attackMonsterData.target === "player") {
-                    console.log("Attacking the player!!!");
-                    let otherPlayer = (roleID + 1) % 2;
-                    console.log("roleID = ", roleID, "and otherPlayer = ", otherPlayer);
-                    PlayerScores[roleID] += 50;
-                    PlayerScores[otherPlayer] -= 50;
-                    playerScores[roleID].text(PlayerScores[roleID]);
-                    playerScores[otherPlayer].text(PlayerScores[otherPlayer]);
-                    Socket.postBehaviour("hit player", PlayerScores);  // It is an array instead of a single score);
+                if (!attackMonsterData.onlyShow) {
+                    if (attackMonsterData.target === "monster") {
+                        console.log("Attacking the monster!!!");
+                        PlayerScores[roleID] += players[roleID].getAttackScore();
+                        playerScores[roleID].text(PlayerScores[roleID]);
+                        Socket.postBehaviour("attackMonster", {
+                            playerID: roleID,
+                            monsterID: attackMonsterData.id,
+                            score: PlayerScores[roleID]
+                        });
+                    } else if (attackMonsterData.target === "player") {
+                        console.log("Attacking the player!!!");
+                        let otherPlayer = (roleID + 1) % 2;
+                        console.log("roleID = ", roleID, "and otherPlayer = ", otherPlayer);
+                        PlayerScores[roleID] += 50;
+                        if (PlayerScores[otherPlayer] - 50 > 0) {
+                            PlayerScores[otherPlayer] -= 50;
+                        }
+                        playerScores[roleID].text(PlayerScores[roleID]);
+                        playerScores[otherPlayer].text(PlayerScores[otherPlayer]);
+                        Socket.postBehaviour("hit player", PlayerScores);  // It is an array instead of a single score);
+                    }
                 }
                 attackMonsterData.x = null;
                 attackMonsterData.y = null;
@@ -255,7 +259,9 @@ const game = (function () {
         } else if (behaviour === "attack") {
             if (playerID === roleID) {
                 attackMonsterData = players[playerID].attack(monsters, players[(playerID + 1) % 2]);
+                attackMonsterData.onlyShow = false;
                 console.log("In attack, the attack data = ", attackMonsterData);
+                Socket.postBehaviour("show attack effect", {x: attackMonsterData.x, y: attackMonsterData.y, playerID: roleID});
             }
         } else if (behaviour === "kill monster") {  // called by player.js (useless now)
             console.log("kill the monsters!!!!")
@@ -275,6 +281,13 @@ const game = (function () {
                 console.log("In attackMonster, the scores = ", direction);
                 PlayerScores[playerID] = direction;
                 playerScores[playerID].text(direction);
+            }
+        } else if (behaviour === "show attack effect") {
+            if (playerID !== roleID) {
+                attackMonsterData.x = direction.x;
+                attackMonsterData.y = direction.y;
+                attackMonsterData.monsterID = null;
+                attackMonsterData.onlyShow = true;
             }
         }
     }

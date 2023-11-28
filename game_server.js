@@ -385,16 +385,16 @@ io.on("connection", (socket) => {
                 });
                 // io.emit("playerBehaviour", { playerID: data.playerID, behaviour: "kill monster", direction: data.score });
             } else {
-                    io.emit("playerBehaviour", {
-                        playerID: data.playerID,
-                        behaviour: data.behaviour,
-                        direction: data.direction
-                    });
+                io.emit("playerBehaviour", {
+                    playerID: data.playerID,
+                    behaviour: data.behaviour,
+                    direction: data.direction
+                });
             }
         });
 
         socket.on("gameEvent", (data) => {
-                io.emit("gameEvent", {gameEvent: data.gameEvent, value: data.value});
+            io.emit("gameEvent", {gameEvent: data.gameEvent, value: data.value});
         });
 
         socket.on('startGame', () => {
