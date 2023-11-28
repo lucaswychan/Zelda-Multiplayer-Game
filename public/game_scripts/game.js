@@ -249,8 +249,8 @@ const game = (function () {
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
-            if (playerID !== roleID) {
-                attackMonsterData = players[(playerID + 1) % 2].attack(monsters, players[playerID]);
+            if (playerID === roleID) {
+                attackMonsterData = players[playerID].attack(monsters, players[(playerID + 1) % 2]);
                 console.log("In attack, the attack data = ", attackMonsterData);
             }
         } else if (behaviour === "kill monster") {  // called by player.js (useless now)
