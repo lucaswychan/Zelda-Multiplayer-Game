@@ -13,9 +13,14 @@ const Socket = (function () {
         socket = io();
 
         socket.on("playerBehaviour", (data) => {
-            // setTimeout(function () {
+            if (data.behaviour ==="move" || data.behaviour ==="stop" ){
+                setTimeout(function () {
+                    game.playerBehaviour(data.playerID, data.behaviour, data.direction)
+                }, 10);
+            }else {
                 game.playerBehaviour(data.playerID, data.behaviour, data.direction)
-            // }, 10);
+            }
+           
         });
 
         socket.on("gameEvent", (data) => {
@@ -248,9 +253,13 @@ const Socket = (function () {
     }
 
     const postBehaviour = function (behaviour, direction) {
-        // setTimeout(function () {
+        if(behaviour ==="move" || behaviour ==="stop" ){
+            setTimeout(function () {
+                socket.emit("playerBehaviour", { playerID: playerID, behaviour: behaviour, direction: direction });
+            }, 10);
+        }else{
             socket.emit("playerBehaviour", { playerID: playerID, behaviour: behaviour, direction: direction });
-        // }, 10);
+        }
     }
 
     const postGameEvents = function(gameEvent, value) {

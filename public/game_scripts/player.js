@@ -108,7 +108,7 @@ const Player = function (ctx, x, y, gameArea, playerID) {
 
     // This function speeds up the player.
     const cheat = function() {
-        speed = 450;
+        speed = 350;
         attackRange = 50;
     };
 

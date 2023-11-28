@@ -384,12 +384,20 @@ io.on("connection", (socket) => {
                     direction: data.direction.score
                 });
                 // io.emit("playerBehaviour", { playerID: data.playerID, behaviour: "kill monster", direction: data.score });
-            } else {
+            }else if(data.behaviour === "move" || data.behaviour === "stop"){
+                setTimeout(function () {
+                    io.emit("playerBehaviour", {
+                        playerID: data.playerID,
+                        behaviour: data.behaviour,
+                        direction: data.direction
+                   });
+                }, 10);
+            }else {
                 io.emit("playerBehaviour", {
                     playerID: data.playerID,
                     behaviour: data.behaviour,
                     direction: data.direction
-                });
+               });
             }
         });
 
