@@ -408,6 +408,12 @@ io.on("connection", (socket) => {
 
         socket.on("end game", (data) => {
             let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
+            if(data.playersScore[0] > 1000) {
+                data.playersScore[0] = 1000;
+            }
+            if(data.playersScore[1] > 1000) {
+                data.playersScore[1] = 1000;
+            }
             // upadte the rankings.json to add the current players into it
                 //player 1 won
             if (players.player1 in rankingData) {
