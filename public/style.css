@@ -1,7 +1,8 @@
 @import url('https://fonts.cdnfonts.com/css/ep-roundie');
+
 :root {
     --material-icons-color: black;
-    --field-color: gray;
+    --field-color: grey;
     --field-background: white;
     --field-background-hover: #eee;
     --input-background: #eee;
@@ -18,7 +19,7 @@
     --caption-color: white;
 
     --font-color: black;
-    --date-color: gray;
+    --date-color: grey;
 
     --register-form-background: linear-gradient(#fde0c5, #facba6);
     --warning-color: red;
@@ -29,6 +30,7 @@
 
     --game-title-color: rgb(239, 15, 15);
 }
+
 * {
     font-family: 'EP Roundie', sans-serif;
     color: var(--font-color);
@@ -45,9 +47,13 @@ body {
     margin: 0;
 }
 
-.center { text-align: center; }
+.center {
+    text-align: center;
+}
 
-.shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); }
+.shadow {
+    box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4);
+}
 
 .warning {
     font-weight: bold;
@@ -56,7 +62,7 @@ body {
 
 form input, form select {
     width: 100%;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 
 input, select {
@@ -68,7 +74,7 @@ input, select {
 }
 
 input::placeholder, select {
-    color: gray;
+    color: grey;
 }
 
 button {
@@ -86,12 +92,14 @@ button {
 }
 
 button:hover {
-    background:  rgb(117, 183, 229);
+    background: rgb(117, 183, 229);
 }
+
 button:active {
     margin: 2px -2px -2px 2px;
     box-shadow: 0px 0px;
 }
+
 button.icon {
     height: inherit;
     border: none;
@@ -101,12 +109,15 @@ button.icon {
     padding: 3px 5px;
     padding-top: 5px;
 }
+
 button.icon * {
     color: white;
 }
+
 button.icon:hover {
-    background:  rgb(117, 183, 229);
+    background: rgb(117, 183, 229);
 }
+
 button.icon:active {
     margin: 2px -2px -2px 2px;
 }
@@ -127,20 +138,24 @@ button.icon:active {
     background: var(--header-background);
     padding: 0 20px;
 }
+
 #title {
     font-family: Abel, sans-serif;
     font-size: 300%;
     text-transform: uppercase;
-    color:  white;
+    color: white;
     user-select: none;
 }
+
 #title .material-icons {
     color: white;
     font-size: 36px;
 }
+
 #user-panel {
     padding: 0;
 }
+
 #signin-user {
     cursor: pointer;
 }
@@ -150,7 +165,6 @@ button.icon:active {
     height: calc(100% - 80px);
     background: linear-gradient(white, #fde0c5);
 } */
-
 
 
 /* Game styles */
@@ -167,40 +181,46 @@ button.icon:active {
 }
 
 
-
 #game-canvas, #counter, #game-start, #game-over {
     position: absolute;
     top: 0px;
     left: 0px;
 }
+
 #game-canvas, #game-start, #game-over {
-    border: 1px solid gray;
+    border: 1px solid grey;
     width: 854px;
     height: 740px;
 }
+
 #game-canvas {
     background: url(./images/map.png);
     background-size: cover;
 }
+
 #game-start, #game-over {
     background: rgba(1, 1, 1, 0.8);
 }
+
 #counter text {
     font-size: 130%;
     fill: white;
     stroke: black;
     stroke-width: 1px;
 }
+
 #game-start text {
     font-size: 150%;
     fill: white;
     text-anchor: middle;
 }
+
 #game-start #game-title {
     font-size: 400%;
     fill: url(#title-fill);
     stroke: black;
 }
+
 #game-over text {
     font-size: 120%;
     fill: url(#game-over-fill);
@@ -215,12 +235,12 @@ button.icon:active {
     padding-top: 8px;
     /* padding-left: 40px */
     margin-right: 8px;
-    width:40%;
+    width: 40%;
 }
 
 /* Player Data */
 
-#player-data{
+#player-data {
     margin-bottom: 5px;
     background: #40779cd1;
     margin: 10px;
@@ -229,26 +249,24 @@ button.icon:active {
     border-radius: 15px;
 }
 
-#Player1{
+#Player1 {
     margin-bottom: 20px;
 }
 
 #Player1 p,
-#player2 p{
+#player2 p {
     margin: 5px 0;
-    color:white;
+    color: white;
 }
 
 #Player1 p span,
-#player2 p span{
-    color:white;
+#player2 p span {
+    color: white;
 }
 
 #player1-name, #player2-name {
     font-weight: bold;
 }
-
-
 
 
 /* Chatroom */
@@ -258,16 +276,19 @@ button.icon:active {
     border-radius: 50px;
     /* padding: 10px 15px; */
     padding: 2px 2px;
-    background:  white;
+    background: white;
     transition: 1s background;
 }
+
 .field-content * {
-    color:  rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
     padding: 5px;
 }
+
 .field-content:hover {
-    background:  #eee;
+    background: #eee;
 }
+
 .user-name {
     white-space: nowrap;
 }
@@ -275,21 +296,21 @@ button.icon:active {
 #chat-panel {
     /* flex-grow: 1; */
     /* align-items: stretch; */
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
     background: #40779cd1;
     margin: 10px;
     height: 420px;
-    color:white;
+    color: white;
     padding: 7px;
     border-radius: 15px;
     /* padding: 5px; */
 }
 
-#chat-panel h2{
+#chat-panel h2 {
     font-size: 130%;
     text-align: center;
-    color:white;
-   
+    color: white;
+
 }
 
 #chat-area {
@@ -313,17 +334,17 @@ button.icon:active {
     align-items: start;
     gap: 5px;
     padding: 0;
-    word-wrap: break-word; 
-    color:white;
+    word-wrap: break-word;
+    color: white;
 }
 
 .chat-date {
     font-size: 75%;
-    color:white;
+    color: white;
 }
 
 .chat-content {
-    color:white;
+    color: white;
     /* padding: 5px; */
 }
 
@@ -394,10 +415,10 @@ button.icon:active {
 }
 
 .instructions-container {
-    width: 800px; 
-    max-height: 500px; 
-    font-size:130%;
-    border: 1px solid #ccc; 
+    width: 800px;
+    max-height: 500px;
+    font-size: 130%;
+    border: 1px solid #ccc;
     overflow: auto;
     background: #b8e2fed1;
     padding: 20px;
@@ -421,8 +442,8 @@ button.icon:active {
     border-radius: 20px;
 }
 
-.home-page-col { 
-    flex-direction: column;  
+.home-page-col {
+    flex-direction: column;
 }
 
 #game-title {
@@ -451,7 +472,7 @@ button.icon:active {
     margin-left: 350px;
     margin-right: 350px;
     font-size: 130%;
-} 
+}
 
 /* Form related */
 #signin-form, #register-form {
@@ -467,14 +488,15 @@ button.icon:active {
     width: 350px;
     background-color: #8ec9f1;
     padding: 20px;
-} 
+}
 
 /*End of Home page*/
 
 /* Game Over Page*/
-#counter{
+#counter {
     font-weight: bold;
-    font-size:150%;
+    font-size: 150%;
+    color: white;
 }
 
 #game-over-page {
@@ -486,7 +508,7 @@ button.icon:active {
     background-size: cover;
 }
 
-#game-over-container{
+#game-over-container {
     background-color: #8ec9f1;
     padding: 20px;
     border-radius: 15px;
@@ -500,7 +522,7 @@ button.icon:active {
     margin-bottom: 20px;
 }
 
-.ranking-result{
+.ranking-result {
     padding: 3px;
     border-radius: 15px;
     background-color: #ffffff;
@@ -515,7 +537,7 @@ button.icon:active {
     overflow-y: auto;
 }
 
-.ranking-result h3{
+.ranking-result h3 {
     color: #4eb2f8;
     text-align: center;
 }
@@ -523,7 +545,7 @@ button.icon:active {
 .leaderboard-table th {
     background-color: #ffffff;
     text-align: left;
-  
+
 }
 
 .leaderboard-table tbody tr:nth-child(even) {
@@ -531,9 +553,9 @@ button.icon:active {
 }
 
 .leaderboard-table tbody tr td {
-   padding-left: 10px;
+    padding-left: 10px;
 
-   
+
 }
 
 /* Styling for the game-over page buttons */
@@ -561,7 +583,7 @@ button.icon:active {
 }
 
 #player1-result p,
-#player2-result p{
+#player2-result p {
     margin: 0 0;
 }
 
