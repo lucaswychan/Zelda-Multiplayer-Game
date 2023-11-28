@@ -24,16 +24,27 @@ const game = (function () {
 
     const gameArea = BoundingBox(context, 60, 60, 700, 800);
     const players = [];
-    players[0] = Player(context, 60, 250, gameArea, 1);
-    players[1] = Player(context, 800, 360, gameArea, 2);
-    let monsters = [Monster(context, 125, 235, gameArea, 1),
-        Monster(context, 700, 400, gameArea, 2)]
+    let monsters = [];
     gem = Gem(context, 427, 350, "green");        // The gem
     const fires = [
-        Fire(context, 60, 180),  // top-left
-        Fire(context, 60, 430),  // bottom-left
-        Fire(context, 800, 180), // top-right
-        Fire(context, 800, 430)  // bottom-right
+        Fire(context, 60, 180),  // left
+        Fire(context, 60, 212),  // left
+        Fire(context, 60, 244),  // left
+        Fire(context, 60, 276),  // left
+        Fire(context, 60, 308),  // left
+        Fire(context, 60, 340),  // left
+        Fire(context, 60, 372),  // left
+        Fire(context, 60, 404),  // left
+        Fire(context, 60, 436),  // left
+        Fire(context, 800, 180),  // right
+        Fire(context, 800, 212),  // right
+        Fire(context, 800, 244),  // right
+        Fire(context, 800, 276),  // right
+        Fire(context, 800, 308),  // right
+        Fire(context, 800, 340),  // right
+        Fire(context, 800, 372),  // right
+        Fire(context, 800, 404),  // right
+        Fire(context, 800, 436),  // right
     ];
     sword = Sword(context, 427, 240);
     const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
@@ -60,8 +71,6 @@ const game = (function () {
         players.forEach(player => {
             player.resetAttackScore();
         });
-
-        gameStartTime = 0;
 
         /* Create the sprites in the game */
         console.log("player: ", players)
@@ -290,8 +299,8 @@ const game = (function () {
 
     const gameControl = function (gameEvent, value) {
         if (gameEvent === "startGame") {
-            players[0] = Player(context, 60, 250, gameArea, 1);
-            players[1] = Player(context, 800, 360, gameArea, 2);
+            players[0] = Player(context, 80, 100, gameArea, 1);
+            players[1] = Player(context, 780, 516, gameArea, 2);
             monsters = [Monster(context, 125, 235, gameArea, 1),
                 Monster(context, 700, 400, gameArea, 2)]
             endGame = false;
