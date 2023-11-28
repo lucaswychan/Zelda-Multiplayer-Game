@@ -25,7 +25,6 @@ const game = (function () {
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
     let roleID = -1;
-    let targetScore = 1000;
 
     const gameArea = BoundingBox(context, 60, 60, 700, 800);
     const players = [];
@@ -76,6 +75,8 @@ const game = (function () {
         /* Create the sprites in the game */
         console.log("player: ", players)
 
+        sounds.battle.currentTime = 0;
+
         /* The main processing of the game */
         function doFrame(now) {
             sounds.battle.play();
@@ -92,8 +93,8 @@ const game = (function () {
                 return;
             }
 
-            PlayerScores.forEach((playerScore,index) => {
-                if(playerScore >= 1000) {
+            PlayerScores.forEach((playerScore, index) => {
+                if (playerScore >= 1000) {
                     PlayerScores[index] = 1000;
                     endGame = true;
                     Socket.postBehaviour("achieve targetScore", null);
@@ -168,6 +169,7 @@ const game = (function () {
                         Socket.postBehaviour("hit player", PlayerScores);  // It is an array instead of a single score);
                     }
                 }
+                attackMonsterData.onlyShow = true;
                 attackMonsterData.x = null;
                 attackMonsterData.y = null;
             }
@@ -308,10 +310,10 @@ const game = (function () {
             }
         } else if (behaviour === "show attack effect") {
             if (playerID !== roleID) {
+                attackMonsterData.onlyShow = true;
                 attackMonsterData.x = direction.x;
                 attackMonsterData.y = direction.y;
                 attackMonsterData.monsterID = null;
-                attackMonsterData.onlyShow = true;
             }
         }
     }
@@ -325,7 +327,12 @@ const game = (function () {
             playerMonsterScores = [100, 100];
             playerMonsterScoresHTML[0].text(playerMonsterScores[0]);
             playerMonsterScoresHTML[1].text(playerMonsterScores[1]);
+            attackMonsterData.x = null;
+            attackMonsterData.y = null;
+            attackMonsterData.monsterID = null;
+            attackMonsterData.onlyShow = true;
             endGame = false;
+            sounds.battle.currentTime = 0;
         }
         if (gameEvent === "updateTimer") {
             $("#time-remaining").text(value);
