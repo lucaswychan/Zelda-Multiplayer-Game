@@ -40,6 +40,10 @@ const Monster = function(ctx, x, y, gameArea, MonsterID) {
     const sequences = MonsterID === 1 ? sequencesForMonster1 : sequencesForMonster2;
     const spriteSheet = MonsterID === 1 ? "./images/monster1.png" : "./images/monster2.png";
     const stopProbability = 0.7;
+    const moveDuration = 200;
+    const stopDuration = 1500;
+    let moveStartTime = performance.now();
+    let stopStartTime = performance.now();
 
     // The sprite object is configured for the monster sprite here.
     sprite
@@ -58,7 +62,7 @@ const Monster = function(ctx, x, y, gameArea, MonsterID) {
     let direction = 0;
 
     // This is the moving speed (pixels per second) of the monster
-    let speed = 50;
+    let speed = 150;
 
     // This function sets the monster's moving direction.
     // - `dir` - the moving direction (1: Left, 2: Up, 3: Right, 4: Down)
