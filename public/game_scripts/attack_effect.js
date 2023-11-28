@@ -1,5 +1,5 @@
 const AttackEffect = (ctx, x, y) => {
-    const sequences = {x: 128, y: 160, width: 16, height: 16, count: 8, timing: 200, loop: true};
+    const sequences = {x: 128, y: 160, width: 16, height: 16, count: 8, timing: 100, loop: true};
 
     // This is the sprite object of the gem created from the Sprite module.
     const sprite = Sprite(ctx, x, y);

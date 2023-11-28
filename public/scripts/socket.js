@@ -65,11 +65,11 @@ const Socket = (function () {
 
             if (player.id === 0) {
                 player1Button.html(player.name);
-                // player1Button.css("background", "purple");
+                player1Button.css("background", "#9354fa");
             }
             else if (player.id === 1) {
                 player2Button.html(player.name);
-                // player2Button.css("background", "purple");
+                player2Button.css("background", "#9354fa");
             }
 
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
@@ -128,10 +128,9 @@ const Socket = (function () {
             players["player2"] = null
             // Reset the pair up button
             player1Button.html('Player 1');
-            // player1Button.css("background", "rgb(117, 183, 229)");
-
             player2Button.html('Player 2');
-            // player2Button.css("background", "rgb(117, 183, 229)");
+
+            $(".pair-up-button").css("background", "rgb(117, 183, 229)");
 
             //clear chatroom data
             const chatroomArea = $('#chat-area');
