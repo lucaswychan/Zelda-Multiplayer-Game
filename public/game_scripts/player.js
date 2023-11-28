@@ -159,7 +159,6 @@ const Player = function (ctx, x, y, gameArea, playerID) {
 
         monsters.forEach(
             (monster, index) => {
-                //console.log(monster);
                 if (Math.abs(sprite.getXY().x - monster.getXY().x) <= attackRange && Math.abs(sprite.getXY().y - monster.getXY().y) <= attackRange) {
                     //console.log("Attacking the monster !!!");
                     sounds.swordAttack.currentTime = 0;
@@ -168,8 +167,6 @@ const Player = function (ctx, x, y, gameArea, playerID) {
                     y = monster.getXY().y + 10;
                     id = index;
                     target = "monster";
-
-                    Socket.postBehaviour("kill monster", null);
                 }
             });
 
@@ -180,8 +177,6 @@ const Player = function (ctx, x, y, gameArea, playerID) {
             x = player.getXY().x + 10;
             y = player.getXY().y + 10;
             target = "player";
-
-            Socket.postBehaviour("hit player", null);
         }
         return { x, y, id, target };
     }

@@ -160,6 +160,7 @@ const monsterMoveDuration = [300, 300];
 const monsterStopDuration = [1000, 500];
 const MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]];
 const stopProbability = 0.5;
+
 function startGameTimer() {
     let gameStartTime = Date.now();
     // Update the timer every second
@@ -169,47 +170,50 @@ function startGameTimer() {
         if (timeRemaining <= 0) {
             connectedClients = 0;
             clearInterval(timer);
-            io.emit('gameEvent', { gameEvent: 'endGame', value: null });
+            io.emit('gameEvent', {gameEvent: 'endGame', value: null});
         } else {
-            io.emit('gameEvent', { gameEvent: 'updateTimer', value: timeRemaining });
-            if(gem) {
+            io.emit('gameEvent', {gameEvent: 'updateTimer', value: timeRemaining});
+            if (gem) {
                 const currentTime = Date.now();
                 const gemAge = currentTime - gem.birthTime;
                 if (gemAge >= gemMaxAge) {
                     gem = randomGem();
-                    io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
+                    io.emit('gameEvent', {gameEvent: 'randomGem', value: {x: gem.x, y: gem.y, color: gem.color}});
                 }
-            } else{
+            } else {
                 gem = randomGem();
-                io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
+                io.emit('gameEvent', {gameEvent: 'randomGem', value: {x: gem.x, y: gem.y, color: gem.color}});
             }
-            if(sword) {
+            if (sword) {
                 const currentTime = Date.now();
                 const swordAge = currentTime - sword.birthTime;
                 if (swordAge >= swordMaxAge) {
                     sword = randomSword();
-                    io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y: sword.y} });
+                    io.emit('gameEvent', {gameEvent: 'randomSword', value: {x: sword.x, y: sword.y}});
                 }
-            } else{
+            } else {
                 sword = randomSword();
-                io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y: sword.y } });
+                io.emit('gameEvent', {gameEvent: 'randomSword', value: {x: sword.x, y: sword.y}});
             }
 
-            if(monsterBirthTime){
+            if (monsterBirthTime) {
                 monsterBirthTime.forEach((monster, index) => {
                     let moveAge = Date.now() - monster;
                     if (moveAge >= MonsterToMoveAge[index]) {
                         if (monsterRandomStop()) {
                             MonsterToMoveAge[index] = monsterStopDuration[index];
-                            io.emit('gameEvent', { gameEvent: 'MonsterStop', value: index });
+                            io.emit('gameEvent', {gameEvent: 'MonsterStop', value: index});
                         } else {
                             MonsterToMoveAge[index] = monsterMoveDuration[index];
                             let direction = monsterRandomMove(index);
-                            io.emit('gameEvent', { gameEvent: 'MonsterMove', value: { index: index, direction: direction} });
+                            io.emit('gameEvent', {
+                                gameEvent: 'MonsterMove',
+                                value: {index: index, direction: direction}
+                            });
                         }
                     }
                 });
-            } else{
+            } else {
                 monsterBirthTime = spawnMonster();
             }
         }
@@ -217,7 +221,7 @@ function startGameTimer() {
 }
 
 function startGame() {
-    io.emit('gameEvent', { gameEvent: 'startGame', value: null });
+    io.emit('gameEvent', {gameEvent: 'startGame', value: null});
     // Start the game timer
     startGameTimer();
 }
@@ -231,7 +235,7 @@ const gameArea = {
 
 const colors = ["green", "red", "yellow", "purple"];
 
-const randomGem = function() {
+const randomGem = function () {
     const x = gameArea.left + (Math.random() * (gameArea.right - gameArea.left));
     const y = gameArea.top + (Math.random() * (gameArea.bottom - gameArea.top));
     const color = colors[Math.floor(Math.random() * 4)];
@@ -239,14 +243,14 @@ const randomGem = function() {
     return {x, y, color, birthTime};
 };
 
-const randomSword = function() {
+const randomSword = function () {
     const x = gameArea.left + (Math.random() * (gameArea.right - gameArea.left));
     const y = gameArea.top + (Math.random() * (gameArea.bottom - gameArea.top));
     let birthTime = Date.now();
     return {x, y, birthTime};
 };
 
-const spawnMonster = function(){
+const spawnMonster = function () {
     return [Date.now(), Date.now()];
 };
 
@@ -254,7 +258,7 @@ function monsterRandomStop() {
     return Math.random() < stopProbability;
 }
 
-const monsterRandomMove = function(monsterID) {
+const monsterRandomMove = function (monsterID) {
     const directions = [1, 2, 3, 4]; // 1: down, 2: right, 3: up, 4: left
     const randomDirection = directions[Math.floor(Math.random() * directions.length)];
 
@@ -317,21 +321,21 @@ io.on("connection", (socket) => {
             //clear chatroom Data
             const emptyData = []
             fs.writeFileSync('data/chatroom.json', JSON.stringify(emptyData));
-
         });
+
+        // Below is the game logic socket
 
         socket.on("join game", (player) => {
             if (player.id === 0) {
                 players.player1 = player.name;
-            }
-            else if (player.id === 1) {
+            } else if (player.id === 1) {
                 players.player2 = player.name;
             }
             connectedClients++
-            if(connectedClients === 2) {
+            if (connectedClients === 2) {
                 startGame();
             }
-            io.emit("ready join game", { name: player.name, id: player.id });
+            io.emit("ready join game", {name: player.name, id: player.id});
         });
 
         socket.on("get players name", () => {
@@ -356,46 +360,50 @@ io.on("connection", (socket) => {
         });
 
         socket.on("playerBehaviour", (data) => {
-            if(data.behaviour === "collect gem") {
+            let MonsterNewLocaltion;
+            if (data.behaviour === "collect gem") {
                 gem = randomGem();
-                io.emit('gameEvent', { gameEvent: 'randomGem', value: { x: gem.x, y: gem.y, color: gem.color } });
-                io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
-            } else if(data.behaviour === "pick up sword") {
+                io.emit('gameEvent', {gameEvent: 'randomGem', value: {x: gem.x, y: gem.y, color: gem.color}});
+                io.emit("playerBehaviour", {
+                    playerID: data.playerID,
+                    behaviour: data.behaviour,
+                    direction: data.direction
+                });
+            } else if (data.behaviour === "pick up sword") {
                 sword = randomSword();
-                io.emit('gameEvent', { gameEvent: 'randomSword', value: { x: sword.x, y:sword.y } });
-                io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
-            } else if (data.behaviour === "attackMonster"){
+                io.emit('gameEvent', {gameEvent: 'randomSword', value: {x: sword.x, y: sword.y}});
+                io.emit("playerBehaviour", {
+                    playerID: data.playerID,
+                    behaviour: data.behaviour,
+                    direction: data.direction
+                });
+            } else if (data.behaviour === "attackMonster") {
                 MonsterNewLocaltion = MonsterRandomize();
-                io.emit('gameEvent', { gameEvent: 'randomMonster', value: { index: data.direction.monsterID, x: MonsterNewLocaltion.x, y: MonsterNewLocaltion.y } });
+                io.emit('gameEvent', {
+                    gameEvent: 'randomMonster',
+                    value: {index: data.direction.monsterID, x: MonsterNewLocaltion.x, y: MonsterNewLocaltion.y}
+                });
+                io.emit("playerBehaviour", {
+                    playerID: data.playerID,
+                    behaviour: data.behaviour,
+                    direction: data.direction.score
+                });
                 // io.emit("playerBehaviour", { playerID: data.playerID, behaviour: "kill monster", direction: data.score });
             } else {
                 setTimeout(function () {
-                    io.emit("playerBehaviour", { playerID: data.playerID, behaviour: data.behaviour, direction: data.direction });
+                    io.emit("playerBehaviour", {
+                        playerID: data.playerID,
+                        behaviour: data.behaviour,
+                        direction: data.direction
+                    });
                 }, 10);
             }
         });
 
         socket.on("gameEvent", (data) => {
-            if(data.gameEvent ==="end game"){
-                // let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
-                // let playerName = players;
-                // //existing player
-                // if (rankingData[player]){
-                //     rankingData[player] += data.value.player1score;
-                // }
-                // //new player
-                // else {
-                //     rankingData[player] = data.value.player1score;
-                // }
-                // fs.writeFileSync("data/rankings.json", JSON.stringify(rankingData));
-                // io.emit("end game", data);
-                // players["player1"] = null;
-                // players["player2"] = null;
-            } else{
-                setTimeout(function () {
-                    io.emit("gameEvent", { gameEvent: data.gameEvent, value: data.value});
-                }, 10);
-            }
+            setTimeout(function () {
+                io.emit("gameEvent", {gameEvent: data.gameEvent, value: data.value});
+            }, 10);
         });
 
         socket.on('startGame', () => {
@@ -422,7 +430,7 @@ io.on("connection", (socket) => {
             io.emit("end game", {players: players, playersScore: data.playersScore, rankingData: rankingData});
         });
 
-     
+
     }
 });
 
