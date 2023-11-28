@@ -160,14 +160,16 @@ const monsterMoveDuration = [300, 300];
 const monsterStopDuration = [1000, 500];
 const MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]];
 const stopProbability = 0.5;
+let gameStart = true;
+let timeRemaining = -1;
 
 function startGameTimer() {
     let gameStartTime = Date.now();
     // Update the timer every second
     const timer = setInterval(() => {
         let gameTimeSoFar = Math.floor((Date.now() - gameStartTime) / 1000);
-        let timeRemaining = totalGameTime - gameTimeSoFar;
-        if (timeRemaining <= 0) {
+        timeRemaining = totalGameTime - gameTimeSoFar;
+        if (timeRemaining <= 0 || !gameStart) {
             connectedClients = 0;
             clearInterval(timer);
             io.emit('gameEvent', {gameEvent: 'endGame', value: null});
@@ -223,6 +225,7 @@ function startGameTimer() {
 function startGame() {
     io.emit('gameEvent', {gameEvent: 'startGame', value: null});
     // Start the game timer
+    gameStart = true;
     startGameTimer();
 }
 
@@ -383,7 +386,9 @@ io.on("connection", (socket) => {
                     behaviour: data.behaviour,
                     direction: data.direction.score
                 });
-                // io.emit("playerBehaviour", { playerID: data.playerID, behaviour: "kill monster", direction: data.score });
+            } else if (data.behaviour === "achieve targetScore") {
+                io.emit('gameEvent', {gameEvent: 'endGame', value: null});
+                gameStart = false;
             } else {
                 io.emit("playerBehaviour", {
                     playerID: data.playerID,
@@ -403,19 +408,57 @@ io.on("connection", (socket) => {
 
         socket.on("end game", (data) => {
             let rankingData = JSON.parse(fs.readFileSync("data/rankings.json"));
-            console.log("player1 name = ", players.player1);
-            console.log("player2 name = ", players.player2);
             // upadte the rankings.json to add the current players into it
+                //player 1 won
             if (players.player1 in rankingData) {
-                rankingData[players.player1] = Math.max(rankingData[players.player1], data.playersScore[0]);
-            } else {
-                rankingData[players.player1] = data.playersScore[0];
+                if(rankingData[players.player1].score < data.playersScore[0]){
+                    rankingData[players.player1].name = players.player1;
+                    rankingData[players.player1].score = data.playersScore[0];
+                    rankingData[players.player1].playtime = totalGameTime - timeRemaining;
+                } else if(rankingData[players.player1].score === data.playersScore[0]){
+                    if(rankingData[players.player1].playtime > totalGameTime - timeRemaining){
+                        rankingData[players.player1].name = players.player1;
+                        rankingData[players.player1].score = data.playersScore[0];
+                        rankingData[players.player1].playtime = totalGameTime - timeRemaining;
+                    }
+                }
+            } else{
+                rankingData[players.player1]= {
+                    "name": players.player1,
+                    "score" : data.playersScore[0],
+                    "playtime" : totalGameTime - timeRemaining
+                }
             }
+            //player2 win
             if (players.player2 in rankingData) {
-                rankingData[players.player2] = Math.max(rankingData[players.player2], data.playersScore[1]);
-            } else {
-                rankingData[players.player2] = data.playersScore[1];
+                if(rankingData[players.player2].score < data.playersScore[1]){
+                    rankingData[players.player2].name = players.player2;
+                    rankingData[players.player2].score = data.playersScore[1];
+                    rankingData[players.player2].playtime = totalGameTime - timeRemaining;
+                } else if(rankingData[players.player2].score === data.playersScore[1]){
+                    if(rankingData[players.player2].playtime > totalGameTime - timeRemaining){
+                        rankingData[players.player2].name = players.player2;
+                        rankingData[players.player2].score = data.playersScore[1];
+                        rankingData[players.player2].playtime = totalGameTime - timeRemaining;
+                    }
+                }
+            } else{
+                rankingData[players.player2]= {
+                    "name": players.player2,
+                    "score" : data.playersScore[1],
+                    "playtime" : totalGameTime - timeRemaining
+                }
             }
+            // if (players.player1 in rankingData) {
+            //     rankingData[players.player1] = Math.max(rankingData[players.player1], data.playersScore[0]);
+            // } else {
+            //     rankingData[players.player1] = data.playersScore[0];
+            // }
+            // if (players.player2 in rankingData) {
+            //     rankingData[players.player2] = Math.max(rankingData[players.player2], data.playersScore[1]);
+            // } else {
+            //     rankingData[players.player2] = data.playersScore[1];
+            // }
             fs.writeFileSync("data/rankings.json", JSON.stringify(rankingData, null, " "));
             console.log("In end game rankingData = ", rankingData);
             io.emit("end game", {players: players, playersScore: data.playersScore, rankingData: rankingData});

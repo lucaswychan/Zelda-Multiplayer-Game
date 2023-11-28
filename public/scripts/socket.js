@@ -168,13 +168,27 @@ const Socket = (function () {
             }
 
             console.log("rankingsData:", data.rankingData)
-            const ranking = Object.entries(data.rankingData).map(([name, score]) => ({ name, score }));
+            // const ranking = Object.entries(data.rankingData).map(([name, score]) => ({ name, score }));
+            //
+            // // Sort in descending order based on the score
+            // ranking.sort((a, b) => b.score - a.score);
 
-            // Sort in descending order based on the score
-            ranking.sort((a, b) => b.score - a.score);
+            // Convert the object into an array for easier sorting
+            const ranking = Object.values(data.rankingData).map((entry) => entry);
+
+            // Sort the ranking array based on score and name
+            ranking.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score; // Sort by score in descending order
+                } else {
+                    return a.playtime - b.playtime; // Sort by time in ascending order
+                }
+            });
 
             // Get the top 10 results or all if the array length is less than 10
             const top10 = ranking.slice(0, Math.min(10, ranking.length));
+
+            console.log(top10);
 
             // Get the tbody element to populate
             const rankingList = $('#ranking-list');
@@ -188,22 +202,11 @@ const Socket = (function () {
                     <td>${index + 1}</td>
                     <td>${item.name}</td>
                     <td>${item.score}</td>
+                    <td>${item.playtime}</td>
                 </tr>`;
                 rankingList.append(row);
             });
         })
-
-        // // get back from server
-        // // gemX, gemY gemColor
-        // socket.on("collect gem", (data) => {
-        //     // setTimeout(function () {
-        //     console.log("back to the client collect function")
-        
-        //         game.genNewGem(data.gemX, data.gemY, data.gemColor);
-        // //    }, 10); 
-          
-        // });
-        
     };
 
     // This function disconnects the socket from the server

@@ -25,6 +25,7 @@ const game = (function () {
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
     let roleID = -1;
+    let targetScore = 1000;
 
     const gameArea = BoundingBox(context, 60, 60, 700, 800);
     const players = [];
@@ -45,11 +46,7 @@ const game = (function () {
 
     const start = () => {
         endGame = false;
-        // const monsterMoveDuration = [500, 300];
-        // const monsterStopDuration = [1500, 1000];
-        // let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
 
-        let monsterScore = 100;
         let attackTime = null;
 
         // Clear Data first
@@ -85,6 +82,14 @@ const game = (function () {
                 sounds.gameOver.play();
                 return;
             }
+
+            PlayerScores.forEach((playerScore,index) => {
+                if(playerScore >= 1000) {
+                    PlayerScores[index] = 1000;
+                    endGame = true;
+                    Socket.postBehaviour("achieve targetScore", null);
+                }
+            })
 
 
             /* Update the sprites */
@@ -140,7 +145,7 @@ const game = (function () {
                         let otherPlayer = (roleID + 1) % 2;
                         console.log("roleID = ", roleID, "and otherPlayer = ", otherPlayer);
                         PlayerScores[roleID] += 50;
-                        if (PlayerScores[otherPlayer] - 50 > 0) {
+                        if (PlayerScores[otherPlayer] - 50 >= 0) {
                             PlayerScores[otherPlayer] -= 50;
                         }
                         playerScores[roleID].text(PlayerScores[roleID]);
