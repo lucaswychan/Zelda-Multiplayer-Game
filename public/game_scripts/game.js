@@ -19,7 +19,7 @@ const game = (function () {
     let sword;
     let attackMonsterData = {x: null, y: null, monsterID: null, onlyShow: null};
     let endGame = false;
-    const totalGameTime = 20;
+    const totalGameTime = 60;
     const gemScore = 20;
 
     const cv = $("canvas").get(0);
@@ -298,6 +298,9 @@ const game = (function () {
             players[1] = Player(context, 800, 360, gameArea, 2);
             monsters = [Monster(context, 125, 235, gameArea, 1),
                 Monster(context, 700, 400, gameArea, 2)]
+            playerMonsterScores = [100, 100];
+            playerMonsterScoresHTML[0].text(playerMonsterScores[0]);
+            playerMonsterScoresHTML[1].text(playerMonsterScores[1]);
             endGame = false;
         }
         if (gameEvent === "updateTimer") {
