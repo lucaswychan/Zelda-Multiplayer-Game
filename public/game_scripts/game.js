@@ -93,13 +93,19 @@ const game = (function () {
                 return;
             }
 
-            PlayerScores.forEach((playerScore, index) => {
-                if (playerScore >= 1000) {
-                    PlayerScores[index] = 1000;
-                    endGame = true;
-                    Socket.postBehaviour("achieve targetScore", null);
-                }
-            })
+            // PlayerScores.forEach((playerScore, index) => {
+            //     if (playerScore >= 1000) {
+            //         PlayerScores[index] = 1000;
+            //         endGame = true;
+            //         Socket.postBehaviour("achieve targetScore", null);
+            //     }
+            // })
+
+            if (PlayerScores[roleID] >= 1000) {
+                PlayerScores[roleID] = 1000;
+                endGame = true;
+                Socket.postBehaviour("achieve targetScore", null);
+            }
 
 
             /* Update the sprites */
@@ -339,6 +345,9 @@ const game = (function () {
         }
         if (gameEvent === "endGame") {
             playerFinalScores.forEach((scoreElement, index) => {
+                if(PlayerScores[index] > 1000){
+                   PlayerScores[index] = 1000;
+                }
                 scoreElement.text(PlayerScores[index]);
             });
             endGame = true;
