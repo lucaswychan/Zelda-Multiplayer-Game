@@ -503,7 +503,7 @@ button.icon:active {
 }
 
 .leaderboard-table {
-    background:#117cc3;
+    background: #4eb2f8;
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -512,7 +512,7 @@ button.icon:active {
 }
 
 .ranking-result h3{
-    color:#117cc3;
+    color: #4eb2f8;
     text-align: center;
 }
 

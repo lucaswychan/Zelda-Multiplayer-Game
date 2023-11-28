@@ -134,6 +134,7 @@ const game = (function () {
                 } else if (attackMonsterData.target === "player") {
                     console.log("Attacking the player!!!");
                     let otherPlayer = (roleID + 1) % 2;
+                    console.log("roleID = ", roleID, "and otherPlayer = ", otherPlayer);
                     PlayerScores[roleID] += 50;
                     PlayerScores[otherPlayer] -= 50;
                     playerScores[roleID].text(PlayerScores[roleID]);
@@ -248,8 +249,10 @@ const game = (function () {
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
         } else if (behaviour === "attack") {
-            attackMonsterData = players[roleID].attack(monsters, players[(roleID + 1) % 2]);
-            console.log("In attack, the attack data = ", attackMonsterData);
+            if (playerID !== roleID) {
+                attackMonsterData = players[(playerID + 1) % 2].attack(monsters, players[playerID]);
+                console.log("In attack, the attack data = ", attackMonsterData);
+            }
         } else if (behaviour === "kill monster") {  // called by player.js (useless now)
             console.log("kill the monsters!!!!")
             PlayerScores[playerID] += players[playerID].getAttackScore();
@@ -265,9 +268,9 @@ const game = (function () {
             }
         } else if (behaviour === "attackMonster") {
             if (playerID !== roleID) {
-                console.log("In attackMonster, the scores = ", direction.score);
-                PlayerScores[playerID] = direction.score;
-                playerScores[playerID].text(direction.score);
+                console.log("In attackMonster, the scores = ", direction);
+                PlayerScores[playerID] = direction;
+                playerScores[playerID].text(direction);
             }
         }
     }
