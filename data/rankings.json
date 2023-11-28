@@ -1,1 +1,11 @@
-{"James":300,"Robert":1000,"John":230,"David":40}
+{
+ "1": {
+  "name": "1",
+  "score": 1000,
+  "playtime": 9
+ },
+ "James": 300,
+ "Robert": 1000,
+ "John": 230,
+ "David": 40
+}
