@@ -46,17 +46,23 @@
     <div class="" id="instruction-page">
         <h1 class="instruction-title">Instructions</h1>
         <div class="instructions-container shadow">
-            <p>Game Duration: 2 minutes</p>
-            <p>The Higher Score Player can win the game</p>
+            <p>Game Duration: 1 minutes</p>
+            <p>Two Way To End Game: </p>
+            <ol>
+                <li>One minute is up </li>
+                <li>One of the players earned 1000 points</li>
+            </ol>
 
             <br>
 
             <h3>Initial Player Attributes :</h3>
-            <p>Player's Attack Monster Scores: 100 (Score earned after killing a monster)</p>
-            <p>Scores: 0</p>
-            <p>Speed of movement: 200</p>
-            <p></p>
-
+            <ol>
+                <li>Scores: 0</li>
+                <li>Player's Attack Monster Scores: 100 (Score earned after killing a monster)</li>
+                <li>Speed of movement: 200</li>
+                <li>Player Attack Range: 60</li>
+            </ol>
+           
             <br>
 
             <h3>Game Flow :</h3>
@@ -66,36 +72,45 @@
                 <li>Wait for other Player to join the game</li>
             </ol>
 
+            <h4>Game Play</h4>
+            <ol>
+                <li>User can collect gems and swords</li>
+                <li>User can attack monster and attack other players</li>
+            </ol>
+
             <h4>Game Characters</h4>
-            <p>Kill Monsters  : + Player's Attack Monster Scores</p>
-            <p>Collect Swords : + 50 in Player's Attack Monster Scores</p>
-            <p>Collect Gem    : + 20 Scores</p>
-            <p></p>
+            <ol>
+                <li>Collect Gem    : + 20 Scores in player'Scores</li>
+                <li>Collect Swords : + 50 in Player's Attack Monster Scores</li>
+                <li>Kill Monsters  : + Player's Attack Monster Scores in player'Scores</li>
+                <li>Attack Player : Attacker: + 50 Scores, Defender: - 50 Scores</li>
+            </ol>
 
             <br>
 
             <h3>Player Movements :</h3>
-            <p>Move: Arrow key ↑:"Up", ←:"Left", ↓:"Down", →:"Right"</p>
-            <p>Attack: Z</p>
-            <p></p>
+            <ol>
+            <li>Move: Arrow key ↑:"Up", ←:"Left", ↓:"Down", →:"Right"</li>
+            <li>Attack: Z</li>
+            </ol>
 
             <br>
 
             <h3>Cheat Modes :</h3>
             <p>Click on Keyboard Space Key</p>
             <ol>
-                <li>The attack range is increased</li>
-                <li>The Attack Monster Scores is double counted</li>
-                <li>The speed is increased</li>
+                <li>Speed of movement: 350</li>
+                <li>Player Attack Range: 120</li>
             </ol>
-            <p></p>
-
+    
             <br>
 
             <h3>End Game :</h3>
             <h4>After finishing the game, there are two buttons to select</h4>
-            <p>Click on "Restart" Button : back to the pair up page</p>
-            <p>Click on "Back Home" Button : back to the home page</p>
+            <ol>
+            <li>Click on "Restart" Button : back to the pair up page</li>
+            <li>Click on "Back Home" Button : back to the home page</li>
+            </ol>
             <p></p>
         </div>
     </div>
@@ -171,6 +186,7 @@
                         <th>Ranking</th>
                         <th>Player Name</th>
                         <th>Score</th>
+                        <th>Time</th>
                     </tr>
                 </thead>
                 <tbody id="ranking-list"></tbody>
