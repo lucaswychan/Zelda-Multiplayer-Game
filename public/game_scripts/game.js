@@ -25,19 +25,31 @@ const game = (function () {
     const cv = $("canvas").get(0);
     const context = cv.getContext("2d");
     let roleID = -1;
+    let targetScore = 1000;
 
     const gameArea = BoundingBox(context, 60, 60, 700, 800);
     const players = [];
-    players[0] = Player(context, 60, 250, gameArea, 1);
-    players[1] = Player(context, 800, 360, gameArea, 2);
-    let monsters = [Monster(context, 125, 235, gameArea, 1),
-        Monster(context, 700, 400, gameArea, 2)]
+    let monsters = [];
     gem = Gem(context, 427, 350, "green");        // The gem
     const fires = [
-        Fire(context, 60, 180),  // top-left
-        Fire(context, 60, 430),  // bottom-left
-        Fire(context, 800, 180), // top-right
-        Fire(context, 800, 430)  // bottom-right
+        Fire(context, 60, 180),  // left
+        Fire(context, 60, 212),  // left
+        Fire(context, 60, 244),  // left
+        Fire(context, 60, 276),  // left
+        Fire(context, 60, 308),  // left
+        Fire(context, 60, 340),  // left
+        Fire(context, 60, 372),  // left
+        Fire(context, 60, 404),  // left
+        Fire(context, 60, 436),  // left
+        Fire(context, 800, 180),  // right
+        Fire(context, 800, 212),  // right
+        Fire(context, 800, 244),  // right
+        Fire(context, 800, 276),  // right
+        Fire(context, 800, 308),  // right
+        Fire(context, 800, 340),  // right
+        Fire(context, 800, 372),  // right
+        Fire(context, 800, 404),  // right
+        Fire(context, 800, 436),  // right
     ];
     sword = Sword(context, 427, 240);
     const attackEffect = AttackEffect(context, fires[0].getXY().x + 10, fires[0].getXY().y + 10);
@@ -45,11 +57,7 @@ const game = (function () {
 
     const start = () => {
         endGame = false;
-        // const monsterMoveDuration = [500, 300];
-        // const monsterStopDuration = [1500, 1000];
-        // let MonsterToMoveAge = [monsterMoveDuration[0], monsterMoveDuration[1]]; // The time monsters need to move
 
-        let monsterScore = 100;
         let attackTime = null;
 
         // Clear Data first
@@ -65,15 +73,13 @@ const game = (function () {
             player.resetAttackScore();
         });
 
-        gameStartTime = 0;
-
         /* Create the sprites in the game */
         console.log("player: ", players)
 
         /* The main processing of the game */
         function doFrame(now) {
             sounds.battle.play();
-            /* TODO */
+
             /* Handle the game over situation here */
             if (endGame) {
                 Socket.endGame(PlayerScores);
@@ -85,6 +91,14 @@ const game = (function () {
                 sounds.gameOver.play();
                 return;
             }
+
+            PlayerScores.forEach((playerScore,index) => {
+                if(playerScore >= 1000) {
+                    PlayerScores[index] = 1000;
+                    endGame = true;
+                    Socket.postBehaviour("achieve targetScore", null);
+                }
+            })
 
 
             /* Update the sprites */
@@ -100,7 +114,7 @@ const game = (function () {
                 monster.update(now);
             });
 
-
+            /* Check the gem collection */
             if (players[roleID].getBoundingBox().isPointInBox(gem.getXY().x, gem.getXY().y)) {
                 console.log(roleID + " collected the gem");
                 sounds.collect.currentTime = 0;
@@ -110,6 +124,7 @@ const game = (function () {
                 Socket.postBehaviour("collect gem", PlayerScores[roleID]);
             }
 
+            /* Check the sword collection */
             if (players[roleID].getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
                 console.log("Successfully get the sword");
                 players[roleID].incrementAttackScore();
@@ -121,11 +136,14 @@ const game = (function () {
             }
 
 
-            // Draw the attack effect starting from now
+            /* Draw the attack effect starting from now */
             if (attackMonsterData.x != null && attackMonsterData.y != null) {
+
                 attackTime = now;
                 attackEffect.setXY(attackMonsterData.x, attackMonsterData.y);
-                if (!attackMonsterData.onlyShow) {
+
+                if (!attackMonsterData.onlyShow) { // only update the score if the attack action is initiated by the current player
+                    // hit the monster
                     if (attackMonsterData.target === "monster") {
                         console.log("Attacking the monster!!!");
                         PlayerScores[roleID] += players[roleID].getAttackScore();
@@ -135,12 +153,14 @@ const game = (function () {
                             monsterID: attackMonsterData.id,
                             score: PlayerScores[roleID]
                         });
-                    } else if (attackMonsterData.target === "player") {
+                    }
+                    // hit the player
+                    else if (attackMonsterData.target === "player") {
                         console.log("Attacking the player!!!");
                         let otherPlayer = (roleID + 1) % 2;
                         console.log("roleID = ", roleID, "and otherPlayer = ", otherPlayer);
                         PlayerScores[roleID] += 50;
-                        if (PlayerScores[otherPlayer] - 50 > 0) {
+                        if (PlayerScores[otherPlayer] - 50 >= 0) {
                             PlayerScores[otherPlayer] -= 50;
                         }
                         playerScores[roleID].text(PlayerScores[roleID]);
@@ -261,7 +281,11 @@ const game = (function () {
                 attackMonsterData = players[playerID].attack(monsters, players[(playerID + 1) % 2]);
                 attackMonsterData.onlyShow = false;
                 console.log("In attack, the attack data = ", attackMonsterData);
-                Socket.postBehaviour("show attack effect", {x: attackMonsterData.x, y: attackMonsterData.y, playerID: roleID});
+                Socket.postBehaviour("show attack effect", {
+                    x: attackMonsterData.x,
+                    y: attackMonsterData.y,
+                    playerID: roleID
+                });
             }
         } else if (behaviour === "kill monster") {  // called by player.js (useless now)
             console.log("kill the monsters!!!!")
@@ -294,8 +318,8 @@ const game = (function () {
 
     const gameControl = function (gameEvent, value) {
         if (gameEvent === "startGame") {
-            players[0] = Player(context, 60, 250, gameArea, 1);
-            players[1] = Player(context, 800, 360, gameArea, 2);
+            players[0] = Player(context, 80, 100, gameArea, 1);
+            players[1] = Player(context, 780, 516, gameArea, 2);
             monsters = [Monster(context, 125, 235, gameArea, 1),
                 Monster(context, 700, 400, gameArea, 2)]
             playerMonsterScores = [100, 100];

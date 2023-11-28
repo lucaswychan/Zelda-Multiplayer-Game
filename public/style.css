@@ -244,6 +244,10 @@ button.icon:active {
     color:white;
 }
 
+#player1-name, #player2-name {
+    font-weight: bold;
+}
+
 
 
 

@@ -58,7 +58,7 @@ const Player = function (ctx, x, y, gameArea, playerID) {
     // This is the moving speed (pixels per second) of the player
     let speed = 150;
 
-    let attackRange = 15;
+    let attackRange = 60;
     let attackScore = 100;
 
     // This function sets the player's moving direction.
@@ -109,13 +109,13 @@ const Player = function (ctx, x, y, gameArea, playerID) {
     // This function speeds up the player.
     const cheat = function() {
         speed = 350;
-        attackRange = 50;
+        attackRange = 120;
     };
 
     // This function slows down the player.
     const endCheat = function () {
         speed = 150;
-        attackRange = 15;
+        attackRange = 60;
     };
 
     // This function updates the player depending on his movement.

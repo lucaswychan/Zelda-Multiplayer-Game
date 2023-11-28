@@ -70,11 +70,11 @@ const Socket = (function () {
 
             if (player.id === 0) {
                 player1Button.html(player.name);
-                // player1Button.css("background", "purple");
+                player1Button.css("background", "#9354fa");
             }
             else if (player.id === 1) {
                 player2Button.html(player.name);
-                // player2Button.css("background", "purple");
+                player2Button.css("background", "#9354fa");
             }
 
             if (player1Button.html() !== "Player 1" && player2Button.html() !== "Player 2") {
@@ -133,10 +133,9 @@ const Socket = (function () {
             players["player2"] = null
             // Reset the pair up button
             player1Button.html('Player 1');
-            // player1Button.css("background", "rgb(117, 183, 229)");
-
             player2Button.html('Player 2');
-            // player2Button.css("background", "rgb(117, 183, 229)");
+
+            $(".pair-up-button").css("background", "rgb(117, 183, 229)");
 
             //clear chatroom data
             const chatroomArea = $('#chat-area');
@@ -173,13 +172,27 @@ const Socket = (function () {
             }
 
             console.log("rankingsData:", data.rankingData)
-            const ranking = Object.entries(data.rankingData).map(([name, score]) => ({ name, score }));
+            // const ranking = Object.entries(data.rankingData).map(([name, score]) => ({ name, score }));
+            //
+            // // Sort in descending order based on the score
+            // ranking.sort((a, b) => b.score - a.score);
 
-            // Sort in descending order based on the score
-            ranking.sort((a, b) => b.score - a.score);
+            // Convert the object into an array for easier sorting
+            const ranking = Object.values(data.rankingData).map((entry) => entry);
+
+            // Sort the ranking array based on score and name
+            ranking.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score; // Sort by score in descending order
+                } else {
+                    return a.playtime - b.playtime; // Sort by time in ascending order
+                }
+            });
 
             // Get the top 10 results or all if the array length is less than 10
             const top10 = ranking.slice(0, Math.min(10, ranking.length));
+
+            console.log(top10);
 
             // Get the tbody element to populate
             const rankingList = $('#ranking-list');
@@ -193,22 +206,11 @@ const Socket = (function () {
                     <td>${index + 1}</td>
                     <td>${item.name}</td>
                     <td>${item.score}</td>
+                    <td>${item.playtime}</td>
                 </tr>`;
                 rankingList.append(row);
             });
         })
-
-        // // get back from server
-        // // gemX, gemY gemColor
-        // socket.on("collect gem", (data) => {
-        //     // setTimeout(function () {
-        //     console.log("back to the client collect function")
-        
-        //         game.genNewGem(data.gemX, data.gemY, data.gemColor);
-        // //    }, 10); 
-          
-        // });
-        
     };
 
     // This function disconnects the socket from the server
