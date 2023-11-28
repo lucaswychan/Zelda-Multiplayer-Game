@@ -9,13 +9,17 @@ const game = (function () {
         $("#game-over-player1-score"),
         $("#game-over-player2-score")
     ];
+    const playerMonsterScoresHTML = [
+        $("#player1-monster-score"),
+        $("#player2-monster-score"),
+    ]
     let PlayerScores = [0, 0];    //Play Score
-    let swordDamage = [0, 0];
+    let playerMonsterScores = [100, 100];
     let gem;
     let sword;
     let attackMonsterData = {x: null, y: null, monsterID: null, onlyShow: null};
     let endGame = false;
-    const totalGameTime = 20;
+    const totalGameTime = 60;
     const gemScore = 20;
 
     const cv = $("canvas").get(0);
@@ -117,13 +121,12 @@ const game = (function () {
 
             if (players[roleID].getBoundingBox().isPointInBox(sword.getXY().x, sword.getXY().y)) {
                 console.log("Successfully get the sword");
-                sword.randomize(gameArea);
                 players[roleID].incrementAttackScore();
                 sounds.sword.currentTime = 0;
                 sounds.sword.play();
-                swordDamage[roleID] = players[roleID].getAttackScore();
-                console.log("roleID : ", roleID, " with sword damage = ", swordDamage[roleID]);
-                Socket.postBehaviour("pick up sword", swordDamage[roleID]);
+                playerMonsterScores[roleID] = players[roleID].getAttackScore();
+                playerMonsterScoresHTML[roleID].text(playerMonsterScores[roleID]);
+                Socket.postBehaviour("pick up sword", playerMonsterScores[roleID]);
             }
 
 
@@ -257,7 +260,8 @@ const game = (function () {
             }
         } else if (behaviour === "pick up sword") {
             if (playerID !== roleID) {
-                swordDamage[playerID] = direction;
+                playerMonsterScores[playerID] = direction;
+                playerMonsterScoresHTML[playerID].text(direction);
             }
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
@@ -303,6 +307,9 @@ const game = (function () {
             players[1] = Player(context, 780, 516, gameArea, 2);
             monsters = [Monster(context, 125, 235, gameArea, 1),
                 Monster(context, 700, 400, gameArea, 2)]
+            playerMonsterScores = [100, 100];
+            playerMonsterScoresHTML[0].text(playerMonsterScores[0]);
+            playerMonsterScoresHTML[1].text(playerMonsterScores[1]);
             endGame = false;
         }
         if (gameEvent === "updateTimer") {
