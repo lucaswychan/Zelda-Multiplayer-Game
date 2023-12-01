@@ -16,10 +16,11 @@
 
 <div align="center">
   <a href="https://github.com/LConann/Zelda-Multiplayer-Game/">
-    <img src="public/images/Register_page.png" alt="RegisterPage" width="600" height="400">
+    <img src="public/images/Register_page.png" alt="RegisterPage" width="800" height="600">
   </a>
 </div>
 
+<hr />
 
 ## Run Code
 1. `npm install`
