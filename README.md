@@ -28,4 +28,5 @@
 
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[React-url]: https://img.shields.io/badge/React-blue?style=for-the-badge&logo=react&logoColor=white
 
