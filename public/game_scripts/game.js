@@ -263,24 +263,24 @@ const game = (function () {
         requestAnimationFrame(doFrame);
     }
 
-    const playerBehaviour = function (playerID, behaviour, direction) {
+    const playerBehaviour = function (playerID, behaviour, value) {
         const gemScore = 20;
         if (behaviour === "move") {
-            players[playerID].move(direction);
+            players[playerID].move(value);
         } else if (behaviour === "stop") {
-            players[playerID].stop(direction);
+            players[playerID].stop(value);
         } else if (behaviour === "cheat mode") {
             players[playerID].cheat();
         } else if (behaviour === "collect gem") {
             if (playerID !== roleID) {
-                console.log("PLayer ", playerID, " update the score list with ", direction);
-                PlayerScores[playerID] = direction;
-                playerScores[playerID].text(direction);
+                console.log("PLayer ", playerID, " update the score list with ", value);
+                PlayerScores[playerID] = value;
+                playerScores[playerID].text(value);
             }
         } else if (behaviour === "pick up sword") {
             if (playerID !== roleID) {
-                playerMonsterScores[playerID] = direction;
-                playerMonsterScoresHTML[playerID].text(direction);
+                playerMonsterScores[playerID] = value;
+                playerMonsterScoresHTML[playerID].text(value);
             }
         } else if (behaviour === "end cheat mode") {
             players[playerID].endCheat();
@@ -301,24 +301,24 @@ const game = (function () {
             playerScores[playerID].text(PlayerScores[playerID]);
         } else if (behaviour === "hit player") {
             if (playerID !== roleID) {
-                console.log("In hit player, the array of the scores = ", direction);
-                PlayerScores[0] = direction[0];
-                PlayerScores[1] = direction[1];
+                console.log("In hit player, the array of the scores = ", value);
+                PlayerScores[0] = value[0];
+                PlayerScores[1] = value[1];
                 playerScores.forEach((scoreHtml, index) => {
                     scoreHtml.text(PlayerScores[index]);
                 })
             }
         } else if (behaviour === "attackMonster") {
             if (playerID !== roleID) {
-                console.log("In attackMonster, the scores = ", direction);
-                PlayerScores[playerID] = direction;
-                playerScores[playerID].text(direction);
+                console.log("In attackMonster, the scores = ", value);
+                PlayerScores[playerID] = value;
+                playerScores[playerID].text(value);
             }
         } else if (behaviour === "show attack effect") {
             if (playerID !== roleID) {
                 attackMonsterData.onlyShow = true;
-                attackMonsterData.x = direction.x;
-                attackMonsterData.y = direction.y;
+                attackMonsterData.x = value.x;
+                attackMonsterData.y = value.y;
                 attackMonsterData.monsterID = null;
             }
         }
